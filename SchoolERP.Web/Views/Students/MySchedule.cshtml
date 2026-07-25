@@ -1,0 +1,116 @@
+@model SchoolERP.Web.ViewModels.Students.StudentScheduleViewModel
+
+@{
+    ViewData["Title"] = "جدولي الدراسي";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="page-title">
+                <i class="fas fa-calendar-week"></i> جدولي الدراسي
+            </h2>
+        </div>
+    </div>
+
+    <!-- معلومات الطالب -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>الطالب:</strong> @Model.StudentName
+                </div>
+                <div class="col-md-3">
+                    <strong>الصف:</strong> @Model.GradeLevelName
+                </div>
+                <div class="col-md-3">
+                    <strong>الفصل:</strong> @Model.ClassRoomName
+                </div>
+                <div class="col-md-3">
+                    <strong>السنة:</strong> @Model.AcademicYearName
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الجدول الدراسي -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-table"></i> الجدول الدراسي الأسبوعي
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered text-center">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>اليوم</th>
+                            <th>المادة</th>
+                            <th>المعلم</th>
+                            <th>الوقت</th>
+                            <th>رقم الحصة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Schedules != null && Model.Schedules.Any())
+                        {
+                            var daysOrder = new[] { DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday };
+
+                            var groupedSchedules = Model.Schedules
+                            .OrderBy(s => Array.IndexOf(daysOrder, s.DayOfWeek))
+                            .ThenBy(s => s.StartTime)
+                            .GroupBy(s => s.DayName)
+                            .ToList();
+
+                            foreach (var group in groupedSchedules)
+                            {
+                                var items = group.ToList();
+                                var rowspan = items.Count;
+
+                                for (int i = 0; i < items.Count; i++)
+                                {
+                                    var schedule = items[i];
+
+                                    <tr>
+                                        @if (i == 0)
+                                        {
+                                            <td rowspan="@rowspan" class="fw-bold align-middle bg-light">
+                                                @group.Key
+                                            </td>
+                                        }
+                                        <td>@schedule.SubjectName</td>
+                                        <td>@schedule.TeacherName</td>
+                                        <td>
+                                            <span class="badge bg-success">
+                                                @schedule.StartTime.ToString("hh\\:mm") - @schedule.EndTime.ToString("hh\\:mm")
+                                            </span>
+                                        </td>
+                                        <td>
+                                            @if (schedule.PeriodNumber.HasValue)
+                                            {
+                                                <span class="badge bg-warning text-dark">@schedule.PeriodNumber</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">-</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">
+                                    <i class="fas fa-calendar-times fa-2x d-block mb-2"></i>
+                                    لا توجد حصص دراسية
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

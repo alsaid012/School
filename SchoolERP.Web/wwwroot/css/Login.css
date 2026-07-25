@@ -1,0 +1,512 @@
+﻿
+/* ============================================================ */
+/* 🎨  التنسيقات العامة                                          */
+/* ============================================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Cairo', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* ============================================================ */
+/* 🌟  خلفية متحركة (Animated Background)                       */
+/* ============================================================ */
+.bg-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+}
+
+    .bg-animation .circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.05);
+        animation: float 20s infinite ease-in-out;
+    }
+
+        .bg-animation .circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .bg-animation .circle:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -5s;
+        }
+
+        .bg-animation .circle:nth-child(3) {
+            width: 200px;
+            height: 200px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -10s;
+        }
+
+        .bg-animation .circle:nth-child(4) {
+            width: 150px;
+            height: 150px;
+            top: 20%;
+            right: 10%;
+            animation-delay: -3s;
+        }
+
+        .bg-animation .circle:nth-child(5) {
+            width: 250px;
+            height: 250px;
+            bottom: 20%;
+            left: 10%;
+            animation-delay: -7s;
+        }
+
+@keyframes float {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    25% {
+        transform: translate(50px, -50px) scale(1.1);
+    }
+
+    50% {
+        transform: translate(-30px, 30px) scale(0.9);
+    }
+
+    75% {
+        transform: translate(40px, 20px) scale(1.05);
+    }
+}
+
+/* ============================================================ */
+/* 📦  بطاقة تسجيل الدخول                                        */
+/* ============================================================ */
+.login-wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+    animation: slideUp 0.8s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease;
+}
+
+    .login-card:hover {
+        transform: translateY(-5px);
+    }
+
+/* ============================================================ */
+/* 🏷️  رأس البطاقة (Header)                                     */
+/* ============================================================ */
+.login-header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 35px 30px 25px;
+    text-align: center;
+    position: relative;
+}
+
+    .login-header .logo-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #f0c040, #f7971e);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        font-size: 36px;
+        color: #1a1a2e;
+        box-shadow: 0 10px 30px rgba(247, 151, 30, 0.3);
+        transition: transform 0.3s ease;
+    }
+
+        .login-header .logo-icon:hover {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+    .login-header h4 {
+        color: #fff;
+        font-weight: 800;
+        font-size: 24px;
+        margin: 0;
+        letter-spacing: 0.5px;
+    }
+
+    .login-header .subtitle {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    .login-header .school-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 4px 16px;
+        border-radius: 50px;
+        color: #f0c040;
+        font-size: 12px;
+        font-weight: 600;
+        margin-top: 10px;
+        letter-spacing: 0.5px;
+    }
+
+/* ============================================================ */
+/* 📝  جسم البطاقة (Body)                                        */
+/* ============================================================ */
+.login-body {
+    padding: 30px;
+}
+
+    .login-body .form-label {
+        font-weight: 600;
+        color: #2d3436;
+        font-size: 14px;
+    }
+
+        .login-body .form-label i {
+            color: #0f3460;
+            width: 20px;
+        }
+
+    .login-body .form-control {
+        border-radius: 12px;
+        padding: 12px 16px;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+        font-size: 15px;
+        background: #f8f9fa;
+    }
+
+        .login-body .form-control:focus {
+            border-color: #0f3460;
+            box-shadow: 0 0 0 4px rgba(15, 52, 96, 0.1);
+            background: #fff;
+        }
+
+        .login-body .form-control.is-invalid {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.1);
+        }
+
+    .login-body .input-group-text {
+        background: transparent;
+        border: none;
+        color: #6c757d;
+        padding: 0 0 0 12px;
+    }
+
+    .login-body .form-text {
+        color: #6c757d;
+        font-size: 12px;
+    }
+
+    /* ============================================================ */
+    /* 🔘  أزرار البطاقة                                             */
+    /* ============================================================ */
+    .login-body .btn-login {
+        background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+        border: none;
+        border-radius: 12px;
+        padding: 14px;
+        font-weight: 700;
+        font-size: 16px;
+        color: #fff;
+        transition: all 0.3s ease;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .login-body .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(15, 52, 96, 0.3);
+        }
+
+        .login-body .btn-login:active {
+            transform: translateY(0);
+        }
+
+        .login-body .btn-login .btn-loader {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+        }
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.login-body .btn-login.loading .btn-text {
+    display: none;
+}
+
+.login-body .btn-login.loading .btn-loader {
+    display: block;
+}
+
+/* ============================================================ */
+/* 🔗  روابط البطاقة                                             */
+/* ============================================================ */
+.login-body .register-link {
+    color: #0f3460;
+    text-decoration: none;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+    .login-body .register-link:hover {
+        color: #f7971e;
+    }
+
+.login-body .forgot-link {
+    color: #6c757d;
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.3s ease;
+}
+
+    .login-body .forgot-link:hover {
+        color: #0f3460;
+    }
+
+/* ============================================================ */
+/* ✅  ألوان الحالة (Status Colors)                              */
+/* ============================================================ */
+.text-gradient {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ============================================================ */
+/* 📱  تنسيق الجوال                                              */
+/* ============================================================ */
+@media (max-width: 576px) {
+    .login-wrapper {
+        padding: 10px;
+    }
+
+    .login-header {
+        padding: 25px 20px 20px;
+    }
+
+        .login-header .logo-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 28px;
+        }
+
+        .login-header h4 {
+            font-size: 20px;
+        }
+
+    .login-body {
+        padding: 20px;
+    }
+
+        .login-body .form-control {
+            padding: 10px 14px;
+            font-size: 14px;
+        }
+}
+
+/* ============================================================ */
+/* 🎯  تنسيق الـ Validation                                      */
+/* ============================================================ */
+.validation-summary-errors ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+    .validation-summary-errors ul li {
+        padding: 8px 12px;
+        margin-bottom: 4px;
+        background: #fde8e8;
+        border-radius: 8px;
+        color: #e74c3c;
+        font-size: 13px;
+    }
+
+.field-validation-error {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+}
+
+/* ============================================================ */
+/* 🎨  توست (Toast) الرسائل                                      */
+/* ============================================================ */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 9999;
+    animation: slideInRight 0.5s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.toast-custom {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    border-right: 4px solid #27ae60;
+    min-width: 300px;
+}
+
+    .toast-custom.error {
+        border-right-color: #e74c3c;
+    }
+
+    .toast-custom .toast-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+        .toast-custom .toast-icon.success {
+            background: #d4edda;
+            color: #27ae60;
+        }
+
+        .toast-custom .toast-icon.error {
+            background: #fde8e8;
+            color: #e74c3c;
+        }
+
+/* ============================================================ */
+/* 🌙  تنسيق الوضع الليلي                                        */
+/* ============================================================ */
+.dark-mode .login-card {
+    background: rgba(26, 26, 46, 0.95);
+}
+
+.dark-mode .login-body .form-label {
+    color: #ecf0f1;
+}
+
+.dark-mode .login-body .form-control {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #ecf0f1;
+}
+
+    .dark-mode .login-body .form-control:focus {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: #f0c040;
+    }
+
+.dark-mode .login-body .register-link {
+    color: #f0c040;
+}
+
+.dark-mode .login-body .forgot-link {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* ============================================================ */
+/* 🎯  زر تبديل الوضع الليلي                                    */
+/* ============================================================ */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+    padding: 8px 16px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+    .theme-toggle:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.05);
+    }
+
+    .theme-toggle i {
+        font-size: 16px;
+    }
+
+/* ============================================================ */
+/* 🎨  تنسيق الرسم البياني للخلفية                              */
+/* ============================================================ */
+.bg-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+

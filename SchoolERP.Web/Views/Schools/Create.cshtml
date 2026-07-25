@@ -1,0 +1,131 @@
+@model SchoolERP.Application.DTOs.Schools.CreateSchoolDto
+
+@{
+    ViewData["Title"] = "إنشاء مدرسة جديدة";
+    ViewData["PageTitle"] = "إنشاء مدرسة جديدة";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="fas fa-plus me-2"></i>إنشاء مدرسة جديدة</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="SchoolName" class="form-label">
+                            <i class="fas fa-tag me-1"></i>اسم المدرسة <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="SchoolName" class="form-control" placeholder="أدخل اسم المدرسة" />
+                        <span asp-validation-for="SchoolName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="SchoolCode" class="form-label">
+                            <i class="fas fa-barcode me-1"></i>كود المدرسة <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="SchoolCode" class="form-control" placeholder="أدخل كود المدرسة" />
+                        <span asp-validation-for="SchoolCode" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="SchoolType" class="form-label">
+                            <i class="fas fa-tag me-1"></i>نوع المدرسة <span class="text-danger">*</span>
+                        </label>
+                        <select asp-for="SchoolType" class="form-select">
+                            <option value="1">عامة</option>
+                            <option value="2">خاصة</option>
+                            <option value="3">لغات</option>
+                            <option value="4">دولية</option>
+                        </select>
+                        <span asp-validation-for="SchoolType" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="DepartmentId" class="form-label">
+                            <i class="fas fa-sitemap me-1"></i>الإدارة <span class="text-danger">*</span>
+                        </label>
+                        <select asp-for="DepartmentId" class="form-select">
+                            <option value="">اختر الإدارة...</option>
+                            @if (ViewBag.Departments != null)
+                            {
+                                foreach (var dept in ViewBag.Departments)
+                                {
+                                    <option value="@dept.Id">@dept.Name</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="PrincipalName" class="form-label">
+                            <i class="fas fa-user-tie me-1"></i>اسم المدير
+                        </label>
+                        <input asp-for="PrincipalName" class="form-control" placeholder="أدخل اسم المدير" />
+                        <span asp-validation-for="PrincipalName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="EstablishedYear" class="form-label">
+                            <i class="fas fa-calendar me-1"></i>سنة التأسيس
+                        </label>
+                        <input asp-for="EstablishedYear" type="number" class="form-control" placeholder="مثال: 1990" />
+                        <span asp-validation-for="EstablishedYear" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Phone" class="form-label">
+                            <i class="fas fa-phone me-1"></i>رقم الهاتف
+                        </label>
+                        <input asp-for="Phone" class="form-control" placeholder="أدخل رقم الهاتف" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">
+                            <i class="fas fa-envelope me-1"></i>البريد الإلكتروني
+                        </label>
+                        <input asp-for="Email" type="email" class="form-control" placeholder="example@email.com" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Address" class="form-label">
+                    <i class="fas fa-home me-1"></i>العنوان
+                </label>
+                <input asp-for="Address" class="form-control" placeholder="أدخل العنوان" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <hr />
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-save me-2"></i>حفظ
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-times me-2"></i>إلغاء
+            </a>
+        </form>
+    </div>
+</div>

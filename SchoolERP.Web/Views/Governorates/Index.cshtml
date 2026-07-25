@@ -1,0 +1,102 @@
+﻿@model IEnumerable<SchoolERP.Application.DTOs.Governorates.GovernorateDto>
+
+@{
+    ViewData["Title"] = "المحافظات";
+    ViewData["PageTitle"] = "إدارة المحافظات";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <h4 class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>@ViewData["PageTitle"]</h4>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>إضافة محافظة جديدة
+    </a>
+</div>
+
+<!-- ============================================================ -->
+<!-- رسائل التنبيه -->
+<!-- ============================================================ -->
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<!-- ============================================================ -->
+<!-- جدول المحافظات -->
+<!-- ============================================================ -->
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-bordered align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th style="width: 50px;">#</th>
+                <th style="min-width: 150px;">اسم المحافظة</th>
+                <th style="min-width: 100px;">الكود</th>
+                <th style="min-width: 120px;">عدد الإدارات</th>
+                <th style="min-width: 100px;">الحالة</th>
+                <th style="min-width: 150px;">تاريخ الإنشاء</th>
+                <th style="min-width: 200px;">الإجراءات</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                int index = 1;
+                foreach (var governorate in Model)
+                {
+                    <tr>
+                        <td class="text-center">@index</td>
+                        <td><strong>@governorate.Name</strong></td>
+                        <td><span class="badge bg-secondary">@governorate.Code</span></td>
+                        <td>@governorate.DepartmentsCount</td>
+                        <td>
+                            @if (governorate.IsActive)
+                            {
+                                <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>مفعل</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger"><i class="fas fa-times-circle me-1"></i>غير مفعل</span>
+                            }
+                        </td>
+                        <td>@governorate.CreatedAt.ToString("yyyy-MM-dd")</td>
+                        <td>
+                            <div class="btn-group btn-group-sm flex-wrap gap-1" role="group">
+                                <a asp-action="Details" asp-route-id="@governorate.Id" class="btn btn-info btn-sm" title="تفاصيل">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@governorate.Id" class="btn btn-warning btn-sm" title="تعديل">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form asp-action="Delete" asp-route-id="@governorate.Id" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm" title="حذف" onclick="return confirm('هل أنت متأكد من حذف هذه المحافظة؟')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    index++;
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">
+                        <i class="fas fa-map-marker-alt fa-2x d-block mb-2"></i>
+                        لا يوجد محافظات
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

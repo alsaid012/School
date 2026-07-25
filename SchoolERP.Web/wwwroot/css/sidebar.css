@@ -1,0 +1,209 @@
+﻿/* ============================================================
+   📱  تنسيقات الشريط الجانبي (Sidebar) - SchoolERP
+   ============================================================ */
+
+/* ---------- الحاوية الرئيسية للـ Sidebar ---------- */
+.sidebar-wrapper {
+    background: #ffffff;
+    border-left: 1px solid #e9ecef;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+    position: sticky;
+    top: 70px;
+    padding: 0.5rem 0;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+    .sidebar-wrapper::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .sidebar-wrapper::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .sidebar-wrapper::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 10px;
+    }
+
+/* ---------- عنوان المجموعة (القابلة للطي) ---------- */
+.sidebar-section .section-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 1.2rem;
+    color: #495057;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    margin: 0.2rem 0.5rem;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: right;
+}
+
+    .sidebar-section .section-toggle:hover {
+        background: #f0f2f5;
+        color: #0d6efd;
+    }
+
+    .sidebar-section .section-toggle .toggle-icon {
+        font-size: 0.7rem;
+        transition: transform 0.3s ease;
+        color: #6c757d;
+    }
+
+        .sidebar-section .section-toggle .toggle-icon.rotated {
+            transform: rotate(-180deg);
+        }
+
+    .sidebar-section .section-toggle .section-title-text i {
+        margin-left: 8px;
+        font-size: 0.9rem;
+    }
+
+/* ---------- قائمة الروابط داخل المجموعة ---------- */
+.sidebar-section .collapse-content {
+    padding: 0.2rem 0;
+}
+
+.sidebar-section .nav-link {
+    color: #495057;
+    padding: 0.45rem 1.2rem 0.45rem 2.2rem;
+    border-radius: 0;
+    border-right: 3px solid transparent;
+    transition: all 0.25s ease;
+    font-weight: 500;
+    font-size: 0.88rem;
+    display: flex;
+    align-items: center;
+}
+
+    .sidebar-section .nav-link i {
+        width: 20px;
+        font-size: 0.9rem;
+        margin-left: 10px;
+        color: #6c757d;
+        transition: all 0.3s;
+    }
+
+    .sidebar-section .nav-link:hover {
+        background: #f8f9fa;
+        color: #0d6efd;
+        border-right-color: #0d6efd;
+    }
+
+        .sidebar-section .nav-link:hover i {
+            color: #0d6efd;
+        }
+
+    .sidebar-section .nav-link.active {
+        background: #e7f1ff;
+        color: #0d6efd;
+        border-right-color: #0d6efd;
+        font-weight: 600;
+    }
+
+        .sidebar-section .nav-link.active i {
+            color: #0d6efd;
+        }
+
+/* ---------- الحالة المفتوحة ---------- */
+.sidebar-section .section-toggle[aria-expanded="true"] {
+    background: #e7f1ff;
+    color: #0d6efd;
+}
+
+    .sidebar-section .section-toggle[aria-expanded="true"] .toggle-icon {
+        transform: rotate(-180deg);
+        color: #0d6efd;
+    }
+
+/* ---------- الفاصل ---------- */
+.sidebar-divider {
+    border: none;
+    border-top: 1px solid #e9ecef;
+    margin: 0.5rem 1.2rem;
+}
+
+/* ---------- أيقونة السهم ---------- */
+.sidebar-section .section-toggle .toggle-icon {
+    font-size: 0.7rem;
+    transition: transform 0.3s ease;
+    color: #6c757d;
+}
+
+.sidebar-section .section-toggle[aria-expanded="true"] .toggle-icon {
+    transform: rotate(-180deg);
+    color: #0d6efd;
+}
+
+/* ---------- تنسيق الجوال ---------- */
+@media (max-width: 768px) {
+    .sidebar-wrapper {
+        height: auto;
+        position: relative;
+        top: 0;
+    }
+}
+
+/* ---------- أيقونة المجموعة المفتوحة ---------- */
+.sidebar-section .section-toggle .section-title-text .fas.fa-chevron-down {
+    font-size: 0.6rem;
+    margin-right: 5px;
+    transition: transform 0.3s;
+}
+
+.sidebar-section .section-toggle[aria-expanded="true"] .section-title-text .fas.fa-chevron-down {
+    transform: rotate(-180deg);
+}
+
+/* ---------- تنسيق الروابط في حالة التعطيل ---------- */
+.sidebar-section .nav-link.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ---------- أيقونة النشاط ---------- */
+.sidebar-section .nav-link .badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #0d6efd;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.sidebar-section .nav-link.active .badge-dot {
+    background: #0d6efd;
+}
+
+/* ---------- تنسيق النص الطويل ---------- */
+.sidebar-section .nav-link .nav-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ---------- تنسيق المجموعات المصغرة ---------- */
+.sidebar-collapsed .sidebar-section .section-toggle {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.7rem;
+}
+
+.sidebar-collapsed .sidebar-section .nav-link {
+    padding: 0.4rem 0.8rem 0.4rem 1.5rem;
+    font-size: 0.8rem;
+}
+
+    .sidebar-collapsed .sidebar-section .nav-link i {
+        width: 18px;
+        font-size: 0.8rem;
+    }

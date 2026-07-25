@@ -1,0 +1,217 @@
+﻿@model SchoolERP.Web.ViewModels.UserContacts.UserContactIndexViewModel
+
+@{
+    ViewData["Title"] = "جهات الاتصال";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-address-book text-primary"></i>
+            جهات الاتصال
+        </h1>
+        <div>
+            <a asp-action="Create" class="btn btn-success btn-lg">
+                <i class="fas fa-plus-circle"></i>
+                إضافة جهة اتصال
+            </a>
+            <a asp-action="Statistics" class="btn btn-info btn-lg ms-2">
+                <i class="fas fa-chart-pie"></i>
+                إحصائيات
+            </a>
+        </div>
+    </div>
+
+    <!-- فلترة -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form asp-action="Index" method="get" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-user"></i> المستخدم
+                    </label>
+                    <select name="userId" class="form-select">
+                        <option value="">-- جميع المستخدمين --</option>
+                        @foreach (var user in Model.Users)
+                        {
+                            <option value="@user.Value" selected="@user.Selected">@user.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter"></i> تصفية
+                    </button>
+                </div>
+                <div class="col-md-2">
+                    <a asp-action="Index" class="btn btn-secondary w-100">
+                        <i class="fas fa-undo"></i> إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- جدول جهات الاتصال -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-list"></i>
+            قائمة جهات الاتصال
+            <span class="badge bg-light text-primary float-end">
+                @Model.Contacts.Count جهة اتصال
+            </span>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped" id="contactsTable">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>المستخدم</th>
+                            <th>النوع</th>
+                            <th>القيمة</th>
+                            <th>أساسي</th>
+                            <th>موثق</th>
+                            <th>الحالة</th>
+                            <th class="text-center">الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Contacts != null && Model.Contacts.Any())
+                        {
+                            int index = 1;
+                            foreach (var item in Model.Contacts)
+                            {
+                                <tr>
+                                    <td>@index</td>
+                                    <td>
+                                        <strong>@item.UserName</strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info">@item.ContactTypeName</span>
+                                    </td>
+                                    <td>@item.ContactValue</td>
+                                    <td>
+                                        @if (item.IsPrimary)
+                                        {
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-star"></i> أساسي
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">ثانوي</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.IsVerified)
+                                        {
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check-circle"></i> موثق
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="fas fa-clock"></i> غير موثق
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.IsActive)
+                                        {
+                                            <span class="badge bg-success">مفعل</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">غير مفعل</span>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Details" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-info" title="تفاصيل">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-warning" title="تعديل">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            @if (!item.IsPrimary)
+                                            {
+                                                <button type="button"
+                                                        class="btn btn-sm btn-success"
+                                                        onclick="setPrimary(@item.Id, @item.UserId)"
+                                                        title="تعيين كأساسي">
+                                                    <i class="fas fa-star"></i>
+                                                </button>
+                                            }
+                                            <button type="button"
+                                                    class="btn btn-sm btn-danger"
+                                                    onclick="deleteItem(@item.Id)"
+                                                    title="حذف">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8" class="text-center text-muted py-4">
+                                    <i class="fas fa-address-book fa-2x d-block mb-2"></i>
+                                    لا توجد جهات اتصال لعرضها
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- نماذج مخفية -->
+<form id="deleteForm" asp-action="Delete" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="deleteId" name="id" value="" />
+</form>
+
+<form id="setPrimaryForm" asp-action="SetPrimary" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="setPrimaryId" name="id" value="" />
+    <input type="hidden" id="setPrimaryUserId" name="userId" value="" />
+</form>
+
+@section Scripts {
+    <script>
+        function deleteItem(id) {
+            if (confirm('هل أنت متأكد من حذف جهة الاتصال هذه؟')) {
+                document.getElementById('deleteId').value = id;
+                document.getElementById('deleteForm').submit();
+            }
+        }
+
+        function setPrimary(id, userId) {
+            if (confirm('هل أنت متأكد من تعيين هذه جهة الاتصال كأساسية؟')) {
+                document.getElementById('setPrimaryId').value = id;
+                document.getElementById('setPrimaryUserId').value = userId;
+                document.getElementById('setPrimaryForm').submit();
+            }
+        }
+
+        $(document).ready(function () {
+            $('#contactsTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
+                },
+                order: [[0, 'asc']],
+                pageLength: 25
+            });
+        });
+    </script>
+}

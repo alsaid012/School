@@ -1,0 +1,209 @@
+﻿@using SchoolERP.Domain.Enums
+@model SchoolERP.Web.ViewModels.EmployeeAttendances.EmployeeAttendanceIndexViewModel
+
+@{
+    ViewData["Title"] = "حضور الموظفين";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-clipboard-check text-primary"></i>
+            حضور الموظفين
+        </h1>
+        <div>
+            <a asp-action="Create" class="btn btn-success btn-lg">
+                <i class="fas fa-user-plus"></i>
+                تسجيل حضور فردي
+            </a>
+            <a asp-action="CreateRange" class="btn btn-primary btn-lg ms-2">
+                <i class="fas fa-users"></i>
+                تسجيل حضور جماعي
+            </a>
+            <a asp-action="DailyReport" class="btn btn-info btn-lg ms-2">
+                <i class="fas fa-file-alt"></i>
+                تقرير يومي
+            </a>
+        </div>
+    </div>
+
+    <!-- فلترة -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form asp-action="Index" method="get" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-user-tie"></i> الموظف
+                    </label>
+                    <select name="employeeId" class="form-select">
+                        <option value="">-- جميع الموظفين --</option>
+                        @foreach (var employee in Model.Employees)
+                        {
+                            <option value="@employee.Value" selected="@employee.Selected">@employee.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-calendar"></i> التاريخ
+                    </label>
+                    <input type="date" name="date" class="form-control" value="@Model.SelectedDate.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter"></i> تصفية
+                    </button>
+                </div>
+                <div class="col-md-2">
+                    <a asp-action="Index" class="btn btn-secondary w-100">
+                        <i class="fas fa-undo"></i> إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- جدول الحضور -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-list"></i>
+            قائمة الحضور
+            <span class="badge bg-light text-primary float-end">
+                @Model.Attendances.Count سجل
+            </span>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped" id="attendancesTable">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>الموظف</th>
+                            <th>المسمى الوظيفي</th>
+                            <th>القسم</th>
+                            <th>التاريخ</th>
+                            <th>وقت الدخول</th>
+                            <th>وقت الخروج</th>
+                            <th>الحالة</th>
+                            <th>التأخير</th>
+                            <th class="text-center">الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Attendances != null && Model.Attendances.Any())
+                        {
+                            int index = 1;
+                            foreach (var item in Model.Attendances)
+                            {
+                                var statusClass = item.Status == AttendanceStatus.Present ? "success" :
+                                item.Status == AttendanceStatus.Absent ? "danger" :
+                                item.Status == AttendanceStatus.Late ? "warning" : "info";
+                                <tr>
+                                    <td>@index</td>
+                                    <td>
+                                        <strong>@item.EmployeeName</strong>
+                                        <br />
+                                        <small class="text-muted">@item.EmployeeCode</small>
+                                    </td>
+                                    <td>@item.JobTitle</td>
+                                    <td>@item.Department</td>
+                                    <td>
+                                        <span class="badge bg-secondary">@item.AttendanceDate.ToString("yyyy/MM/dd")</span>
+                                    </td>
+                                    <td>
+                                        @if (item.CheckInTime.HasValue)
+                                        {
+                                            <span class="badge bg-success">@item.CheckInTime.Value.ToString("HH:mm")</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.CheckOutTime.HasValue)
+                                        {
+                                            <span class="badge bg-danger">@item.CheckOutTime.Value.ToString("HH:mm")</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-@statusClass">@item.StatusName</span>
+                                    </td>
+                                    <td>
+                                        @if (item.DelayMinutes.HasValue)
+                                        {
+                                            <span class="badge bg-warning text-dark">@item.DelayMinutes دقيقة</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Details" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-info" title="تفاصيل">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-warning" title="تعديل">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <button type="button"
+                                                    class="btn btn-sm btn-danger"
+                                                    onclick="deleteItem(@item.Id)"
+                                                    title="حذف">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="10" class="text-center text-muted py-4">
+                                    <i class="fas fa-clipboard-list fa-2x d-block mb-2"></i>
+                                    لا توجد سجلات حضور لعرضها
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="deleteForm" asp-action="Delete" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="deleteId" name="id" value="" />
+</form>
+
+@section Scripts {
+    <script>
+        function deleteItem(id) {
+            if (confirm('هل أنت متأكد من حذف سجل الحضور هذا؟')) {
+                document.getElementById('deleteId').value = id;
+                document.getElementById('deleteForm').submit();
+            }
+        }
+
+        $(document).ready(function () {
+            $('#attendancesTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
+                },
+                order: [[4, 'desc']],
+                pageLength: 25
+            });
+        });
+    </script>
+}

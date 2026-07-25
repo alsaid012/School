@@ -1,0 +1,254 @@
+@using SchoolERP.Web.ViewModels.ClassSchedule
+@model ClassScheduleEditViewModel
+
+@{
+    ViewData["Title"] = "تعديل الحصة";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- عنوان الصفحة -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-edit text-warning"></i>
+            تعديل الحصة
+        </h1>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> العودة للقائمة
+        </a>
+    </div>
+
+    <!-- معلومات الحصة (للقراءة فقط) -->
+    <div class="card shadow-sm mb-4 border-info">
+        <div class="card-header bg-info text-white">
+            <i class="fas fa-info-circle"></i>
+            معلومات الحصة (للقراءة فقط)
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <strong><i class="fas fa-user-tie"></i> المعلم:</strong>
+                    <span class="badge bg-primary fs-6">@Model.DisplayInfo.TeacherName</span>
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-book"></i> المادة:</strong>
+                    <span class="badge bg-success fs-6">@Model.DisplayInfo.SubjectName</span>
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-chalkboard"></i> الفصل:</strong>
+                    <span class="badge bg-warning text-dark fs-6">@Model.DisplayInfo.ClassRoomName</span>
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-calendar"></i> السنة:</strong>
+                    <span class="badge bg-secondary fs-6">@Model.DisplayInfo.AcademicYearName</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نموذج التعديل -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-warning text-white">
+            <i class="fas fa-edit"></i>
+            تعديل بيانات الحصة
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="row">
+                    <!-- السنة الدراسية -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="ClassSchedule.AcademicYearId" class="form-label fw-bold">
+                            <i class="fas fa-calendar text-primary"></i>
+                            السنة الدراسية
+                        </label>
+                        <select asp-for="ClassSchedule.AcademicYearId"
+                                class="form-select form-select-lg"
+                                asp-items="Model.AcademicYears">
+                            <option value="">-- اختر السنة الدراسية --</option>
+                        </select>
+                        <span asp-validation-for="ClassSchedule.AcademicYearId" class="text-danger"></span>
+                    </div>
+
+                    <!-- الفصل الدراسي -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="ClassSchedule.ClassRoomId" class="form-label fw-bold">
+                            <i class="fas fa-chalkboard text-info"></i>
+                            الفصل الدراسي
+                        </label>
+                        <select asp-for="ClassSchedule.ClassRoomId"
+                                class="form-select form-select-lg"
+                                asp-items="Model.ClassRooms">
+                            <option value="">-- اختر الفصل --</option>
+                        </select>
+                        <span asp-validation-for="ClassSchedule.ClassRoomId" class="text-danger"></span>
+                    </div>
+
+                    <!-- المادة -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="ClassSchedule.SubjectId" class="form-label fw-bold">
+                            <i class="fas fa-book text-warning"></i>
+                            المادة
+                        </label>
+                        <select asp-for="ClassSchedule.SubjectId"
+                                class="form-select form-select-lg"
+                                asp-items="Model.Subjects">
+                            <option value="">-- اختر المادة --</option>
+                        </select>
+                        <span asp-validation-for="ClassSchedule.SubjectId" class="text-danger"></span>
+                    </div>
+
+                    <!-- المعلم -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="ClassSchedule.TeacherId" class="form-label fw-bold">
+                            <i class="fas fa-user-tie text-success"></i>
+                            المعلم
+                        </label>
+                        <select asp-for="ClassSchedule.TeacherId"
+                                class="form-select form-select-lg"
+                                asp-items="Model.Teachers">
+                            <option value="">-- اختر المعلم --</option>
+                        </select>
+                        <span asp-validation-for="ClassSchedule.TeacherId" class="text-danger"></span>
+                    </div>
+
+                    <!-- اليوم -->
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="ClassSchedule.DayOfWeek" class="form-label fw-bold">
+                            <i class="fas fa-calendar-day text-primary"></i>
+                            اليوم
+                        </label>
+                        <select asp-for="ClassSchedule.DayOfWeek"
+                                class="form-select form-select-lg"
+                                asp-items="Model.DaysOfWeek">
+                            <option value="">-- اختر اليوم --</option>
+                        </select>
+                        <span asp-validation-for="ClassSchedule.DayOfWeek" class="text-danger"></span>
+                    </div>
+
+                    <!-- وقت البداية -->
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="ClassSchedule.StartTime" class="form-label fw-bold">
+                            <i class="fas fa-play text-success"></i>
+                            وقت البداية
+                        </label>
+                        <input asp-for="ClassSchedule.StartTime"
+                               type="time"
+                               class="form-control form-control-lg" />
+                        <span asp-validation-for="ClassSchedule.StartTime" class="text-danger"></span>
+                    </div>
+
+                    <!-- وقت النهاية -->
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="ClassSchedule.EndTime" class="form-label fw-bold">
+                            <i class="fas fa-stop text-danger"></i>
+                            وقت النهاية
+                        </label>
+                        <input asp-for="ClassSchedule.EndTime"
+                               type="time"
+                               class="form-control form-control-lg" />
+                        <span asp-validation-for="ClassSchedule.EndTime" class="text-danger"></span>
+                    </div>
+
+                    <!-- رقم الحصة -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="ClassSchedule.PeriodNumber" class="form-label fw-bold">
+                            <i class="fas fa-sort-numeric-up text-info"></i>
+                            رقم الحصة (اختياري)
+                        </label>
+                        <input asp-for="ClassSchedule.PeriodNumber"
+                               type="number"
+                               min="1"
+                               max="10"
+                               class="form-control form-control-lg"
+                               placeholder="مثال: 1" />
+                        <span asp-validation-for="ClassSchedule.PeriodNumber" class="text-danger"></span>
+                        <small class="text-muted">رقم الحصة من 1 إلى 10 (اختياري)</small>
+                    </div>
+
+                    <!-- الحالة -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="ClassSchedule.IsActive" class="form-label fw-bold">
+                            <i class="fas fa-toggle-on text-success"></i>
+                            @Html.DisplayNameFor(m => m.ClassSchedule.IsActive)
+                        </label>
+                        <div class="form-check form-switch mt-2">
+                            <input asp-for="ClassSchedule.IsActive"
+                                   class="form-check-input"
+                                   id="isActiveSwitch"
+                                   checked="@(Model.ClassSchedule.IsActive)" />
+                            <label class="form-check-label fw-bold" for="isActiveSwitch">
+                                @if (Model.ClassSchedule.IsActive)
+                                {
+                                    <span class="text-success"><i class="fas fa-check-circle"></i> مفعل</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger"><i class="fas fa-times-circle"></i> غير مفعل</span>
+                                }
+                            </label>
+                        </div>
+                        <small class="text-muted">تعطيل الحصة يمنع ظهورها في الجداول والتقارير</small>
+                    </div>
+
+                    <!-- ملاحظات -->
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="ClassSchedule.Notes" class="form-label fw-bold">
+                            <i class="fas fa-sticky-note text-muted"></i>
+                            ملاحظات (اختياري)
+                        </label>
+                        <textarea asp-for="ClassSchedule.Notes"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="أدخل أي ملاحظات إضافية..."></textarea>
+                        <span asp-validation-for="ClassSchedule.Notes" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- أزرار التحكم -->
+                <div class="mt-4 d-flex gap-2 border-top pt-3">
+                    <button type="submit" class="btn btn-warning btn-lg">
+                        <i class="fas fa-save"></i> تحديث الحصة
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-times"></i> إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            // ✅ تحديث نص Switch عند التغيير
+            $('#isActiveSwitch').on('change', function () {
+                var label = $(this).closest('.form-check').find('.form-check-label');
+                if ($(this).is(':checked')) {
+                    label.html('<span class="text-success"><i class="fas fa-check-circle"></i> مفعل</span>');
+                } else {
+                    label.html('<span class="text-danger"><i class="fas fa-times-circle"></i> غير مفعل</span>');
+                }
+            });
+
+            // ✅ التحقق من الوقت
+            $('form').on('submit', function (e) {
+                var startTime = $('#ClassSchedule_StartTime').val();
+                var endTime = $('#ClassSchedule_EndTime').val();
+
+                if (startTime && endTime && startTime >= endTime) {
+                    alert('⚠️ وقت النهاية يجب أن يكون بعد وقت البداية');
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+}

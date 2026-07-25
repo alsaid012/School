@@ -1,0 +1,309 @@
+@model SchoolERP.Application.DTOs.AcademicYears.AcademicYearDetailsDto
+
+@{
+    ViewData["Title"] = "تفاصيل العام الدراسي";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- عنوان الصفحة -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-calendar-alt text-info"></i>
+            تفاصيل العام الدراسي
+        </h1>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                <i class="fas fa-edit"></i> تعديل
+            </a>
+            <a asp-action="Statistics" asp-route-id="@Model.Id" class="btn btn-primary">
+                <i class="fas fa-chart-pie"></i> إحصائيات
+            </a>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-right"></i> العودة للقائمة
+            </a>
+        </div>
+    </div>
+
+    <!-- معلومات العام الدراسي -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-info text-white">
+            <i class="fas fa-info-circle"></i>
+            معلومات العام الدراسي
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            <i class="fas fa-tag text-primary"></i> اسم العام
+                        </dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-primary fs-6">@Model.YearName</span>
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-school text-info"></i> المدرسة
+                        </dt>
+                        <dd class="col-sm-8">@Model.SchoolName</dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-calendar-plus text-success"></i> تاريخ البداية
+                        </dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-success">@Model.StartDate.ToString("yyyy/MM/dd")</span>
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-calendar-times text-danger"></i> تاريخ النهاية
+                        </dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-danger">@Model.EndDate.ToString("yyyy/MM/dd")</span>
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            <i class="fas fa-check-circle text-success"></i> عام حالي
+                        </dt>
+                        <dd class="col-sm-8">
+                            @if (Model.IsCurrent)
+                            {
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check"></i> نعم
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">لا</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-users text-primary"></i> عدد الطلاب
+                        </dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-primary">@Model.Students?.Count ?? 0</span>
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-file-alt text-warning"></i> عدد الامتحانات
+                        </dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-warning text-dark">@Model.Exams?.Count ?? 0</span>
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-toggle-on text-success"></i> الحالة
+                        </dt>
+                        <dd class="col-sm-8">
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check"></i> مفعل
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-times"></i> غير مفعل
+                                </span>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- معلومات الإنشاء والتحديث -->
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <hr />
+                    <div class="text-muted small">
+                        <i class="fas fa-calendar-plus"></i> تاريخ الإنشاء: @Model.CreatedAt.ToString("yyyy/MM/dd HH:mm")
+                        @if (Model.UpdatedAt.HasValue)
+                        {
+                            <span class="ms-3">
+                                <i class="fas fa-calendar-edit"></i> آخر تحديث: @Model.UpdatedAt.Value.ToString("yyyy/MM/dd HH:mm")
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- إحصائيات العام الدراسي -->
+    @if (Model.Statistics != null)
+    {
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <i class="fas fa-chart-bar"></i>
+                إحصائيات العام الدراسي
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <h6 class="text-muted">الطلاب</h6>
+                            <h3 class="text-primary">@Model.Statistics.TotalStudents</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <h6 class="text-muted">المعلمين</h6>
+                            <h3 class="text-success">@Model.Statistics.TotalTeachers</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <h6 class="text-muted">الفصول</h6>
+                            <h3 class="text-info">@Model.Statistics.TotalClassRooms</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <h6 class="text-muted">المواد</h6>
+                            <h3 class="text-warning">@Model.Statistics.TotalSubjects</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3 text-center">
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <h6 class="text-muted">الامتحانات</h6>
+                            <h3 class="text-danger">@Model.Statistics.TotalExams</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <h6 class="text-muted">نسبة النجاح</h6>
+                            <h3 class="text-success">@Model.Statistics.OverallSuccessRate.ToString("0.0")%</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <h6 class="text-muted">نسبة الحضور</h6>
+                            <h3 class="text-info">@Model.Statistics.OverallAttendanceRate.ToString("0.0")%</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <h6 class="text-muted">الأيام الدراسية</h6>
+                            <h3 class="text-secondary">@Model.Statistics.TotalSchoolDays</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- قائمة الطلاب -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-users"></i> الطلاب المسجلين</span>
+            <span class="badge bg-light text-secondary">@Model.Students?.Count ?? 0 طالب</span>
+        </div>
+        <div class="card-body">
+            @if (Model.Students != null && Model.Students.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>كود الطالب</th>
+                                <th>اسم الطالب</th>
+                                <th>الفصل</th>
+                                <th>تاريخ التسجيل</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int index = 1;
+                                foreach (var student in Model.Students)
+                                {
+                                    <tr>
+                                        <td>@index</td>
+                                        <td>
+                                            <span class="badge bg-info">@student.StudentCode</span>
+                                        </td>
+                                        <td>@student.FullName</td>
+                                        <td>@student.ClassRoomName</td>
+                                        <td>@student.EnrollmentDate.ToString("yyyy/MM/dd")</td>
+                                    </tr>
+                                    index++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center text-muted py-3">
+                    <i class="fas fa-users fa-2x d-block mb-2"></i>
+                    لا يوجد طلاب مسجلين في هذا العام الدراسي
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- قائمة الامتحانات -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-file-alt"></i> الامتحانات</span>
+            <span class="badge bg-light text-secondary">@Model.Exams?.Count ?? 0 امتحان</span>
+        </div>
+        <div class="card-body">
+            @if (Model.Exams != null && Model.Exams.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>اسم الامتحان</th>
+                                <th>المادة</th>
+                                <th>التاريخ</th>
+                                <th>الدرجة النهائية</th>
+                                <th>عدد الطلاب</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int examIndex = 1;
+                                foreach (var exam in Model.Exams)
+                                {
+                                    <tr>
+                                        <td>@examIndex</td>
+                                        <td>@exam.ExamName</td>
+                                        <td>@exam.SubjectName</td>
+                                        <td>
+                                            <span class="badge bg-secondary">@exam.ExamDate.ToString("yyyy/MM/dd")</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-warning text-dark">@exam.MaxScore</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary">@exam.StudentsCount</span>
+                                        </td>
+                                    </tr>
+                                    examIndex++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center text-muted py-3">
+                    <i class="fas fa-file-alt fa-2x d-block mb-2"></i>
+                    لا توجد امتحانات في هذا العام الدراسي
+                </div>
+            }
+        </div>
+    </div>
+</div>

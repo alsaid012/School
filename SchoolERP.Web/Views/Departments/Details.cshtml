@@ -1,0 +1,113 @@
+@model SchoolERP.Application.DTOs.Departments.DepartmentDetailsDto
+
+@{
+    ViewData["Title"] = "تفاصيل الإدارة";
+    ViewData["PageTitle"] = "تفاصيل الإدارة";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-sitemap me-2"></i>@Model.Name</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">اسم الإدارة</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+
+            <dt class="col-sm-3">الكود</dt>
+            <dd class="col-sm-9"><span class="badge bg-secondary">@Model.Code</span></dd>
+
+            <dt class="col-sm-3">المحافظة</dt>
+            <dd class="col-sm-9">@Model.GovernorateName</dd>
+
+            <dt class="col-sm-3">مدير الإدارة</dt>
+            <dd class="col-sm-9">@Model.DirectorName</dd>
+
+            <dt class="col-sm-3">رقم الهاتف</dt>
+            <dd class="col-sm-9">@Model.Phone</dd>
+
+            <dt class="col-sm-3">البريد الإلكتروني</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">العنوان</dt>
+            <dd class="col-sm-9">@Model.Address</dd>
+
+            <dt class="col-sm-3">عدد المدارس</dt>
+            <dd class="col-sm-9">@Model.SchoolsCount</dd>
+
+            <dt class="col-sm-3">الحالة</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsActive)
+                {
+                    <span class="badge bg-success">مفعل</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">غير مفعل</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">تاريخ الإنشاء</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</dd>
+
+            <dt class="col-sm-3">آخر تحديث</dt>
+            <dd class="col-sm-9">@(Model.UpdatedAt?.ToString("yyyy-MM-dd HH:mm") ?? "-")</dd>
+        </dl>
+
+       @*  @if (Model.Schools != null && Model.Schools.Any())
+        {
+            <hr />
+            <h6><i class="fas fa-school me-2"></i>المدارس التابعة</h6>
+            <ul class="list-group">
+                @foreach (var school in Model.Schools)
+                {
+                    <li class="list-group-item">@school.Name</li>
+                }
+            </ul>
+        } *@
+        @if (Model.Schools != null && Model.Schools.Any())
+        {
+            <hr />
+            <h6><i class="fas fa-school me-2"></i>المدارس التابعة</h6>
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>اسم المدرسة</th>
+                            <th>الكود</th>
+                            <th>النوع</th>
+                            <th>المدير</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var school in Model.Schools)
+                        {
+                            <tr>
+                                <td>@school.Id</td>
+                                <td>@school.Name</td>
+                                <td>@school.Code</td>
+                                <td>@school.SchoolType</td>
+                                <td>@school.PrincipalName</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info mt-3">
+                <i class="fas fa-info-circle me-2"></i>لا توجد مدارس تابعة لهذه الإدارة
+            </div>
+        }
+    </div>
+    <div class="card-footer">
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right me-2"></i>العودة
+        </a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+            <i class="fas fa-edit me-2"></i>تعديل
+        </a>
+    </div>
+</div>

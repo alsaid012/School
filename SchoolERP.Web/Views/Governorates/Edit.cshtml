@@ -1,0 +1,57 @@
+@model SchoolERP.Application.DTOs.Governorates.UpdateGovernorateDto
+
+@{
+    ViewData["Title"] = "تعديل المحافظة";
+    ViewData["PageTitle"] = "تعديل المحافظة";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-warning">
+        <h5 class="mb-0"><i class="fas fa-edit me-2"></i>تعديل المحافظة</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-action="Edit" asp-route-id="@ViewBag.Id">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">
+                            <i class="fas fa-tag me-1"></i>اسم المحافظة
+                        </label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Code" class="form-label">
+                            <i class="fas fa-barcode me-1"></i>الكود
+                        </label>
+                        <input asp-for="Code" class="form-control" />
+                        <span asp-validation-for="Code" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="IsActive" class="form-label">
+                    <i class="fas fa-power-off me-1"></i>الحالة
+                </label>
+                <select asp-for="IsActive" class="form-select">
+                    <option value="true">مفعل</option>
+                    <option value="false">غير مفعل</option>
+                </select>
+                <span asp-validation-for="IsActive" class="text-danger"></span>
+            </div>
+
+            <hr />
+            <button type="submit" class="btn btn-warning">
+                <i class="fas fa-save me-2"></i>تحديث
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-times me-2"></i>إلغاء
+            </a>
+        </form>
+    </div>
+</div>

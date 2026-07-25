@@ -1,0 +1,317 @@
+@model SchoolERP.Application.DTOs.Users.UpdateUserDto
+
+@{
+    ViewData["Title"] = "تعديل المستخدم";
+    ViewData["PageTitle"] = "تعديل المستخدم";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-warning">
+        <h5 class="mb-0"><i class="fas fa-edit me-2"></i>تعديل المستخدم</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-action="Edit" asp-route-id="@ViewBag.UserId" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- ============================================================ -->
+            <!-- الصف الأول: الاسم الكامل + البريد الإلكتروني -->
+            <!-- ============================================================ -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="FullName" class="form-label">
+                            <i class="fas fa-user-circle me-1"></i>الاسم الكامل
+                        </label>
+                        <input asp-for="FullName" class="form-control" />
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">
+                            <i class="fas fa-envelope me-1"></i>البريد الإلكتروني
+                        </label>
+                        <input asp-for="Email" type="email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- الصف الثاني: رقم الهاتف + الحالة -->
+            <!-- ============================================================ -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="PhoneNumber" class="form-label">
+                            <i class="fas fa-phone me-1"></i>رقم الهاتف
+                        </label>
+                        <input asp-for="PhoneNumber" class="form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Status" class="form-label">
+                            <i class="fas fa-info-circle me-1"></i>الحالة
+                        </label>
+                        <select asp-for="Status" class="form-select">
+                            <option value="0">معلق</option>
+                            <option value="1">نشط</option>
+                            <option value="2">موقوف</option>
+                            <option value="3">غير نشط</option>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- الصف الثالث: النوع الاجتماعي + العنوان -->
+            <!-- ============================================================ -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Gender" class="form-label">
+                            <i class="fas fa-venus-mars me-1"></i>النوع الاجتماعي
+                        </label>
+                        <select asp-for="Gender" class="form-select">
+                            <option value="">اختر النوع...</option>
+                            <option value="ذكر">ذكر</option>
+                            <option value="أنثى">أنثى</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Address" class="form-label">
+                            <i class="fas fa-home me-1"></i>العنوان
+                        </label>
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- الصورة الحالية -->
+            <!-- ============================================================ -->
+            @if (!string.IsNullOrEmpty(Model.CurrentProfilePicture))
+            {
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-image me-1"></i>الصورة الحالية</label>
+                    <div>
+                        <img src="@Model.CurrentProfilePicture" alt="الصورة الشخصية" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover; border: 2px solid #ddd;" />
+                    </div>
+                </div>
+            }
+
+            <!-- ============================================================ -->
+            <!-- تغيير الصورة -->
+            <!-- ============================================================ -->
+            <div class="mb-3">
+                <label asp-for="ProfileImage" class="form-label">
+                    <i class="fas fa-image me-1"></i>تغيير الصورة الشخصية
+                </label>
+                <input asp-for="ProfileImage" type="file" class="form-control" accept="image/*" onchange="previewImage(event)" />
+                <span asp-validation-for="ProfileImage" class="text-danger"></span>
+                <div id="imagePreview" class="mt-2" style="display: none;">
+                    <img id="preview" src="#" alt="معاينة الصورة" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover; border: 2px solid #ddd;" />
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- حذف الصورة -->
+            <!-- ============================================================ -->
+            @if (!string.IsNullOrEmpty(Model.CurrentProfilePicture))
+            {
+                <div class="mb-3 form-check">
+                    <input asp-for="RemoveImage" type="checkbox" class="form-check-input" />
+                    <label asp-for="RemoveImage" class="form-check-label text-danger">
+                        <i class="fas fa-trash me-1"></i>حذف الصورة الحالية
+                    </label>
+                </div>
+            }
+
+            <!-- ============================================================ -->
+            <!-- جهات الاتصال -->
+            <!-- ============================================================ -->
+            <div class="mb-3">
+                <label class="form-label"><i class="fas fa-address-book me-1"></i>جهات الاتصال</label>
+                <div id="contactsContainer">
+                    @if (ViewBag.Contacts != null)
+                    {
+                        var contactsList = ViewBag.Contacts as List<SchoolERP.Domain.Entities.UserContact>;
+                        int i = 0;
+                        if (contactsList != null)
+                        {
+                            foreach (var contact in contactsList)
+                            {
+                                <div class="row contact-row mt-2">
+                                    <div class="col-md-3">
+                                        <input type="hidden" name="Contacts[@i].Id" value="@contact.Id" />
+                                        <select name="Contacts[@i].ContactType" class="form-select">
+                                            @if (contact.ContactType == SchoolERP.Domain.Enums.ContactType.Phone)
+                                            {
+                                                <option value="1" selected>هاتف</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="1">هاتف</option>
+                                            }
+
+                                            @if (contact.ContactType == SchoolERP.Domain.Enums.ContactType.Mobile)
+                                            {
+                                                <option value="2" selected>موبايل</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="2">موبايل</option>
+                                            }
+
+                                            @if (contact.ContactType == SchoolERP.Domain.Enums.ContactType.Email)
+                                            {
+                                                <option value="3" selected>بريد إلكتروني</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="3">بريد إلكتروني</option>
+                                            }
+
+                                            @if (contact.ContactType == SchoolERP.Domain.Enums.ContactType.WhatsApp)
+                                            {
+                                                <option value="4" selected>واتساب</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="4">واتساب</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" name="Contacts[@i].ContactValue" class="form-control" value="@contact.ContactValue" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check mt-2">
+                                            @if (contact.IsPrimary)
+                                            {
+                                                <input type="checkbox" name="Contacts[@i].IsPrimary" class="form-check-input" value="true" checked />
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" name="Contacts[@i].IsPrimary" class="form-check-input" value="true" />
+                                            }
+                                            <label class="form-check-label">أساسي</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check mt-2">
+                                            <input type="checkbox" name="Contacts[@i].IsDeleted" class="form-check-input" value="true" />
+                                            <label class="form-check-label text-danger">حذف</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button type="button" class="btn btn-danger btn-sm remove-contact" onclick="removeContact(this)">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                i++;
+                            }
+                        }
+                    }
+                </div>
+                <button type="button" class="btn btn-outline-primary btn-sm mt-2" onclick="addContact()">
+                    <i class="fas fa-plus me-1"></i>إضافة جهة اتصال
+                </button>
+            </div>
+            <!-- ============================================================ -->
+            <!-- أزرار الحفظ والإلغاء -->
+            <!-- ============================================================ -->
+            <hr />
+            <button type="submit" class="btn btn-warning">
+                <i class="fas fa-save me-2"></i>تحديث
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-times me-2"></i>إلغاء
+            </a>
+        </form>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Scripts -->
+<!-- ============================================================ -->
+@section Scripts {
+    <script>
+        // معاينة الصورة
+        function previewImage(event) {
+            const input = event.target;
+            const previewContainer = document.getElementById('imagePreview');
+            const preview = document.getElementById('preview');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                }
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                previewContainer.style.display = 'none';
+            }
+        }
+
+        // إضافة جهة اتصال جديدة
+        let contactIndex = @(ViewBag.Contacts != null ? ViewBag.Contacts.Count : 0);
+
+        function addContact() {
+            const container = document.getElementById('contactsContainer');
+            const newRow = document.createElement('div');
+            newRow.className = 'row contact-row mt-2';
+            newRow.innerHTML = `
+                <div class="col-md-3">
+                    <select name="Contacts[${contactIndex}].ContactType" class="form-select">
+                        <option value="1">هاتف</option>
+                        <option value="2">موبايل</option>
+                        <option value="3">بريد إلكتروني</option>
+                        <option value="4">واتساب</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" name="Contacts[${contactIndex}].ContactValue" class="form-control" placeholder="القيمة" />
+                </div>
+                <div class="col-md-2">
+                    <div class="form-check mt-2">
+                        <input type="checkbox" name="Contacts[${contactIndex}].IsPrimary" class="form-check-input" value="true" />
+                        <label class="form-check-label">أساسي</label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-check mt-2">
+                        <input type="checkbox" name="Contacts[${contactIndex}].IsDeleted" class="form-check-input" value="true" />
+                        <label class="form-check-label text-danger">حذف</label>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-danger btn-sm remove-contact" onclick="removeContact(this)">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            container.appendChild(newRow);
+            contactIndex++;
+        }
+
+        // حذف جهة اتصال
+        function removeContact(button) {
+            const row = button.closest('.contact-row');
+            if (document.querySelectorAll('.contact-row').length > 1) {
+                row.remove();
+            } else {
+                alert('يجب أن يكون هناك على الأقل جهة اتصال واحدة');
+            }
+        }
+    </script>
+}

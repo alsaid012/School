@@ -1,0 +1,121 @@
+@model SchoolERP.Application.DTOs.TeacherSubjects.CreateTeacherSubjectDto
+
+@{
+    ViewData["Title"] = "إضافة رابط جديد";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- عنوان الصفحة -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-plus-circle text-success"></i>
+            إضافة رابط جديد بين المعلم والمادة
+        </h1>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> العودة للقائمة
+        </a>
+    </div>
+
+    <!-- نموذج الإضافة -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            <i class="fas fa-plus"></i>
+            بيانات الرابط الجديد
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="row">
+                    <!-- اختيار المعلم -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="TeacherId" class="form-label fw-bold">
+                            <i class="fas fa-user-tie text-primary"></i>
+                            @Html.DisplayNameFor(m => m.TeacherId)
+                        </label>
+                        <select asp-for="TeacherId"
+                                class="form-select form-select-lg"
+                                asp-items="@(new SelectList(ViewBag.Teachers as List<SchoolERP.Domain.Entities.Teacher>, "Id", "User.FullName"))">
+                            <option value="">-- اختر المعلم --</option>
+                        </select>
+                        <span asp-validation-for="TeacherId" class="text-danger"></span>
+                    </div>
+
+                    <!-- اختيار المادة -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="SubjectId" class="form-label fw-bold">
+                            <i class="fas fa-book text-success"></i>
+                            @Html.DisplayNameFor(m => m.SubjectId)
+                        </label>
+                        <select asp-for="SubjectId"
+                                class="form-select form-select-lg"
+                                asp-items="@(new SelectList(ViewBag.Subjects as List<SchoolERP.Domain.Entities.Subject>, "Id", "SubjectName"))">
+                            <option value="">-- اختر المادة --</option>
+                        </select>
+                        <span asp-validation-for="SubjectId" class="text-danger"></span>
+                    </div>
+
+                    <!-- المادة الأساسية -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="IsPrimary" class="form-label fw-bold">
+                            <i class="fas fa-star text-warning"></i>
+                            @Html.DisplayNameFor(m => m.IsPrimary)
+                        </label>
+                        <div class="form-check form-switch">
+                            <input asp-for="IsPrimary" class="form-check-input" />
+                            <label class="form-check-label" for="IsPrimary">
+                                @(Model.IsPrimary ? "مادة أساسية" : "مادة ثانوية")
+                            </label>
+                        </div>
+                        <small class="text-muted">المادة الأساسية هي المادة الرئيسية التي يدرسها المعلم</small>
+                    </div>
+
+                    <!-- عدد الحصص -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="WeeklyHours" class="form-label fw-bold">
+                            <i class="fas fa-clock text-info"></i>
+                            @Html.DisplayNameFor(m => m.WeeklyHours)
+                        </label>
+                        <input asp-for="WeeklyHours"
+                               type="number"
+                               min="1"
+                               max="10"
+                               class="form-control form-control-lg"
+                               placeholder="مثال: 4" />
+                        <span asp-validation-for="WeeklyHours" class="text-danger"></span>
+                        <small class="text-muted">عدد الحصص الأسبوعية لهذه المادة (1-10)</small>
+                    </div>
+                </div>
+
+                <!-- أزرار التحكم -->
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-save"></i> حفظ الرابط
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-times"></i> إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // ✅ تحديث نص الـ Switch عند التغيير
+        $(document).ready(function () {
+            $('#IsPrimary').on('change', function () {
+                var label = $(this).closest('.form-check').find('.form-check-label');
+                if ($(this).is(':checked')) {
+                    label.text('مادة أساسية');
+                } else {
+                    label.text('مادة ثانوية');
+                }
+            });
+        });
+    </script>
+}

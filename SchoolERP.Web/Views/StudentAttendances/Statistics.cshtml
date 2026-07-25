@@ -1,0 +1,220 @@
+@model SchoolERP.Application.DTOs.StudentAttendances.StudentAttendanceStatisticsDto
+
+@{
+    ViewData["Title"] = "إحصائيات الحضور";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var studentName = ViewBag.StudentName as string ?? "الطالب";
+    var studentCode = ViewBag.StudentCode as string ?? "";
+    var fromDate = ViewBag.FromDate as DateTime? ?? DateTime.Now.AddMonths(-1);
+    var toDate = ViewBag.ToDate as DateTime? ?? DateTime.Now;
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-chart-pie text-primary"></i>
+            إحصائيات الحضور
+        </h1>
+        <div>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-right"></i> العودة للحضور
+            </a>
+        </div>
+    </div>
+
+    <!-- معلومات الطالب -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-info-circle"></i>
+            معلومات الطالب
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <strong><i class="fas fa-user-graduate"></i> اسم الطالب:</strong>
+                    <span class="badge bg-primary fs-6">@studentName</span>
+                </div>
+                <div class="col-md-4">
+                    <strong><i class="fas fa-id-card"></i> كود الطالب:</strong>
+                    <span class="badge bg-secondary fs-6">@studentCode</span>
+                </div>
+                <div class="col-md-4">
+                    <strong><i class="fas fa-calendar"></i> الفترة:</strong>
+                    <span class="badge bg-info fs-6">@fromDate.ToString("yyyy/MM/dd") - @toDate.ToString("yyyy/MM/dd")</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الإحصائيات الأساسية -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-primary">
+                <div class="card-body">
+                    <h6 class="text-muted">إجمالي أيام الحضور</h6>
+                    <h2 class="text-primary">@Model.TotalAttendanceDays</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-success">
+                <div class="card-body">
+                    <h6 class="text-muted">أيام الحضور</h6>
+                    <h2 class="text-success">@Model.PresentDays</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-danger">
+                <div class="card-body">
+                    <h6 class="text-muted">أيام الغياب</h6>
+                    <h2 class="text-danger">@Model.AbsentDays</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-info">
+                <div class="card-body">
+                    <h6 class="text-muted">نسبة الحضور</h6>
+                    <h2 class="text-info">@Model.AttendancePercentage.ToString("0.0")%</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- إحصائيات إضافية -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm text-center border-warning">
+                <div class="card-body">
+                    <h6 class="text-muted">أيام التأخير</h6>
+                    <h2 class="text-warning">@Model.LateDays</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm text-center border-info">
+                <div class="card-body">
+                    <h6 class="text-muted">أيام العذر</h6>
+                    <h2 class="text-info">@Model.ExcusedDays</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm text-center border-secondary">
+                <div class="card-body">
+                    <h6 class="text-muted">متوسط أيام الحضور</h6>
+                    <h2 class="text-secondary">@Model.AverageAttendanceDays.ToString("0.0")</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- توزيع الحضور حسب الفصول (إذا كان هناك بيانات) -->
+    @if (Model.AttendanceByClass != null && Model.AttendanceByClass.Any())
+    {
+        <div class="card shadow-sm">
+            <div class="card-header bg-secondary text-white">
+                <i class="fas fa-chart-bar"></i>
+                توزيع الحضور حسب الفصول
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>الفصل</th>
+                                <th>عدد الطلاب</th>
+                                <th>أيام الحضور</th>
+                                <th>أيام الغياب</th>
+                                <th>أيام التأخير</th>
+                                <th>نسبة الحضور</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.AttendanceByClass)
+                            {
+                                <tr>
+                                    <td>@item.Key</td>
+                                    <td>@item.Value.TotalStudents</td>
+                                    <td>@item.Value.PresentDays</td>
+                                    <td>@item.Value.AbsentDays</td>
+                                    <td>@item.Value.LateDays</td>
+                                    <td>
+                                        <span class="badge bg-primary">@item.Value.AttendancePercentage.ToString("0.0")%</span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- شريط نسبة الحضور -->
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-dark text-white">
+            <i class="fas fa-progress"></i>
+            نسبة الحضور الإجمالية
+        </div>
+        <div class="card-body">
+            @{
+                var progress = Model.AttendancePercentage;
+                var progressClass = progress >= 80 ? "bg-success" :
+                                   progress >= 60 ? "bg-warning" :
+                                   progress >= 40 ? "bg-info" : "bg-danger";
+            }
+            <div class="d-flex justify-content-between mb-2">
+                <span>نسبة الحضور: @progress.ToString("0.0")%</span>
+                <span>@Model.PresentDays يوم من @Model.TotalAttendanceDays</span>
+            </div>
+            <div class="progress" style="height: 25px;">
+                <div class="progress-bar @progressClass progress-bar-striped progress-bar-animated"
+                     role="progressbar"
+                     style="width: @progress.ToString("0.0")%;"
+                     aria-valuenow="@progress"
+                     aria-valuemin="0"
+                     aria-valuemax="100">
+                    @progress.ToString("0.0")%
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- توزيع الحضور (Pie Chart - باستخدام CSS) -->
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-chart-pie"></i>
+            توزيع أيام الحضور
+        </div>
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <div class="border rounded p-3">
+                        <h6 class="text-success">حاضر</h6>
+                        <h3 class="text-success">@Model.PresentDays</h3>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="border rounded p-3">
+                        <h6 class="text-danger">غائب</h6>
+                        <h3 class="text-danger">@Model.AbsentDays</h3>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="border rounded p-3">
+                        <h6 class="text-warning">متأخر</h6>
+                        <h3 class="text-warning">@Model.LateDays</h3>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="border rounded p-3">
+                        <h6 class="text-info">معذور</h6>
+                        <h3 class="text-info">@Model.ExcusedDays</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,114 @@
+@model SchoolERP.Application.DTOs.Students.StudentDetailsDto
+
+@{
+    ViewData["Title"] = "تفاصيل الطالب";
+    ViewData["PageTitle"] = "تفاصيل الطالب";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-user-graduate me-2"></i>@Model.FullName</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">كود الطالب</dt>
+            <dd class="col-sm-9"><strong>@Model.StudentCode</strong></dd>
+
+            <dt class="col-sm-3">اسم الطالب</dt>
+            <dd class="col-sm-9">@Model.FullName</dd>
+
+            <dt class="col-sm-3">الصف الدراسي</dt>
+            <dd class="col-sm-9">@Model.GradeLevelName</dd>
+
+            <dt class="col-sm-3">الفصل</dt>
+            <dd class="col-sm-9">@Model.ClassRoomName</dd>
+
+            <dt class="col-sm-3">العام الدراسي</dt>
+            <dd class="col-sm-9">@Model.AcademicYearName</dd>
+
+            <dt class="col-sm-3">تاريخ التقييد</dt>
+            <dd class="col-sm-9">@Model.EnrollmentDate.ToString("yyyy-MM-dd")</dd>
+
+            <dt class="col-sm-3">حالة التخرج</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsGraduated)
+                {
+                    <span class="badge bg-secondary">متخرج</span>
+                }
+                else
+                {
+                    <span class="badge bg-success">غير متخرج</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">اسم ولي الأمر</dt>
+            <dd class="col-sm-9">@Model.ParentName</dd>
+
+            <dt class="col-sm-3">تليفون ولي الأمر</dt>
+            <dd class="col-sm-9">@Model.ParentPhone</dd>
+
+            <dt class="col-sm-3">بريد ولي الأمر</dt>
+            <dd class="col-sm-9">@Model.ParentEmail</dd>
+
+            <dt class="col-sm-3">الحالة</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsActive)
+                {
+                    <span class="badge bg-success">نشط</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">غير نشط</span>
+                }
+            </dd>
+        </dl>
+
+        @if (Model.Statistics != null)
+        {
+            <hr />
+            <h6><i class="fas fa-chart-bar me-2"></i>الإحصائيات</h6>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">عدد الامتحانات</h6>
+                            <h4>@Model.Statistics.TotalExams</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">المتوسط</h6>
+                            <h4>@Model.Statistics.AverageScore.ToString("F1")</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">أعلى درجة</h6>
+                            <h4>@Model.Statistics.MaxScore</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">نسبة الحضور</h6>
+                            <h4>@Model.Statistics.AttendancePercentage.ToString("F1")%</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="card-footer">
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right me-2"></i>العودة
+        </a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+            <i class="fas fa-edit me-2"></i>تعديل
+        </a>
+    </div>
+</div>

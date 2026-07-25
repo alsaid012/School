@@ -1,0 +1,114 @@
+@model SchoolERP.Application.DTOs.Subjects.SubjectDetailsDto
+
+@{
+    ViewData["Title"] = "تفاصيل المادة";
+    ViewData["PageTitle"] = "تفاصيل المادة";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-book me-2"></i>@Model.SubjectName</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">اسم المادة</dt>
+            <dd class="col-sm-9">@Model.SubjectName</dd>
+
+            <dt class="col-sm-3">الكود</dt>
+            <dd class="col-sm-9"><span class="badge bg-secondary">@Model.SubjectCode</span></dd>
+
+            <dt class="col-sm-3">الصف الدراسي</dt>
+            <dd class="col-sm-9">@Model.GradeLevelName</dd>
+
+            <dt class="col-sm-3">المدرسة</dt>
+            <dd class="col-sm-9">@Model.SchoolName</dd>
+
+            <dt class="col-sm-3">عدد الحصص الأسبوعية</dt>
+            <dd class="col-sm-9">@Model.WeeklyHours</dd>
+
+            <dt class="col-sm-3">مادة إجبارية</dt>
+            <dd class="col-sm-9">@(Model.IsRequired ? "نعم" : "لا")</dd>
+
+            <dt class="col-sm-3">عدد المعلمين</dt>
+            <dd class="col-sm-9">@Model.TeachersCount</dd>
+
+            <dt class="col-sm-3">عدد الطلاب</dt>
+            <dd class="col-sm-9">@Model.StudentsCount</dd>
+
+            <dt class="col-sm-3">الوصف</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+
+            <dt class="col-sm-3">الحالة</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsActive)
+                {
+                    <span class="badge bg-success">مفعل</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">غير مفعل</span>
+                }
+            </dd>
+        </dl>
+
+        @if (Model.Teachers != null && Model.Teachers.Any())
+        {
+            <hr />
+            <h6><i class="fas fa-chalkboard-teacher me-2"></i>المعلمون</h6>
+            <ul class="list-group">
+                @foreach (var teacher in Model.Teachers)
+                {
+                    <li class="list-group-item">@teacher.FullName (@teacher.Specialization)</li>
+                }
+            </ul>
+        }
+
+        @if (Model.Statistics != null)
+        {
+            <hr />
+            <h6><i class="fas fa-chart-bar me-2"></i>الإحصائيات</h6>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">عدد المعلمين</h6>
+                            <h4>@Model.Statistics.TotalTeachers</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">عدد الطلاب</h6>
+                            <h4>@Model.Statistics.TotalStudents</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">متوسط الدرجات</h6>
+                            <h4>@Model.Statistics.AverageScore.ToString("F1")</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">نسبة النجاح</h6>
+                            <h4>@Model.Statistics.SuccessRate.ToString("F1")%</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="card-footer">
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right me-2"></i>العودة
+        </a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+            <i class="fas fa-edit me-2"></i>تعديل
+        </a>
+    </div>
+</div>

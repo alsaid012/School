@@ -1,0 +1,150 @@
+@model SchoolERP.Web.ViewModels.EmployeeAttendances.DailyReportViewModel
+
+@{
+    ViewData["Title"] = "تقرير الحضور اليومي للموظفين";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-file-alt text-primary"></i>
+            تقرير الحضور اليومي للموظفين
+        </h1>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> العودة للحضور
+        </a>
+    </div>
+
+    <!-- فلترة -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form asp-action="DailyReport" method="get" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-school"></i> المدرسة
+                    </label>
+                    <select name="schoolId" class="form-select">
+                        <option value="">-- جميع المدارس --</option>
+                        @foreach (var school in Model.Schools)
+                        {
+                            <option value="@school.Value" selected="@school.Selected">@school.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-calendar"></i> التاريخ
+                    </label>
+                    <input type="date" name="date" class="form-control" value="@Model.SelectedDate.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search"></i> عرض
+                    </button>
+                </div>
+                <div class="col-md-2">
+                    <a asp-action="DailyReport" class="btn btn-secondary w-100">
+                        <i class="fas fa-undo"></i> إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model.Report != null)
+    {
+        var report = Model.Report as dynamic;
+        if (report != null)
+        {
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <i class="fas fa-chart-bar"></i>
+                    تقرير الحضور - @report.التاريخ
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card text-center border-primary">
+                                <div class="card-body">
+                                    <h6 class="text-muted">إجمالي الموظفين</h6>
+                                    <h2 class="text-primary">@report.إجمالي_الموظفين</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center border-success">
+                                <div class="card-body">
+                                    <h6 class="text-muted">حاضر</h6>
+                                    <h2 class="text-success">@report.حاضر</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center border-danger">
+                                <div class="card-body">
+                                    <h6 class="text-muted">غائب</h6>
+                                    <h2 class="text-danger">@report.غائب</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center border-info">
+                                <div class="card-body">
+                                    <h6 class="text-muted">نسبة الحضور</h6>
+                                    <h2 class="text-info">@report.نسبة_الحضور.ToString("0.0")%</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (report.تفاصيل_حسب_القسم != null && report.تفاصيل_حسب_القسم.Count > 0)
+                    {
+                        <div class="mt-4">
+                            <h5>تفاصيل حسب القسم</h5>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>القسم</th>
+                                            <th>الإجمالي</th>
+                                            <th>حاضر</th>
+                                            <th>غائب</th>
+                                            <th>متأخر</th>
+                                            <th>معذور</th>
+                                            <th>نسبة الحضور</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var cls in report.تفاصيل_حسب_القسم)
+                                        {
+                                            var percentage = cls.إجمالي > 0 ? (double)cls.حاضر / cls.إجمالي * 100 : 0;
+                                            <tr>
+                                                <td>@cls.القسم</td>
+                                                <td>@cls.إجمالي</td>
+                                                <td><span class="badge bg-success">@cls.حاضر</span></td>
+                                                <td><span class="badge bg-danger">@cls.غائب</span></td>
+                                                <td><span class="badge bg-warning text-dark">@cls.متأخر</span></td>
+                                                <td><span class="badge bg-info">@cls.معذور</span></td>
+                                                <td><span class="badge bg-primary">@percentage.ToString("0.0")%</span></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="card shadow-sm">
+            <div class="card-body text-center text-muted py-5">
+                <i class="fas fa-file-alt fa-3x d-block mb-3"></i>
+                <h5>يرجى اختيار المدرسة والتاريخ لعرض التقرير</h5>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,105 @@
+@model SchoolERP.Application.DTOs.Departments.CreateDepartmentDto
+
+@{
+    ViewData["Title"] = "إنشاء إدارة جديدة";
+    ViewData["PageTitle"] = "إنشاء إدارة جديدة";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="fas fa-plus me-2"></i>إنشاء إدارة جديدة</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">
+                            <i class="fas fa-tag me-1"></i>اسم الإدارة <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="Name" class="form-control" placeholder="أدخل اسم الإدارة" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Code" class="form-label">
+                            <i class="fas fa-barcode me-1"></i>الكود <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="Code" class="form-control" placeholder="أدخل كود الإدارة" />
+                        <span asp-validation-for="Code" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="DirectorName" class="form-label">
+                            <i class="fas fa-user-tie me-1"></i>اسم المدير
+                        </label>
+                        <input asp-for="DirectorName" class="form-control" placeholder="أدخل اسم المدير" />
+                        <span asp-validation-for="DirectorName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="GovernorateId" class="form-label">
+                            <i class="fas fa-map-marker-alt me-1"></i>المحافظة <span class="text-danger">*</span>
+                        </label>
+                        <select asp-for="GovernorateId" class="form-select">
+                            <option value="">اختر المحافظة...</option>
+                            @if (ViewBag.Governorates != null)
+                            {
+                                foreach (var gov in ViewBag.Governorates)
+                                {
+                                    <option value="@gov.Id">@gov.Name</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="GovernorateId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Phone" class="form-label">
+                            <i class="fas fa-phone me-1"></i>رقم الهاتف
+                        </label>
+                        <input asp-for="Phone" class="form-control" placeholder="أدخل رقم الهاتف" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">
+                            <i class="fas fa-envelope me-1"></i>البريد الإلكتروني
+                        </label>
+                        <input asp-for="Email" type="email" class="form-control" placeholder="example@email.com" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Address" class="form-label">
+                    <i class="fas fa-home me-1"></i>العنوان
+                </label>
+                <input asp-for="Address" class="form-control" placeholder="أدخل العنوان" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <hr />
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-save me-2"></i>حفظ
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-times me-2"></i>إلغاء
+            </a>
+        </form>
+    </div>
+</div>

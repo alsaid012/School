@@ -1,0 +1,56 @@
+@model SchoolERP.Application.DTOs.Employees.EmployeeDto
+
+@{
+    ViewData["Title"] = "حذف الموظف";
+    ViewData["PageTitle"] = "حذف الموظف";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0"><i class="fas fa-trash me-2"></i>حذف الموظف</h5>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>تنبيه!</strong> هل أنت متأكد من حذف هذا الموظف؟ هذا الإجراء لا يمكن التراجع عنه.
+        </div>
+
+        <dl class="row">
+            <dt class="col-sm-3">كود الموظف</dt>
+            <dd class="col-sm-9"><strong>@Model.EmployeeCode</strong></dd>
+
+            <dt class="col-sm-3">اسم الموظف</dt>
+            <dd class="col-sm-9">@Model.FullName</dd>
+
+            <dt class="col-sm-3">المسمى الوظيفي</dt>
+            <dd class="col-sm-9">@Model.JobTitle</dd>
+
+            <dt class="col-sm-3">القسم</dt>
+            <dd class="col-sm-9">@Model.Department</dd>
+
+            <dt class="col-sm-3">تاريخ التعيين</dt>
+            <dd class="col-sm-9">@Model.HireDate.ToString("yyyy-MM-dd")</dd>
+
+            <dt class="col-sm-3">الحالة</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsActive)
+                {
+                    <span class="badge bg-success">نشط</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">غير نشط</span>
+                }
+            </dd>
+        </dl>
+
+        <form method="post" asp-action="Delete" asp-route-id="@Model.Id">
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash me-2"></i>تأكيد الحذف
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-right me-2"></i>العودة
+            </a>
+        </form>
+    </div>
+</div>

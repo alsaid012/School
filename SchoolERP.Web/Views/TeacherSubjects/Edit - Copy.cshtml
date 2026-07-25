@@ -1,0 +1,87 @@
+@model SchoolERP.Application.DTOs.TeacherSubjects.UpdateTeacherSubjectDto
+
+@{
+    ViewData["Title"] = "تعديل الرابط";
+    ViewData["PageTitle"] = "تعديل الرابط";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-warning">
+        <h5 class="mb-0"><i class="fas fa-edit me-2"></i>تعديل الرابط</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-action="Edit" asp-route-id="@ViewBag.Id">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- ✅ Hidden Fields للمعرفات -->
+            <input type="hidden" asp-for="TeacherId" />
+            <input type="hidden" asp-for="SubjectId" />
+
+            <!-- ✅ معلومات الرابط (للقراءة فقط) -->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-chalkboard-teacher me-1"></i>المعلم
+                        </label>
+                        <p class="form-control-plaintext">@Model.TeacherName</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-book me-1"></i>المادة
+                        </label>
+                        <p class="form-control-plaintext">@Model.SubjectName</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-graduation-cap me-1"></i>الصف الدراسي
+                        </label>
+                        <p class="form-control-plaintext">@Model.GradeLevelName</p>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <!-- ✅ خيارات التعديل -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" asp-for="IsPrimary" />
+                            <label class="form-check-label" asp-for="IsPrimary">
+                                <i class="fas fa-star me-1"></i>مادة أساسية للمعلم
+                            </label>
+                        </div>
+                        <span asp-validation-for="IsPrimary" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" asp-for="IsActive" />
+                            <label class="form-check-label" asp-for="IsActive">
+                                <i class="fas fa-power-off me-1"></i>مفعل
+                            </label>
+                        </div>
+                        <span asp-validation-for="IsActive" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-warning">
+                    <i class="fas fa-save me-2"></i>تحديث
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-times me-2"></i>إلغاء
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

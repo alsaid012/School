@@ -1,0 +1,121 @@
+@model SchoolERP.Web.ViewModels.StudentAttendances.StudentAttendanceCreateViewModel
+
+@{
+    ViewData["Title"] = "تسجيل حضور طالب";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-user-plus text-success"></i>
+            تسجيل حضور طالب
+        </h1>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> العودة للقائمة
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            <i class="fas fa-plus"></i>
+            بيانات الحضور
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="row">
+                    <!-- الطالب -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Attendance.StudentId" class="form-label fw-bold">
+                            <i class="fas fa-user-graduate text-primary"></i>
+                            الطالب
+                        </label>
+                        <select asp-for="Attendance.StudentId" class="form-select form-select-lg" asp-items="Model.Students">
+                            <option value="">-- اختر الطالب --</option>
+                        </select>
+                        <span asp-validation-for="Attendance.StudentId" class="text-danger"></span>
+                    </div>
+
+                    <!-- التاريخ -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Attendance.AttendanceDate" class="form-label fw-bold">
+                            <i class="fas fa-calendar text-info"></i>
+                            التاريخ
+                        </label>
+                        <input asp-for="Attendance.AttendanceDate" type="date" class="form-control form-control-lg" />
+                        <span asp-validation-for="Attendance.AttendanceDate" class="text-danger"></span>
+                    </div>
+
+                    <!-- وقت الدخول -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Attendance.CheckInTime" class="form-label fw-bold">
+                            <i class="fas fa-sign-in-alt text-success"></i>
+                            وقت الدخول
+                        </label>
+                        <input asp-for="Attendance.CheckInTime" type="datetime-local" class="form-control form-control-lg" />
+                        <span asp-validation-for="Attendance.CheckInTime" class="text-danger"></span>
+                    </div>
+
+                    <!-- وقت الخروج -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Attendance.CheckOutTime" class="form-label fw-bold">
+                            <i class="fas fa-sign-out-alt text-danger"></i>
+                            وقت الخروج
+                        </label>
+                        <input asp-for="Attendance.CheckOutTime" type="datetime-local" class="form-control form-control-lg" />
+                        <span asp-validation-for="Attendance.CheckOutTime" class="text-danger"></span>
+                    </div>
+
+                    <!-- حالة الحضور -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Attendance.Status" class="form-label fw-bold">
+                            <i class="fas fa-clipboard-check text-primary"></i>
+                            حالة الحضور
+                        </label>
+                        <select asp-for="Attendance.Status" class="form-select form-select-lg" asp-items="Model.StatusList">
+                            <option value="">-- اختر الحالة --</option>
+                        </select>
+                        <span asp-validation-for="Attendance.Status" class="text-danger"></span>
+                    </div>
+
+                    <!-- دقائق التأخير -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Attendance.DelayMinutes" class="form-label fw-bold">
+                            <i class="fas fa-clock text-warning"></i>
+                            دقائق التأخير
+                        </label>
+                        <input asp-for="Attendance.DelayMinutes" type="number" min="0" max="1000" class="form-control form-control-lg" placeholder="مثال: 10" />
+                        <span asp-validation-for="Attendance.DelayMinutes" class="text-danger"></span>
+                        <small class="text-muted">ادخل 0 إذا لم يكن هناك تأخير</small>
+                    </div>
+
+                    <!-- ملاحظات -->
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Attendance.Notes" class="form-label fw-bold">
+                            <i class="fas fa-sticky-note text-muted"></i>
+                            ملاحظات (اختياري)
+                        </label>
+                        <textarea asp-for="Attendance.Notes" class="form-control" rows="3" placeholder="أدخل أي ملاحظات إضافية..."></textarea>
+                        <span asp-validation-for="Attendance.Notes" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2 border-top pt-3">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-save"></i> تسجيل الحضور
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-times"></i> إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

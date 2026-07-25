@@ -1,0 +1,194 @@
+@model SchoolERP.Application.DTOs.AcademicYears.AcademicYearStatisticsDto
+
+@{
+    ViewData["Title"] = "إحصائيات العام الدراسي";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var yearName = ViewBag.YearName as string ?? "العام الدراسي";
+    var schoolName = ViewBag.SchoolName as string ?? "المدرسة";
+    var startDate = ViewBag.StartDate as DateTime?;
+    var endDate = ViewBag.EndDate as DateTime?;
+    var isCurrent = ViewBag.IsCurrent as bool?;
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-chart-pie text-primary"></i>
+            إحصائيات العام الدراسي
+        </h1>
+        <div>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-right"></i> العودة للأعوام الدراسية
+            </a>
+        </div>
+    </div>
+
+    <!-- معلومات العام الدراسي -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-info-circle"></i>
+            معلومات العام الدراسي
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>اسم العام:</strong>
+                    <span class="badge bg-primary fs-6">@yearName</span>
+                </div>
+                <div class="col-md-3">
+                    <strong>المدرسة:</strong>
+                    <span class="badge bg-info fs-6">@schoolName</span>
+                </div>
+                <div class="col-md-3">
+                    <strong>تاريخ البداية:</strong>
+                    <span class="badge bg-secondary fs-6">@startDate?.ToString("yyyy/MM/dd")</span>
+                </div>
+                <div class="col-md-3">
+                    <strong>تاريخ النهاية:</strong>
+                    <span class="badge bg-secondary fs-6">@endDate?.ToString("yyyy/MM/dd")</span>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-3">
+                    <strong>الحالة:</strong>
+                    @if (isCurrent.GetValueOrDefault())
+                    {
+                        <span class="badge bg-success fs-6"><i class="fas fa-check-circle"></i> عام حالي</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary fs-6">عام سابق</span>
+                    }
+                </div>
+                <div class="col-md-3">
+                    <strong>الأيام الدراسية:</strong>
+                    <span class="badge bg-dark fs-6">@Model.TotalSchoolDays يوم</span>
+                </div>
+                <div class="col-md-3">
+                    <strong>الأيام المتبقية:</strong>
+                    <span class="badge bg-warning text-dark fs-6">@Model.RemainingSchoolDays يوم</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الإحصائيات الأساسية -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-primary">
+                <div class="card-body">
+                    <h6 class="text-muted">عدد الطلاب</h6>
+                    <h2 class="text-primary">@Model.TotalStudents</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-success">
+                <div class="card-body">
+                    <h6 class="text-muted">عدد المعلمين</h6>
+                    <h2 class="text-success">@Model.TotalTeachers</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-info">
+                <div class="card-body">
+                    <h6 class="text-muted">عدد الفصول</h6>
+                    <h2 class="text-info">@Model.TotalClassRooms</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-warning">
+                <div class="card-body">
+                    <h6 class="text-muted">عدد المواد</h6>
+                    <h2 class="text-warning">@Model.TotalSubjects</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- إحصائيات إضافية -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm text-center border-danger">
+                <div class="card-body">
+                    <h6 class="text-muted">عدد الامتحانات</h6>
+                    <h2 class="text-danger">@Model.TotalExams</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm text-center border-success">
+                <div class="card-body">
+                    <h6 class="text-muted">نسبة النجاح الإجمالية</h6>
+                    <h2 class="text-success">@Model.OverallSuccessRate.ToString("0.0")%</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm text-center border-info">
+                <div class="card-body">
+                    <h6 class="text-muted">نسبة الحضور الإجمالية</h6>
+                    <h2 class="text-info">@Model.OverallAttendanceRate.ToString("0.0")%</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- توزيع الطلاب حسب الصفوف -->
+    @if (Model.StudentDistributionByGrade != null && Model.StudentDistributionByGrade.Any())
+    {
+        <div class="card shadow-sm">
+            <div class="card-header bg-secondary text-white">
+                <i class="fas fa-users"></i>
+                توزيع الطلاب حسب الصفوف
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    @foreach (var item in Model.StudentDistributionByGrade)
+                    {
+                        <div class="col-md-3 mb-2">
+                            <div class="d-flex justify-content-between align-items-center border rounded p-2">
+                                <span>@item.Key</span>
+                                <span class="badge bg-primary">@item.Value طالب</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- نسبة الإكمال -->
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-dark text-white">
+            <i class="fas fa-progress"></i>
+            نسبة إكمال العام الدراسي
+        </div>
+        <div class="card-body">
+            @{
+                var progress = Model.TotalSchoolDays > 0 
+                    ? (decimal)(Model.TotalSchoolDays - Model.RemainingSchoolDays) / Model.TotalSchoolDays * 100 
+                    : 0;
+                var progressClass = progress >= 80 ? "bg-success" :
+                                   progress >= 60 ? "bg-warning" :
+                                   progress >= 40 ? "bg-info" : "bg-danger";
+            }
+            <div class="d-flex justify-content-between mb-2">
+                <span>تم إنجاز @progress.ToString("0.0")% من العام الدراسي</span>
+                <span>@Model.RemainingSchoolDays يوم متبقي</span>
+            </div>
+            <div class="progress" style="height: 25px;">
+                <div class="progress-bar @progressClass progress-bar-striped progress-bar-animated" 
+                     role="progressbar" 
+                     style="width: @progress.ToString("0.0")%;" 
+                     aria-valuenow="@progress" 
+                     aria-valuemin="0" 
+                     aria-valuemax="100">
+                    @progress.ToString("0.0")%
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

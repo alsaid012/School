@@ -1,0 +1,445 @@
+﻿/* ============================================================
+   🎨  التنسيقات العامة - SchoolERP
+   ============================================================ */
+
+/* ---------- الإعدادات الأساسية ---------- */
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+body {
+    font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+    margin-bottom: 60px;
+}
+
+a {
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+/* ========================================================= */
+/* 🎨  تنسيق الشريط العلوي (Navbar)                           */
+/* ========================================================= */
+.top-navbar {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 0.8rem 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+}
+
+    .top-navbar .navbar-brand {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #fff;
+        letter-spacing: 0.5px;
+    }
+
+        .top-navbar .navbar-brand i {
+            color: #f0c040;
+            margin-left: 10px;
+        }
+
+    .top-navbar .nav-link {
+        color: rgba(255, 255, 255, 0.8) !important;
+        font-weight: 600;
+        transition: all 0.3s;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+    }
+
+        .top-navbar .nav-link:hover {
+            color: #fff !important;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .top-navbar .nav-link.active {
+            color: #fff !important;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+    .top-navbar .user-dropdown .dropdown-toggle {
+        color: #fff !important;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s;
+    }
+
+        .top-navbar .user-dropdown .dropdown-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+    .top-navbar .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f0c040, #f7971e);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 16px;
+        color: #1a1a2e;
+        margin-left: 8px;
+    }
+
+    .top-navbar .badge-notification {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #e74c3c;
+        color: #fff;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .top-navbar .search-box {
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 50px;
+        padding: 0.4rem 1rem;
+        color: #fff;
+        width: 250px;
+        transition: all 0.3s;
+    }
+
+        .top-navbar .search-box:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #f0c040;
+            box-shadow: none;
+            color: #fff;
+            outline: none;
+            width: 300px;
+        }
+
+        .top-navbar .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+/* ========================================================= */
+/* 📱  تنسيق الشريط الجانبي (Sidebar)                         */
+/* ========================================================= */
+.sidebar-wrapper {
+    background: #ffffff;
+    border-left: 1px solid #e9ecef;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+    position: sticky;
+    top: 70px;
+    padding: 0;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+    .sidebar-wrapper::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .sidebar-wrapper::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .sidebar-wrapper::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 10px;
+    }
+
+    .sidebar-wrapper .sidebar-section {
+        padding: 0.5rem 0;
+    }
+
+        .sidebar-wrapper .sidebar-section .section-title {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #6c757d;
+            padding: 0.5rem 1.2rem 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.7;
+        }
+
+            .sidebar-wrapper .sidebar-section .section-title i {
+                margin-left: 6px;
+                font-size: 0.65rem;
+            }
+
+    .sidebar-wrapper .nav-link {
+        color: #495057;
+        padding: 0.55rem 1.2rem;
+        border-radius: 0;
+        border-right: 3px solid transparent;
+        transition: all 0.25s ease;
+        font-weight: 500;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+    }
+
+        .sidebar-wrapper .nav-link i {
+            width: 22px;
+            font-size: 1rem;
+            margin-left: 10px;
+            color: #6c757d;
+            transition: all 0.3s;
+        }
+
+        .sidebar-wrapper .nav-link:hover {
+            background: #f8f9fa;
+            color: #0d6efd;
+            border-right-color: #0d6efd;
+        }
+
+            .sidebar-wrapper .nav-link:hover i {
+                color: #0d6efd;
+            }
+
+        .sidebar-wrapper .nav-link.active {
+            background: #e7f1ff;
+            color: #0d6efd;
+            border-right-color: #0d6efd;
+            font-weight: 600;
+        }
+
+            .sidebar-wrapper .nav-link.active i {
+                color: #0d6efd;
+            }
+
+    .sidebar-wrapper .divider {
+        border: none;
+        border-top: 1px solid #e9ecef;
+        margin: 0.3rem 1.2rem;
+    }
+
+/* ========================================================= */
+/* 📱  تنسيق المحتوى الرئيسي                                 */
+/* ========================================================= */
+.main-content {
+    padding: 1.5rem 2rem;
+    min-height: calc(100vh - 70px);
+    background: #f4f6f9;
+}
+
+/* ========================================================= */
+/* 📱  تنسيق الفوتر                                          */
+/* ========================================================= */
+.footer {
+    background: #fff;
+    border-top: 1px solid #e9ecef;
+    padding: 1rem 0;
+    margin-top: 1.5rem;
+}
+
+/* ========================================================= */
+/* 📱  تنسيقات إضافية                                       */
+/* ========================================================= */
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 1.5rem;
+}
+
+    .page-title i {
+        color: #0d6efd;
+        margin-left: 10px;
+    }
+
+/* ========================================================= */
+/* 📱  تنسيقات البطاقات                                     */
+/* ========================================================= */
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.card-shadow-hover:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================================= */
+/* 📱  تنسيقات الجداول                                      */
+/* ========================================================= */
+.table-responsive {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.table th {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.table td {
+    vertical-align: middle;
+    font-size: 0.9rem;
+}
+
+/* ========================================================= */
+/* 📱  تنسيقات البادجات                                     */
+/* ========================================================= */
+.badge {
+    font-size: 0.85rem;
+    padding: 5px 12px;
+    border-radius: 20px;
+}
+
+.badge-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+/* ========================================================= */
+/* 📱  تنسيقات الأزرار                                      */
+/* ========================================================= */
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+/* ========================================================= */
+/* 📱  تنسيقات النماذج                                      */
+/* ========================================================= */
+.form-floating > .form-control-plaintext::placeholder,
+.form-floating > .form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder,
+.form-floating > .form-control:focus::placeholder {
+    text-align: start;
+}
+
+/* ========================================================= */
+/* 📱  تنسيقات الـ Scrollbar                                 */
+/* ========================================================= */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
+
+/* ========================================================= */
+/* 📱  تنسيقات الروابط السريعة                              */
+/* ========================================================= */
+.quick-action-btn {
+    border-radius: 12px;
+    padding: 15px 20px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+    .quick-action-btn:hover {
+        transform: scale(1.02);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+    }
+
+/* ========================================================= */
+/* 📱  تنسيقات التوست Messages                              */
+/* ========================================================= */
+.alert {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* ========================================================= */
+/* 📱  تنسيقات الـ School Badge                             */
+/* ========================================================= */
+.school-badge {
+    display: inline-block;
+    padding: 5px 15px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    font-size: 0.9rem;
+}
+
+/* ========================================================= */
+/* 📱  تنسيقات الـ Container                               */
+/* ========================================================= */
+.container-fluid {
+    padding: 0 30px;
+}
+
+/* ========================================================= */
+/* 📱  تنسيق الجوال                                         */
+/* ========================================================= */
+@media (max-width: 768px) {
+    .top-navbar .search-box {
+        width: 140px;
+    }
+
+        .top-navbar .search-box:focus {
+            width: 180px;
+        }
+
+    .sidebar-wrapper {
+        height: auto;
+        position: relative;
+        top: 0;
+    }
+
+    .main-content {
+        padding: 1rem;
+    }
+
+    .container-fluid {
+        padding: 0 15px;
+    }
+
+    .quick-action-btn {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+        flex: 1 1 100%;
+    }
+}
+
+/* ========================================================= */
+/* 📱  تنسيق الشاشات المتوسطة                               */
+/* ========================================================= */
+@media (min-width: 769px) and (max-width: 1200px) {
+    .quick-action-btn {
+        flex: 1 1 45%;
+    }
+}

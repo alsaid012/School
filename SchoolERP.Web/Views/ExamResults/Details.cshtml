@@ -1,0 +1,158 @@
+@model SchoolERP.Application.DTOs.ExamResults.ExamResultDto
+
+@{
+    ViewData["Title"] = "تفاصيل النتيجة";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- عنوان الصفحة -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-file-alt text-info"></i>
+            تفاصيل النتيجة
+        </h1>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                <i class="fas fa-edit"></i> تعديل
+            </a> 
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-right"></i> العودة
+            </a>
+        </div>
+    </div>
+
+    <!-- بطاقة التفاصيل -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+            <i class="fas fa-info-circle"></i>
+            معلومات النتيجة
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            <i class="fas fa-user-graduate text-primary"></i> الطالب
+                        </dt>
+                        <dd class="col-sm-8">
+                            <strong>@Model.StudentName</strong>
+                            <br />
+                            <small class="text-muted">@Model.StudentCode</small>
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-file-alt text-success"></i> الامتحان
+                        </dt>
+                        <dd class="col-sm-8">@Model.ExamName</dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-book text-warning"></i> المادة
+                        </dt>
+                        <dd class="col-sm-8">@Model.SubjectName</dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-chalkboard text-secondary"></i> الفصل
+                        </dt>
+                        <dd class="col-sm-8">@Model.ClassRoomName</dd>
+                    </dl>
+                </div>
+
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            <i class="fas fa-calendar text-primary"></i> التاريخ
+                        </dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-secondary">@Model.ExamDate.ToString("yyyy/MM/dd")</span>
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-star text-warning"></i> الدرجة
+                        </dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-primary">@Model.Score / @Model.MaxScore</span>
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-percent text-info"></i> النسبة
+                        </dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-info">@(Model.Percentage?.ToString("0.0") ?? "0")%</span>
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-star text-warning"></i> التقدير
+                        </dt>
+                        <dd class="col-sm-8">
+                            @{
+                                var gradeClass = Model.Percentage >= 80 ? "success" :
+                                                Model.Percentage >= 70 ? "warning" :
+                                                Model.Percentage >= 60 ? "info" : "danger";
+                            }
+                            <span class="badge bg-@gradeClass">@Model.Grade</span>
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-check-circle text-success"></i> الحالة
+                        </dt>
+                        <dd class="col-sm-8">
+                            @if (Model.IsPassed)
+                            {
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check"></i> ناجح
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-times"></i> راسب
+                                </span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-toggle-on text-success"></i> الحالة
+                        </dt>
+                        <dd class="col-sm-8">
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check"></i> مفعل
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-times"></i> غير مفعل
+                                </span>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Remarks))
+                {
+                    <div class="col-md-12 mt-3">
+                        <hr />
+                        <strong><i class="fas fa-sticky-note text-muted"></i> ملاحظات:</strong>
+                        <p class="mt-2 p-3 bg-light rounded">@Model.Remarks</p>
+                    </div>
+                }
+
+                <div class="col-md-12 mt-3">
+                    <hr />
+                    <div class="text-muted small">
+                        <i class="fas fa-calendar-plus"></i> تاريخ الإنشاء: @Model.CreatedAt.ToString("yyyy/MM/dd HH:mm")
+                        @if (Model.UpdatedAt.HasValue)
+                        {
+                            <span class="ms-3">
+                                <i class="fas fa-calendar-edit"></i> آخر تحديث: @Model.UpdatedAt.Value.ToString("yyyy/MM/dd HH:mm")
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

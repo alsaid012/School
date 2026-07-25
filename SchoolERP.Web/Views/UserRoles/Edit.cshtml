@@ -1,0 +1,205 @@
+@model SchoolERP.Web.ViewModels.UserRoles.UserRoleEditViewModel
+
+@{
+    ViewData["Title"] = "تعديل دور";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-edit text-warning"></i>
+            تعديل دور
+        </h1>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> العودة للقائمة
+        </a>
+    </div>
+
+    <!-- معلومات الدور (للقراءة فقط) -->
+    <div class="card shadow-sm mb-4 border-info">
+        <div class="card-header bg-info text-white">
+            <i class="fas fa-info-circle"></i>
+            معلومات الدور (للقراءة فقط)
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <strong><i class="fas fa-user"></i> المستخدم:</strong>
+                    <span class="badge bg-primary fs-6">@Model.DisplayInfo.UserName</span>
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-tag"></i> نوع الدور:</strong>
+                    <span class="badge bg-info fs-6">@Model.DisplayInfo.RoleTypeName</span>
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-star"></i> أساسي:</strong>
+                    @if (Model.DisplayInfo.IsPrimary)
+                    {
+                        <span class="badge bg-success fs-6">نعم</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary fs-6">لا</span>
+                    }
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-calendar-plus"></i> تاريخ الإنشاء:</strong>
+                    <span class="badge bg-secondary fs-6">@Model.DisplayInfo.CreatedAt.ToString("yyyy/MM/dd")</span>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-3">
+                    <strong><i class="fas fa-calendar-plus"></i> تاريخ البداية:</strong>
+                    @if (Model.DisplayInfo.StartDate.HasValue)
+                    {
+                        <span class="badge bg-success fs-6">@Model.DisplayInfo.StartDate.Value.ToString("yyyy/MM/dd")</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">غير محدد</span>
+                    }
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-calendar-times"></i> تاريخ النهاية:</strong>
+                    @if (Model.DisplayInfo.EndDate.HasValue)
+                    {
+                        <span class="badge bg-danger fs-6">@Model.DisplayInfo.EndDate.Value.ToString("yyyy/MM/dd")</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">غير محدد</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نموذج التعديل -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-warning text-white">
+            <i class="fas fa-edit"></i>
+            تعديل بيانات الدور
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="row">
+                    <!-- دور أساسي -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Role.IsPrimary" class="form-label fw-bold">
+                            <i class="fas fa-star text-warning"></i>
+                            @Html.DisplayNameFor(m => m.Role.IsPrimary)
+                        </label>
+                        <div class="form-check form-switch mt-2">
+                            <input asp-for="Role.IsPrimary" class="form-check-input" id="isPrimarySwitch" checked="@(Model.Role.IsPrimary)" />
+                            <label class="form-check-label fw-bold" for="isPrimarySwitch">
+                                @if (Model.Role.IsPrimary)
+                                {
+                                    <span class="text-success"><i class="fas fa-star"></i> أساسي</span>
+                                }
+                                else
+                                {
+                                    <span class="text-secondary"><i class="fas fa-circle"></i> ثانوي</span>
+                                }
+                            </label>
+                        </div>
+                        <small class="text-muted">الدور الأساسي هو الدور الرئيسي للمستخدم</small>
+                    </div>
+
+                    <!-- الحالة -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Role.IsActive" class="form-label fw-bold">
+                            <i class="fas fa-toggle-on text-success"></i>
+                            @Html.DisplayNameFor(m => m.Role.IsActive)
+                        </label>
+                        <div class="form-check form-switch mt-2">
+                            <input asp-for="Role.IsActive" class="form-check-input" id="isActiveSwitch" checked="@(Model.Role.IsActive)" />
+                            <label class="form-check-label fw-bold" for="isActiveSwitch">
+                                @if (Model.Role.IsActive)
+                                {
+                                    <span class="text-success"><i class="fas fa-check-circle"></i> مفعل</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger"><i class="fas fa-times-circle"></i> غير مفعل</span>
+                                }
+                            </label>
+                        </div>
+                        <small class="text-muted">تعطيل الدور يمنع ظهوره في القوائم</small>
+                    </div>
+
+                    <!-- تاريخ البداية -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Role.StartDate" class="form-label fw-bold">
+                            <i class="fas fa-calendar-plus text-success"></i>
+                            تاريخ البداية (اختياري)
+                        </label>
+                        <input asp-for="Role.StartDate" type="date" class="form-control form-control-lg" />
+                        <span asp-validation-for="Role.StartDate" class="text-danger"></span>
+                    </div>
+
+                    <!-- تاريخ النهاية -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Role.EndDate" class="form-label fw-bold">
+                            <i class="fas fa-calendar-times text-danger"></i>
+                            تاريخ النهاية (اختياري)
+                        </label>
+                        <input asp-for="Role.EndDate" type="date" class="form-control form-control-lg" />
+                        <span asp-validation-for="Role.EndDate" class="text-danger"></span>
+                    </div>
+
+                    <!-- ملاحظات -->
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Role.Notes" class="form-label fw-bold">
+                            <i class="fas fa-sticky-note text-muted"></i>
+                            ملاحظات (اختياري)
+                        </label>
+                        <textarea asp-for="Role.Notes" class="form-control" rows="3" placeholder="أدخل أي ملاحظات إضافية..."></textarea>
+                        <span asp-validation-for="Role.Notes" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2 border-top pt-3">
+                    <button type="submit" class="btn btn-warning btn-lg">
+                        <i class="fas fa-save"></i> تحديث الدور
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-times"></i> إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            // ✅ تحديث نصوص Switches عند التغيير
+            $('#isPrimarySwitch').on('change', function () {
+                var label = $(this).closest('.form-check').find('.form-check-label');
+                if ($(this).is(':checked')) {
+                    label.html('<span class="text-success"><i class="fas fa-star"></i> أساسي</span>');
+                } else {
+                    label.html('<span class="text-secondary"><i class="fas fa-circle"></i> ثانوي</span>');
+                }
+            });
+
+            $('#isActiveSwitch').on('change', function () {
+                var label = $(this).closest('.form-check').find('.form-check-label');
+                if ($(this).is(':checked')) {
+                    label.html('<span class="text-success"><i class="fas fa-check-circle"></i> مفعل</span>');
+                } else {
+                    label.html('<span class="text-danger"><i class="fas fa-times-circle"></i> غير مفعل</span>');
+                }
+            });
+        });
+    </script>
+}

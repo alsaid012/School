@@ -1,0 +1,178 @@
+﻿@model SchoolERP.Application.DTOs.Auth.LoginDto
+
+@{
+    ViewData["Title"] = "تسجيل الدخول";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - نظام إدارة المدارس</title>
+
+    <!-- Bootstrap RTL -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/Login.css" asp-append-version="true" />
+
+  
+</head>
+<body>
+
+    <!-- ============================================================ -->
+    <!-- 🌟  خلفية متحركة                                              -->
+    <!-- ============================================================ -->
+    <div class="bg-animation">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+
+    <div class="bg-pattern"></div>
+
+    <!-- ============================================================ -->
+    <!-- 🌙  زر تبديل الوضع الليلي                                     -->
+    <!-- ============================================================ -->
+    <button class="theme-toggle" id="themeToggle" title="تبديل الوضع">
+        <i class="fas fa-moon"></i>
+        <span id="themeText" class="ms-1">ليلي</span>
+    </button>
+
+    <!-- ============================================================ -->
+    <!-- 📦  بطاقة تسجيل الدخول                                       -->
+    <!-- ============================================================ -->
+    <div class="login-wrapper">
+        <div class="login-card">
+
+            <!-- ========================================================== -->
+            <!-- 🏷️  رأس البطاقة                                             -->
+            <!-- ========================================================== -->
+            <div class="login-header">
+                <div class="logo-icon">
+                    <i class="fas fa-school"></i>
+                </div>
+                <h4>نظام إدارة المدارس</h4>
+                <div class="subtitle">منصة تعليمية متكاملة</div>
+                <div class="school-badge">
+                    <i class="fas fa-graduation-cap me-1"></i>
+                    تسجيل الدخول
+                </div>
+            </div>
+
+            <!-- ========================================================== -->
+            <!-- 📝  جسم البطاقة                                             -->
+            <!-- ========================================================== -->
+            <div class="login-body">
+
+                <!-- ✅ رسائل النجاح -->
+                @if (ViewBag.Message != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show rounded-3 border-0" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        @ViewBag.Message
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                <!-- ✅ رسائل الخطأ العامة -->
+                @if (!ViewData.ModelState.IsValid && ViewData.ModelState.Values.Any(v => v.Errors.Any()))
+                {
+                    <div class="alert alert-danger alert-dismissible fade show rounded-3 border-0" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                <!-- ✅ نموذج تسجيل الدخول -->
+                <form method="post" asp-controller="Auth" asp-action="Login" asp-route-returnUrl="@ViewBag.ReturnUrl" id="loginForm">
+
+                    @Html.AntiForgeryToken()
+
+                    <!-- اسم المستخدم -->
+                    <div class="mb-3">
+                        <label asp-for="Username" class="form-label">
+                            <i class="fas fa-user"></i>
+                            اسم المستخدم
+                        </label>
+                        <div class="input-group">
+                            <input asp-for="Username" class="form-control" placeholder="أدخل اسم المستخدم" autofocus />
+                        </div>
+                        <span asp-validation-for="Username" class="field-validation-error"></span>
+                    </div>
+
+                    <!-- كلمة المرور -->
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">
+                            <i class="fas fa-lock"></i>
+                            كلمة المرور
+                        </label>
+                        <div class="input-group">
+                            <input asp-for="Password" type="password" class="form-control" placeholder="أدخل كلمة المرور" id="passwordInput" />
+                            <button type="button" class="btn btn-outline-secondary border-0" id="togglePassword" style="background:transparent; position:absolute; left:10px; top:50%; transform:translateY(-50%); z-index:10; color:#6c757d;">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="Password" class="field-validation-error"></span>
+                    </div>
+
+                    <!-- خيارات إضافية -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe" name="RememberMe" />
+                            <label class="form-check-label" for="rememberMe" style="font-size:14px;">
+                                تذكرني
+                            </label>
+                        </div>
+                        <a asp-controller="Auth" asp-action="ForgotPassword" class="forgot-link">
+                            <i class="fas fa-key me-1"></i>
+                            نسيت كلمة المرور؟
+                        </a>
+                    </div>
+
+                    <!-- زر تسجيل الدخول -->
+                    <button type="submit" class="btn-login" id="loginBtn">
+                        <span class="btn-text">
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            تسجيل الدخول
+                        </span>
+                        <span class="btn-loader"></span>
+                    </button>
+
+                    <!-- رابط التسجيل -->
+                    <div class="text-center mt-3">
+                        <span style="color:#6c757d; font-size:14px;">ليس لديك حساب؟</span>
+                        <a asp-controller="Auth" asp-action="Register" class="register-link">
+                            إنشاء حساب جديد
+                            <i class="fas fa-arrow-left me-1"></i>
+                        </a>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 📦  السكريبتات                                                -->
+    <!-- ============================================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+
+    <script src="~/js/Login.js" asp-append-version="true"></script>
+
+
+</body>
+</html>

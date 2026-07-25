@@ -1,0 +1,119 @@
+﻿@model IEnumerable<SchoolERP.Application.DTOs.Students.StudentDto>
+
+@{
+    ViewData["Title"] = "الطلاب";
+    ViewData["PageTitle"] = "إدارة الطلاب";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <h4 class="mb-0"><i class="fas fa-user-graduate me-2"></i>@ViewData["PageTitle"]</h4>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>إضافة طالب جديد
+    </a>
+</div>
+
+<!-- ============================================================ -->
+<!-- رسائل التنبيه -->
+<!-- ============================================================ -->
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<!-- ============================================================ -->
+<!-- جدول الطلاب -->
+<!-- ============================================================ -->
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-bordered align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th style="width: 50px;">#</th>
+                <th style="min-width: 100px;">كود الطالب</th>
+                <th style="min-width: 140px;">اسم الطالب</th>
+                <th style="min-width: 120px;">الصف</th>
+                <th style="min-width: 100px;">الفصل</th>
+                <th style="min-width: 120px;">ولي الأمر</th>
+                <th style="min-width: 100px;">الحالة</th>
+                <th style="min-width: 220px;">الإجراءات</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                int index = 1;
+                foreach (var student in Model)
+                {
+                    <tr>
+                        <td class="text-center">@index</td>
+                        <td><strong>@student.StudentCode</strong></td>
+                        <td>@student.FullName</td>
+                        <td>@student.GradeLevelName</td>
+                        <td>@student.ClassRoomName</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(student.ParentName))
+                            {
+                                <span>@student.ParentName</span>
+                                <br />
+                                <small class="text-muted">@student.ParentPhone</small>
+                            }
+                            else
+                            {
+                                <span class="text-muted">-</span>
+                            }
+                        </td>
+                        <td>
+                            @if (student.IsActive && !student.IsGraduated)
+                            {
+                                <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>نشط</span>
+                            }
+                            else if (student.IsGraduated)
+                            {
+                                <span class="badge bg-secondary"><i class="fas fa-graduation-cap me-1"></i>متخرج</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger"><i class="fas fa-times-circle me-1"></i>غير نشط</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm flex-wrap gap-1" role="group">
+                                <a asp-action="Details" asp-route-id="@student.Id" class="btn btn-info btn-sm" title="تفاصيل">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@student.Id" class="btn btn-warning btn-sm" title="تعديل">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form asp-action="Delete" asp-route-id="@student.Id" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm" title="حذف" onclick="return confirm('هل أنت متأكد من حذف هذا الطالب؟')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    index++;
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-4">
+                        <i class="fas fa-user-graduate fa-2x d-block mb-2"></i>
+                        لا يوجد طلاب
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

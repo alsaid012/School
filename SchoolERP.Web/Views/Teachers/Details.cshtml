@@ -1,0 +1,148 @@
+@model SchoolERP.Application.DTOs.Teachers.TeacherDetailsDto
+
+@{
+    ViewData["Title"] = "تفاصيل المعلم";
+    ViewData["PageTitle"] = "تفاصيل المعلم";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-chalkboard-teacher me-2"></i>@Model.FullName</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">كود المعلم</dt>
+            <dd class="col-sm-9"><strong>@Model.TeacherCode</strong></dd>
+
+            <dt class="col-sm-3">اسم المعلم</dt>
+            <dd class="col-sm-9">@Model.FullName</dd>
+
+            <dt class="col-sm-3">البريد الإلكتروني</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">رقم الهاتف</dt>
+            <dd class="col-sm-9">@Model.PhoneNumber</dd>
+
+            <dt class="col-sm-3">المؤهل الدراسي</dt>
+            <dd class="col-sm-9">@Model.Qualification</dd>
+
+            <dt class="col-sm-3">التخصص</dt>
+            <dd class="col-sm-9">@Model.Specialization</dd>
+
+            <dt class="col-sm-3">تاريخ التعيين</dt>
+            <dd class="col-sm-9">@Model.HireDate.ToString("yyyy-MM-dd")</dd>
+
+            <dt class="col-sm-3">الراتب</dt>
+            <dd class="col-sm-9">@Model.Salary</dd>
+
+            <dt class="col-sm-3">معلم فصل</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsHomeroomTeacher)
+                {
+                    <span class="badge bg-success">نعم</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">لا</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">المدرسة</dt>
+            <dd class="col-sm-9">@Model.SchoolName</dd>
+
+            <dt class="col-sm-3">الحالة</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsActive)
+                {
+                    <span class="badge bg-success">نشط</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">غير نشط</span>
+                }
+            </dd>
+        </dl>
+
+        @if (Model.Subjects != null && Model.Subjects.Any())
+        {
+            <hr />
+            <h6><i class="fas fa-book me-2"></i>المواد التي يدرسها</h6>
+            <ul class="list-group">
+                @foreach (var subject in Model.Subjects)
+                {
+                    <li class="list-group-item">
+                        <strong>@subject.SubjectName</strong>
+                        @if (!string.IsNullOrEmpty(subject.GradeLevelName))
+                        {
+                            <span class="text-muted"> - @subject.GradeLevelName</span>
+                        }
+                        @if (subject.IsPrimary)
+                        {
+                            <span class="badge bg-primary ms-2">أساسي</span>
+                        }
+                    </li>
+                }
+            </ul>
+        }
+
+        @if (Model.ClassRooms != null && Model.ClassRooms.Any())
+        {
+            <hr />
+            <h6><i class="fas fa-door-open me-2"></i>الفصول المشرف عليها</h6>
+            <ul class="list-group">
+                @foreach (var room in Model.ClassRooms)
+                {
+                    <li class="list-group-item">@room.ClassName</li>
+                }
+            </ul>
+        }
+
+        @if (Model.Statistics != null)
+        {
+            <hr />
+            <h6><i class="fas fa-chart-bar me-2"></i>الإحصائيات</h6>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">المواد</h6>
+                            <h4>@Model.Statistics.TotalSubjects</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">الفصول</h6>
+                            <h4>@Model.Statistics.TotalClassRooms</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">الطلاب</h6>
+                            <h4>@Model.Statistics.TotalStudents</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">نسبة الحضور</h6>
+                            <h4>@Model.Statistics.AttendancePercentage.ToString("F1")%</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="card-footer">
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right me-2"></i>العودة
+        </a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+            <i class="fas fa-edit me-2"></i>تعديل
+        </a>
+    </div>
+</div>

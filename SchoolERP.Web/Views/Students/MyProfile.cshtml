@@ -1,0 +1,136 @@
+@model SchoolERP.Web.ViewModels.Students.StudentProfileViewModel
+
+@{
+    ViewData["Title"] = "الملف الشخصي";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@* ✅ تعريف واحد فقط لقسم Styles *@
+@section Styles {
+    <style>
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 700;
+            color: white;
+        }
+    </style>
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="page-title">
+                <i class="fas fa-id-card"></i> الملف الشخصي
+            </h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- البطاقة الشخصية -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <div class="profile-avatar mx-auto mb-3">
+                        <span>@Model.FullName.Substring(0, 1).ToUpper()</span>
+                    </div>
+                    <h5 class="card-title">@Model.FullName</h5>
+                    <p class="text-muted">@Model.StudentCode</p>
+                    <hr />
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">@Model.GradeLevelName</span>
+                        <span class="badge @(Model.IsGraduated ? "bg-success" : "bg-primary")">
+                            @(Model.IsGraduated ? "تخرج" : "طالب")
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- المعلومات -->
+        <div class="col-md-8 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <i class="fas fa-info-circle"></i> المعلومات الشخصية
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-5">الاسم الكامل</dt>
+                                <dd class="col-sm-7">@Model.FullName</dd>
+
+                                <dt class="col-sm-5">كود الطالب</dt>
+                                <dd class="col-sm-7"><span class="badge bg-secondary">@Model.StudentCode</span></dd>
+
+                                <dt class="col-sm-5">اسم المستخدم</dt>
+                                <dd class="col-sm-7">@Model.Username</dd>
+
+                                <dt class="col-sm-5">البريد الإلكتروني</dt>
+                                <dd class="col-sm-7">@Model.Email</dd>
+
+                                <dt class="col-sm-5">رقم الهاتف</dt>
+                                <dd class="col-sm-7">@(Model.Phone ?? "-")</dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-5">تاريخ الميلاد</dt>
+                                <dd class="col-sm-7">@Model.DateOfBirth.ToString("yyyy/MM/dd")</dd>
+
+                                <dt class="col-sm-5">الجنس</dt>
+                                <dd class="col-sm-7">@(Model.Gender ?? "-")</dd>
+
+                                <dt class="col-sm-5">الرقم القومي</dt>
+                                <dd class="col-sm-7">@(Model.NationalId ?? "-")</dd>
+
+                                <dt class="col-sm-5">العنوان</dt>
+                                <dd class="col-sm-7">@(Model.Address ?? "-")</dd>
+
+                                <dt class="col-sm-5">تاريخ التسجيل</dt>
+                                <dd class="col-sm-7">@Model.EnrollmentDate.ToString("yyyy/MM/dd")</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-school text-primary"></i> المعلومات الدراسية</h6>
+                            <dl class="row">
+                                <dt class="col-sm-5">السنة الدراسية</dt>
+                                <dd class="col-sm-7">@Model.AcademicYear</dd>
+
+                                <dt class="col-sm-5">الصف الدراسي</dt>
+                                <dd class="col-sm-7">@Model.GradeLevelName</dd>
+
+                                <dt class="col-sm-5">الفصل</dt>
+                                <dd class="col-sm-7">@Model.ClassRoomName</dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-users text-success"></i> بيانات ولي الأمر</h6>
+                            <dl class="row">
+                                <dt class="col-sm-5">الاسم</dt>
+                                <dd class="col-sm-7">@(Model.ParentName ?? "-")</dd>
+
+                                <dt class="col-sm-5">الهاتف</dt>
+                                <dd class="col-sm-7">@(Model.ParentPhone ?? "-")</dd>
+
+                                <dt class="col-sm-5">البريد</dt>
+                                <dd class="col-sm-7">@(Model.ParentEmail ?? "-")</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

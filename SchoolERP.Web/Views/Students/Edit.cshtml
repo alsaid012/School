@@ -1,0 +1,105 @@
+@model SchoolERP.Application.DTOs.Students.UpdateStudentDto
+
+@{
+    ViewData["Title"] = "تعديل الطالب";
+    ViewData["PageTitle"] = "تعديل الطالب";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-warning">
+        <h5 class="mb-0"><i class="fas fa-edit me-2"></i>تعديل الطالب</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-action="Edit" asp-route-id="@ViewBag.Id">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="ClassRoomId" class="form-label">
+                            <i class="fas fa-door-open me-1"></i>الفصل
+                        </label>
+                        <select asp-for="ClassRoomId" class="form-select">
+                            <option value="">اختر الفصل...</option>
+                            @if (ViewBag.ClassRooms != null)
+                            {
+                                foreach (var room in ViewBag.ClassRooms)
+                                {
+                                    if (Model.ClassRoomId == room.Id)
+                                    {
+                                        <option value="@room.Id" selected>@room.ClassName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@room.Id">@room.ClassName</option>
+                                    }
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="ClassRoomId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="IsGraduated" class="form-label">
+                            <i class="fas fa-graduation-cap me-1"></i>حالة التخرج
+                        </label>
+                        <select asp-for="IsGraduated" class="form-select">
+                            <option value="false">غير متخرج</option>
+                            <option value="true">متخرج</option>
+                        </select>
+                        <span asp-validation-for="IsGraduated" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="ParentName" class="form-label">
+                            <i class="fas fa-user-friends me-1"></i>اسم ولي الأمر
+                        </label>
+                        <input asp-for="ParentName" class="form-control" />
+                        <span asp-validation-for="ParentName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="ParentPhone" class="form-label">
+                            <i class="fas fa-phone me-1"></i>تليفون ولي الأمر
+                        </label>
+                        <input asp-for="ParentPhone" class="form-control" />
+                        <span asp-validation-for="ParentPhone" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ParentEmail" class="form-label">
+                    <i class="fas fa-envelope me-1"></i>بريد ولي الأمر
+                </label>
+                <input asp-for="ParentEmail" type="email" class="form-control" />
+                <span asp-validation-for="ParentEmail" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="IsActive" class="form-label">
+                    <i class="fas fa-power-off me-1"></i>الحالة
+                </label>
+                <select asp-for="IsActive" class="form-select">
+                    <option value="true">مفعل</option>
+                    <option value="false">غير مفعل</option>
+                </select>
+                <span asp-validation-for="IsActive" class="text-danger"></span>
+            </div>
+
+            <hr />
+            <button type="submit" class="btn btn-warning">
+                <i class="fas fa-save me-2"></i>تحديث
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-times me-2"></i>إلغاء
+            </a>
+        </form>
+    </div>
+</div>

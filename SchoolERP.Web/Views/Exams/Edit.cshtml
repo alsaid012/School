@@ -1,0 +1,259 @@
+@model SchoolERP.Web.ViewModels.Exams.ExamEditViewModel
+
+@{
+    ViewData["Title"] = "تعديل الامتحان";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-edit text-warning"></i>
+            تعديل الامتحان
+        </h1>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> العودة للقائمة
+        </a>
+    </div>
+
+    <!-- معلومات الامتحان -->
+    <div class="card shadow-sm mb-4 border-info">
+        <div class="card-header bg-info text-white">
+            <i class="fas fa-info-circle"></i>
+            معلومات الامتحان (للقراءة فقط)
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <strong><i class="fas fa-tag"></i> اسم الامتحان:</strong>
+                    <span class="badge bg-primary fs-6">@Model.DisplayInfo.ExamName</span>
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-tag text-warning"></i> النوع:</strong>
+                    <span class="badge bg-info fs-6">@Model.DisplayInfo.ExamTypeName</span>
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-book"></i> المادة:</strong>
+                    <span class="badge bg-success fs-6">@Model.DisplayInfo.SubjectName</span>
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-calendar"></i> السنة:</strong>
+                    <span class="badge bg-secondary fs-6">@Model.DisplayInfo.AcademicYearName</span>
+                </div>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.DisplayInfo.TeacherName))
+            {
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <strong><i class="fas fa-user-tie"></i> المعلم المشرف:</strong>
+                        <span class="badge bg-dark fs-6">@Model.DisplayInfo.TeacherName</span>
+                    </div>
+                    <div class="col-md-4">
+                        <strong><i class="fas fa-chalkboard"></i> الفصل:</strong>
+                        <span class="badge bg-warning text-dark fs-6">@Model.DisplayInfo.ClassRoomName</span>
+                    </div>
+                    <div class="col-md-4">
+                        <strong><i class="fas fa-users"></i> عدد الطلاب:</strong>
+                        <span class="badge bg-primary fs-6">@Model.DisplayInfo.StudentsCount</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- نموذج التعديل -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-warning text-white">
+            <i class="fas fa-edit"></i>
+            تعديل بيانات الامتحان
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="row">
+                    <!-- اسم الامتحان -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Exam.ExamName" class="form-label fw-bold">
+                            <i class="fas fa-tag text-primary"></i>
+                            اسم الامتحان
+                        </label>
+                        <input asp-for="Exam.ExamName" class="form-control form-control-lg" />
+                        <span asp-validation-for="Exam.ExamName" class="text-danger"></span>
+                    </div>
+
+                    <!-- نوع الامتحان -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Exam.ExamType" class="form-label fw-bold">
+                            <i class="fas fa-tag text-warning"></i>
+                            نوع الامتحان
+                        </label>
+                        <select asp-for="Exam.ExamType" class="form-select form-select-lg" asp-items="Model.ExamTypes">
+                            <option value="">-- اختر نوع الامتحان --</option>
+                        </select>
+                        <span asp-validation-for="Exam.ExamType" class="text-danger"></span>
+                    </div>
+
+                    <!-- المادة -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Exam.SubjectId" class="form-label fw-bold">
+                            <i class="fas fa-book text-info"></i>
+                            المادة
+                        </label>
+                        <select asp-for="Exam.SubjectId" class="form-select form-select-lg" asp-items="Model.Subjects">
+                            <option value="">-- اختر المادة --</option>
+                        </select>
+                        <span asp-validation-for="Exam.SubjectId" class="text-danger"></span>
+                    </div>
+
+                    <!-- السنة الدراسية -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Exam.AcademicYearId" class="form-label fw-bold">
+                            <i class="fas fa-calendar text-primary"></i>
+                            السنة الدراسية
+                        </label>
+                        <select asp-for="Exam.AcademicYearId" class="form-select form-select-lg" asp-items="Model.AcademicYears">
+                            <option value="">-- اختر السنة الدراسية --</option>
+                        </select>
+                        <span asp-validation-for="Exam.AcademicYearId" class="text-danger"></span>
+                    </div>
+
+                    <!-- الفصل -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Exam.ClassRoomId" class="form-label fw-bold">
+                            <i class="fas fa-chalkboard text-secondary"></i>
+                            الفصل (اختياري)
+                        </label>
+                        <select asp-for="Exam.ClassRoomId" class="form-select form-select-lg" asp-items="Model.ClassRooms">
+                            <option value="">-- اختر الفصل (اختياري) --</option>
+                        </select>
+                        <span asp-validation-for="Exam.ClassRoomId" class="text-danger"></span>
+                    </div>
+
+                    <!-- المعلم -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Exam.TeacherId" class="form-label fw-bold">
+                            <i class="fas fa-user-tie text-success"></i>
+                            المعلم المشرف (اختياري)
+                        </label>
+                        <select asp-for="Exam.TeacherId" class="form-select form-select-lg" asp-items="Model.Teachers">
+                            <option value="">-- اختر المعلم (اختياري) --</option>
+                        </select>
+                        <span asp-validation-for="Exam.TeacherId" class="text-danger"></span>
+                    </div>
+
+                    <!-- تاريخ الامتحان -->
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Exam.ExamDate" class="form-label fw-bold">
+                            <i class="fas fa-calendar-day text-primary"></i>
+                            تاريخ الامتحان
+                        </label>
+                        <input asp-for="Exam.ExamDate" type="date" class="form-control form-control-lg" />
+                        <span asp-validation-for="Exam.ExamDate" class="text-danger"></span>
+                    </div>
+
+                    <!-- وقت البداية -->
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Exam.StartTime" class="form-label fw-bold">
+                            <i class="fas fa-play text-success"></i>
+                            وقت البداية
+                        </label>
+                        <input asp-for="Exam.StartTime" type="time" class="form-control form-control-lg" />
+                        <span asp-validation-for="Exam.StartTime" class="text-danger"></span>
+                    </div>
+
+                    <!-- وقت النهاية -->
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Exam.EndTime" class="form-label fw-bold">
+                            <i class="fas fa-stop text-danger"></i>
+                            وقت النهاية
+                        </label>
+                        <input asp-for="Exam.EndTime" type="time" class="form-control form-control-lg" />
+                        <span asp-validation-for="Exam.EndTime" class="text-danger"></span>
+                    </div>
+
+                    <!-- الدرجة النهائية -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Exam.MaxScore" class="form-label fw-bold">
+                            <i class="fas fa-star text-warning"></i>
+                            الدرجة النهائية
+                        </label>
+                        <input asp-for="Exam.MaxScore" type="number" min="1" max="1000" class="form-control form-control-lg" />
+                        <span asp-validation-for="Exam.MaxScore" class="text-danger"></span>
+                    </div>
+
+                    <!-- الحالة -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Exam.IsActive" class="form-label fw-bold">
+                            <i class="fas fa-toggle-on text-success"></i>
+                            الحالة
+                        </label>
+                        <div class="form-check form-switch mt-2">
+                            <input asp-for="Exam.IsActive" class="form-check-input" id="isActiveSwitch" checked="@(Model.Exam.IsActive)" />
+                            <label class="form-check-label fw-bold" for="isActiveSwitch">
+                                @if (Model.Exam.IsActive)
+                                {
+                                    <span class="text-success"><i class="fas fa-check-circle"></i> مفعل</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger"><i class="fas fa-times-circle"></i> غير مفعل</span>
+                                }
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- ملاحظات -->
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Exam.Notes" class="form-label fw-bold">
+                            <i class="fas fa-sticky-note text-muted"></i>
+                            ملاحظات (اختياري)
+                        </label>
+                        <textarea asp-for="Exam.Notes" class="form-control" rows="3" placeholder="أدخل أي ملاحظات إضافية..."></textarea>
+                        <span asp-validation-for="Exam.Notes" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2 border-top pt-3">
+                    <button type="submit" class="btn btn-warning btn-lg">
+                        <i class="fas fa-save"></i> تحديث الامتحان
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-times"></i> إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            $('#isActiveSwitch').on('change', function () {
+                var label = $(this).closest('.form-check').find('.form-check-label');
+                if ($(this).is(':checked')) {
+                    label.html('<span class="text-success"><i class="fas fa-check-circle"></i> مفعل</span>');
+                } else {
+                    label.html('<span class="text-danger"><i class="fas fa-times-circle"></i> غير مفعل</span>');
+                }
+            });
+
+            $('form').on('submit', function (e) {
+                var startTime = $('#Exam_StartTime').val();
+                var endTime = $('#Exam_EndTime').val();
+
+                if (startTime && endTime && startTime >= endTime) {
+                    alert('⚠️ وقت النهاية يجب أن يكون بعد وقت البداية');
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+}

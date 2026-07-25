@@ -1,0 +1,97 @@
+@model SchoolERP.Application.DTOs.Subjects.CreateSubjectDto
+
+@{
+    ViewData["Title"] = "إنشاء مادة جديدة";
+    ViewData["PageTitle"] = "إنشاء مادة جديدة";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="fas fa-plus me-2"></i>إنشاء مادة جديدة</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="SubjectName" class="form-label">
+                            <i class="fas fa-tag me-1"></i>اسم المادة <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="SubjectName" class="form-control" placeholder="مثال: اللغة العربية" />
+                        <span asp-validation-for="SubjectName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="SubjectCode" class="form-label">
+                            <i class="fas fa-barcode me-1"></i>كود المادة
+                        </label>
+                        <input asp-for="SubjectCode" class="form-control" placeholder="مثال: SUB-AR-001" />
+                        <span asp-validation-for="SubjectCode" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="GradeLevelId" class="form-label">
+                            <i class="fas fa-graduation-cap me-1"></i>الصف الدراسي <span class="text-danger">*</span>
+                        </label>
+                        <select asp-for="GradeLevelId" class="form-select">
+                            <option value="">اختر الصف...</option>
+                            @if (ViewBag.GradeLevels != null)
+                            {
+                                foreach (var grade in ViewBag.GradeLevels)
+                                {
+                                    <option value="@grade.Id">@grade.GradeName</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="GradeLevelId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="WeeklyHours" class="form-label">
+                            <i class="fas fa-clock me-1"></i>عدد الحصص الأسبوعية
+                        </label>
+                        <input asp-for="WeeklyHours" type="number" class="form-control" placeholder="مثال: 4" />
+                        <span asp-validation-for="WeeklyHours" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <div class="form-check mt-2">
+                            <input asp-for="IsRequired" class="form-check-input" />
+                            <label asp-for="IsRequired" class="form-check-label">
+                                <i class="fas fa-star me-1"></i>مادة إجبارية
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">
+                    <i class="fas fa-align-left me-1"></i>الوصف
+                </label>
+                <textarea asp-for="Description" class="form-control" rows="3" placeholder="أدخل وصف المادة"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <hr />
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-save me-2"></i>حفظ
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-times me-2"></i>إلغاء
+            </a>
+        </form>
+    </div>
+</div>

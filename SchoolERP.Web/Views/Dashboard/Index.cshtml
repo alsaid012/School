@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "لوحة التحكم";
+    ViewData["PageTitle"] = "لوحة التحكم";
+}
+
+<div class="row g-4">
+    <!-- بطاقة إجمالي الطلاب -->
+    <div class="col-md-3">
+        <div class="card-stat bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted mb-1">إجمالي الطلاب</h6>
+                    <h2 class="mb-0">@ViewBag.TotalStudents</h2>
+                </div>
+                <div class="icon" style="background: #e3f2fd; color: #1976d2;">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- بطاقة إجمالي المعلمين -->
+    <div class="col-md-3">
+        <div class="card-stat bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted mb-1">إجمالي المعلمين</h6>
+                    <h2 class="mb-0">@ViewBag.TotalTeachers</h2>
+                </div>
+                <div class="icon" style="background: #e8f5e9; color: #388e3c;">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- بطاقة إجمالي الموظفين -->
+    <div class="col-md-3">
+        <div class="card-stat bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted mb-1">إجمالي الموظفين</h6>
+                    <h2 class="mb-0">@ViewBag.TotalEmployees</h2>
+                </div>
+                <div class="icon" style="background: #fff3e0; color: #f57c00;">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- بطاقة إجمالي المدارس -->
+    <div class="col-md-3">
+        <div class="card-stat bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted mb-1">إجمالي المدارس</h6>
+                    <h2 class="mb-0">@ViewBag.TotalSchools</h2>
+                </div>
+                <div class="icon" style="background: #fce4ec; color: #c62828;">
+                    <i class="fas fa-school"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-chart-line me-2"></i>
+                نظرة عامة
+            </div>
+            <div class="card-body">
+                <p class="text-muted">مرحباً بك في نظام إدارة المدارس. يمكنك من هنا إدارة جميع بيانات المدرسة.</p>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fas fa-circle text-primary" style="font-size: 12px;"></i>
+                            <span>الطلاب: <strong>@ViewBag.TotalStudents</strong></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fas fa-circle text-success" style="font-size: 12px;"></i>
+                            <span>المعلمين: <strong>@ViewBag.TotalTeachers</strong></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fas fa-circle text-warning" style="font-size: 12px;"></i>
+                            <span>الموظفين: <strong>@ViewBag.TotalEmployees</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

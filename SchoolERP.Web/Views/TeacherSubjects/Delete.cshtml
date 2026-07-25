@@ -1,0 +1,62 @@
+@model SchoolERP.Application.DTOs.TeacherSubjects.TeacherSubjectDto
+
+@{
+    ViewData["Title"] = "حذف الرابط";
+    ViewData["PageTitle"] = "حذف الرابط";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0"><i class="fas fa-trash me-2"></i>حذف الرابط</h5>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>تنبيه!</strong> هل أنت متأكد من حذف هذا الرابط؟ هذا الإجراء لا يمكن التراجع عنه.
+        </div>
+
+        <dl class="row">
+            <dt class="col-sm-3">المعلم</dt>
+            <dd class="col-sm-9"><strong>@Model.TeacherName</strong></dd>
+
+            <dt class="col-sm-3">المادة</dt>
+            <dd class="col-sm-9"><strong>@Model.SubjectName</strong></dd>
+
+            <dt class="col-sm-3">الصف الدراسي</dt>
+            <dd class="col-sm-9">@Model.GradeLevelName</dd>
+
+            <dt class="col-sm-3">مادة أساسية</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsPrimary)
+                {
+                    <span class="badge bg-success">نعم</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">لا</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">الحالة</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsActive)
+                {
+                    <span class="badge bg-success">مفعل</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">غير مفعل</span>
+                }
+            </dd>
+        </dl>
+
+        <form method="post" asp-action="Delete" asp-route-id="@Model.Id">
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash me-2"></i>تأكيد الحذف
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-right me-2"></i>العودة
+            </a>
+        </form>
+    </div>
+</div>

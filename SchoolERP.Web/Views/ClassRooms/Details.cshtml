@@ -1,0 +1,283 @@
+@model SchoolERP.Application.DTOs.ClassRooms.ClassRoomDetailsDto
+
+@{
+    ViewData["Title"] = "تفاصيل الفصل";
+    ViewData["PageTitle"] = "تفاصيل الفصل";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-door-open me-2"></i>@Model.ClassName</h5>
+    </div>
+    <div class="card-body">
+        <!-- ============================================================ -->
+        <!-- المعلومات الأساسية -->
+        <!-- ============================================================ -->
+        <dl class="row">
+            <dt class="col-sm-3">اسم الفصل</dt>
+            <dd class="col-sm-9">@Model.ClassName</dd>
+
+            <dt class="col-sm-3">الكود</dt>
+            <dd class="col-sm-9"><span class="badge bg-secondary">@Model.ClassCode</span></dd>
+
+            <dt class="col-sm-3">رقم الغرفة</dt>
+            <dd class="col-sm-9">@Model.RoomNumber</dd>
+
+            <dt class="col-sm-3">السعة</dt>
+            <dd class="col-sm-9">@Model.Capacity</dd>
+
+            <dt class="col-sm-3">الصف الدراسي</dt>
+            <dd class="col-sm-9">@Model.GradeLevelName</dd>
+
+            <dt class="col-sm-3">معلم الفصل</dt>
+            <dd class="col-sm-9">@Model.TeacherName</dd>
+
+            <dt class="col-sm-3">عدد الطلاب</dt>
+            <dd class="col-sm-9">@Model.StudentsCount</dd>
+
+            <dt class="col-sm-3">سبورة ذكية</dt>
+            <dd class="col-sm-9">@(Model.HasSmartBoard ? "نعم" : "لا")</dd>
+
+            <dt class="col-sm-3">بروجيكتور</dt>
+            <dd class="col-sm-9">@(Model.HasProjector ? "نعم" : "لا")</dd>
+
+            <dt class="col-sm-3">الملاحظات</dt>
+            <dd class="col-sm-9">@Model.Notes</dd>
+
+            <dt class="col-sm-3">الحالة</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsActive)
+                {
+                    <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>مفعل</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger"><i class="fas fa-times-circle me-1"></i>غير مفعل</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">تاريخ الإنشاء</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</dd>
+
+            <dt class="col-sm-3">آخر تحديث</dt>
+            <dd class="col-sm-9">@(Model.UpdatedAt?.ToString("yyyy-MM-dd HH:mm") ?? "-")</dd>
+        </dl>
+
+        <!-- ============================================================ -->
+        <!-- الإحصائيات -->
+        <!-- ============================================================ -->
+        @if (Model.Statistics != null)
+        {
+            <hr />
+            <h6><i class="fas fa-chart-bar me-2"></i>الإحصائيات</h6>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">عدد الطلاب</h6>
+                            <h4>@Model.Statistics.TotalStudents</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">عدد المواد</h6>
+                            <h4>@Model.Statistics.TotalSubjects</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">نسبة الإشغال</h6>
+                            <h4>@Model.Statistics.OccupancyRate.ToString("F1")%</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">عدد الحصص الأسبوعية</h6>
+                            <h4>@Model.Statistics.WeeklyHours</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">عدد المعلمين</h6>
+                            <h4>@Model.Statistics.TotalTeachers</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">عدد الامتحانات</h6>
+                            <h4>@Model.Statistics.TotalExams</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">نسبة الحضور</h6>
+                            <h4>@Model.Statistics.AttendanceRate.ToString("F1")%</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">نسبة النجاح</h6>
+                            <h4>@Model.Statistics.SuccessRate.ToString("F1")%</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- ============================================================ -->
+        <!-- الطلاب -->
+        <!-- ============================================================ -->
+        @if (Model.Students != null && Model.Students.Any())
+        {
+            <hr />
+            <h6><i class="fas fa-user-graduate me-2"></i>الطلاب</h6>
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>كود الطالب</th>
+                            <th>اسم الطالب</th>
+                            <th>ولي الأمر</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int studentIndex = 1;
+                            foreach (var student in Model.Students)
+                            {
+                                <tr>
+                                    <td>@studentIndex</td>
+                                    <td>@student.StudentCode</td>
+                                    <td>@student.FullName</td>
+                                    <td>@student.ParentName</td>
+                                    <td>
+                                        @if (student.IsActive)
+                                        {
+                                            <span class="badge bg-success">نشط</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">غير نشط</span>
+                                        }
+                                    </td>
+                                </tr>
+                                studentIndex++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        <!-- ============================================================ -->
+        <!-- جدول الحصص -->
+        <!-- ============================================================ -->
+        @if (Model.Schedules != null && Model.Schedules.Any())
+        {
+            <hr />
+            <h6><i class="fas fa-calendar-alt me-2"></i>جدول الحصص</h6>
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>اليوم</th>
+                            <th>الوقت</th>
+                            <th>المادة</th>
+                            <th>المعلم</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int scheduleIndex = 1;
+                            foreach (var schedule in Model.Schedules)
+                            {
+                                <tr>
+                                    <td>@scheduleIndex</td>
+                                    <td>@schedule.DayName</td>
+                                    <td>@schedule.StartTime.ToString(@"hh\:mm") - @schedule.EndTime.ToString(@"hh\:mm")</td>
+                                    <td>@schedule.SubjectName</td>
+                                    <td>@schedule.TeacherName</td>
+                                </tr>
+                                scheduleIndex++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        <!-- ============================================================ -->
+        <!-- الامتحانات -->
+        <!-- ============================================================ -->
+        @if (Model.Exams != null && Model.Exams.Any())
+        {
+            <hr />
+            <h6><i class="fas fa-pencil-alt me-2"></i>الامتحانات</h6>
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>اسم الامتحان</th>
+                            <th>النوع</th>
+                            <th>التاريخ</th>
+                            <th>الوقت</th>
+                            <th>المادة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int examIndex = 1;
+                            foreach (var exam in Model.Exams)
+                            {
+                                <tr>
+                                    <td>@examIndex</td>
+                                    <td>@exam.ExamName</td>
+                                    <td>@exam.ExamTypeName</td>
+                                    <td>@exam.ExamDate.ToString("yyyy-MM-dd")</td>
+                                    <td>@exam.StartTime.ToString(@"hh\:mm") - @exam.EndTime.ToString(@"hh\:mm")</td>
+                                    <td>@exam.SubjectName</td>
+                                </tr>
+                                examIndex++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- الأزرار -->
+    <!-- ============================================================ -->
+    <div class="card-footer">
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right me-2"></i>العودة
+        </a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+            <i class="fas fa-edit me-2"></i>تعديل
+        </a>
+        <form asp-action="Delete" asp-route-id="@Model.Id" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-danger" onclick="return confirm('هل أنت متأكد من حذف هذا الفصل؟')">
+                <i class="fas fa-trash me-2"></i>حذف
+            </button>
+        </form>
+    </div>
+</div>

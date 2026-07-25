@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="DTOs\Common\" />
+    <Folder Include="DTOs\GradeLevels\" />
+    <Folder Include="DTOs\AcademicYears\" />
+    <Folder Include="DTOs\Departments\" />
+    <Folder Include="DTOs\Contacts\" />
+    <Folder Include="DTOs\Employees\" />
+    <Folder Include="DTOs\ClassRooms\" />
+    <Folder Include="DTOs\Exams\" />
+    <Folder Include="DTOs\ExamResults\" />
+    <Folder Include="DTOs\StudentAttendances\" />
+    <Folder Include="DTOs\TeacherSubjects\" />
+    <Folder Include="DTOs\Subjects\" />
+    <Folder Include="DTOs\Students\" />
+    <Folder Include="Interfaces\Repositories\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.1.1" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.11" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.9" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.19.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SchoolERP.Domain\SchoolERP.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

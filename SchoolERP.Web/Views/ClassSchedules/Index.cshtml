@@ -1,0 +1,272 @@
+﻿@using SchoolERP.Web.ViewModels.ClassSchedule
+@model ClassScheduleIndexViewModel
+
+@{
+    ViewData["Title"] = "جدول الحصص الدراسية";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- عنوان الصفحة -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-calendar-alt text-primary"></i>
+            جدول الحصص الدراسية
+        </h1>
+        <a asp-action="Create" class="btn btn-primary btn-lg">
+            <i class="fas fa-plus-circle"></i>
+            إضافة حصة جديدة
+        </a>
+    </div>
+
+    <!-- فلترة حسب السنة الدراسية -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form asp-action="Index" method="get" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-calendar"></i> السنة الدراسية
+                    </label>
+                    <select name="academicYearId" class="form-select">
+                        <option value="">-- جميع السنوات --</option>
+                        @foreach (var year in Model.AcademicYears)
+                        {
+                            <option value="@year.Id" selected="@(Model.SelectedAcademicYearId == year.Id)">
+                                @year.YearName
+                            </option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter"></i> تصفية
+                    </button>
+                </div>
+                <div class="col-md-2">
+                    <a asp-action="Index" class="btn btn-secondary w-100">
+                        <i class="fas fa-undo"></i> إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- جدول البيانات -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-list"></i>
+            قائمة الحصص
+            <span class="badge bg-light text-primary float-end">
+                @Model.Schedules.Count() حصة
+            </span>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped" id="schedulesTable">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>
+                                <i class="fas fa-calendar"></i>
+                                السنة الدراسية
+                            </th>
+                            <th>
+                                <i class="fas fa-graduation-cap"></i>
+                                الصف
+                            </th>
+                            <th>
+                                <i class="fas fa-chalkboard"></i>
+                                الفصل
+                            </th>
+                            <th>
+                                <i class="fas fa-book"></i>
+                                المادة
+                            </th>
+                            <th>
+                                <i class="fas fa-user-tie"></i>
+                                المعلم
+                            </th>
+                            <th>
+                                <i class="fas fa-calendar-day"></i>
+                                اليوم
+                            </th>
+                            <th>
+                                <i class="fas fa-clock"></i>
+                                الوقت
+                            </th>
+                            <th>
+                                <i class="fas fa-sort-numeric-up"></i>
+                                رقم الحصة
+                            </th>
+                            <th>
+                                <i class="fas fa-toggle-on"></i>
+                                الحالة
+                            </th>
+                            <th class="text-center">الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Schedules != null && Model.Schedules.Any())
+                        {
+                            int index = 1;
+                            foreach (var item in Model.Schedules)
+                            {
+                                <tr>
+                                    <td>@index</td>
+                                    <td>
+                                        <span class="badge bg-info">@item.AcademicYearName</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">@item.GradeLevelName</span>
+                                    </td>
+                                    <td>
+                                        <strong>@item.ClassRoomName</strong>
+                                    </td>
+                                    <td>@item.SubjectName</td>
+                                    <td>@item.TeacherName</td>
+                                    <td>
+                                        <span class="badge bg-primary">@item.DayName</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success">
+                                            @item.StartTime.ToString("hh\\:mm") - @item.EndTime.ToString("hh\\:mm")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @if (item.PeriodNumber.HasValue)
+                                        {
+                                            <span class="badge bg-warning text-dark">@item.PeriodNumber</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.IsActive)
+                                        {
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check"></i> مفعل
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">
+                                                <i class="fas fa-times"></i> غير مفعل
+                                            </span>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Details" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-info" title="تفاصيل">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-warning" title="تعديل">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <button type="button"
+                                                    class="btn btn-sm @(item.IsActive ? "btn-secondary" : "btn-success")"
+                                                    onclick="toggleStatus(@item.Id, '@item.IsActive')"
+                                                    title="@(item.IsActive ? "تعطيل" : "تفعيل")">
+                                                <i class="fas @(item.IsActive ? "fa-pause" : "fa-play")"></i>
+                                            </button>
+                                            <button type="button"
+                                                    class="btn btn-sm btn-danger"
+                                                    onclick="deleteItem(@item.Id)"
+                                                    title="حذف">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="11" class="text-center text-muted py-4">
+                                    <i class="fas fa-calendar-times fa-2x d-block mb-2"></i>
+                                    لا توجد حصص لعرضها
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- نماذج مخفية -->
+<form id="deleteForm" asp-action="Delete" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="deleteId" name="id" value="" />
+</form>
+
+<form id="toggleForm" asp-action="ToggleStatus" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="toggleId" name="id" value="" />
+</form>
+
+@section Scripts {
+    <script>
+        // ✅ دالة الحذف
+        function deleteItem(id) {
+            if (confirm('هل أنت متأكد من حذف هذه الحصة؟')) {
+                document.getElementById('deleteId').value = id;
+                document.getElementById('deleteForm').submit();
+            }
+        }
+
+        // ✅ دالة تغيير الحالة
+        function toggleStatus(id, isActive) {
+            var message = isActive ? 'هل أنت متأكد من تعطيل هذه الحصة؟' : 'هل أنت متأكد من تفعيل هذه الحصة؟';
+            if (confirm(message)) {
+                document.getElementById('toggleId').value = id;
+                document.getElementById('toggleForm').submit();
+            }
+        }
+
+        // ✅ تفعيل DataTable
+        $(document).ready(function () {
+            $('#schedulesTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
+                },
+                order: [[6, 'asc'], [7, 'asc']],
+                pageLength: 25
+            });
+        });
+    </script>
+}
+
+@* @section Styles {
+    <style>
+        .table th {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .table td {
+            vertical-align: middle;
+            font-size: 0.9rem;
+        }
+
+        .badge {
+            font-size: 0.85rem;
+            padding: 5px 10px;
+        }
+
+        .btn-group .btn {
+            margin: 0 2px;
+        }
+
+        .card-header .badge {
+            font-size: 1rem;
+            padding: 5px 15px;
+        }
+    </style>
+} *@

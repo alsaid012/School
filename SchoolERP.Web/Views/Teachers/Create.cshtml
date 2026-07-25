@@ -1,0 +1,141 @@
+@model SchoolERP.Application.DTOs.Teachers.CreateTeacherDto
+
+@{
+    ViewData["Title"] = "إنشاء معلم جديد";
+    ViewData["PageTitle"] = "إنشاء معلم جديد";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="fas fa-user-plus me-2"></i>إنشاء معلم جديد</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- ============================================================ -->
+            <!-- كود المعلم + المستخدم -->
+            <!-- ============================================================ -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="TeacherCode" class="form-label">
+                            <i class="fas fa-barcode me-1"></i>كود المعلم <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="TeacherCode" class="form-control" placeholder="مثال: TCH-2024-001" />
+                        <span asp-validation-for="TeacherCode" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="UserId" class="form-label">
+                            <i class="fas fa-user me-1"></i>المستخدم <span class="text-danger">*</span>
+                        </label>
+                        <select asp-for="UserId" class="form-select">
+                            <option value="">اختر المستخدم...</option>
+                            @if (ViewBag.Users != null)
+                            {
+                                foreach (var user in ViewBag.Users)
+                                {
+                                    <option value="@user.Id">@user.FullName (@user.Username)</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="UserId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- المؤهل + التخصص -->
+            <!-- ============================================================ -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Qualification" class="form-label">
+                            <i class="fas fa-graduation-cap me-1"></i>المؤهل الدراسي
+                        </label>
+                        <input asp-for="Qualification" class="form-control" placeholder="مثال: ليسانس آداب" />
+                        <span asp-validation-for="Qualification" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Specialization" class="form-label">
+                            <i class="fas fa-tag me-1"></i>التخصص
+                        </label>
+                        <input asp-for="Specialization" class="form-control" placeholder="مثال: اللغة العربية" />
+                        <span asp-validation-for="Specialization" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- تاريخ التعيين + الراتب -->
+            <!-- ============================================================ -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="HireDate" class="form-label">
+                            <i class="fas fa-calendar me-1"></i>تاريخ التعيين <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="HireDate" type="date" class="form-control" />
+                        <span asp-validation-for="HireDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Salary" class="form-label">
+                            <i class="fas fa-money-bill me-1"></i>الراتب
+                        </label>
+                        <input asp-for="Salary" type="number" class="form-control" placeholder="مثال: 5000" />
+                        <span asp-validation-for="Salary" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- معلم فصل + المواد -->
+            <!-- ============================================================ -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <div class="form-check mt-2">
+                            <input asp-for="IsHomeroomTeacher" class="form-check-input" />
+                            <label asp-for="IsHomeroomTeacher" class="form-check-label">
+                                <i class="fas fa-door-open me-1"></i>معلم فصل
+                            </label>
+                        </div>
+                        <span asp-validation-for="IsHomeroomTeacher" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-book me-1"></i>المواد التي يدرسها
+                        </label>
+                        <select asp-for="SubjectIds" class="form-select" multiple>
+                            @if (ViewBag.Subjects != null)
+                            {
+                                foreach (var subject in ViewBag.Subjects)
+                                {
+                                    <option value="@subject.Id">@subject.SubjectName</option>
+                                }
+                            }
+                        </select>
+                        <small class="text-muted">اضغط Ctrl + اختيار لتحديد عدة مواد</small>
+                        <span asp-validation-for="SubjectIds" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-save me-2"></i>حفظ
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-times me-2"></i>إلغاء
+            </a>
+        </form>
+    </div>
+</div>

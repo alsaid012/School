@@ -1,0 +1,164 @@
+@using SchoolERP.Domain.Enums
+@model SchoolERP.Application.DTOs.EmployeeAttendances.EmployeeAttendanceDto
+
+@{
+    ViewData["Title"] = "تفاصيل الحضور";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- عنوان الصفحة -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-clipboard-check text-info"></i>
+            تفاصيل سجل الحضور
+        </h1>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                <i class="fas fa-edit"></i> تعديل
+            </a>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-right"></i> العودة للقائمة
+            </a>
+        </div>
+    </div>
+
+    <!-- بطاقة التفاصيل -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+            <i class="fas fa-info-circle"></i>
+            معلومات سجل الحضور
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            <i class="fas fa-user-tie text-primary"></i> الموظف
+                        </dt>
+                        <dd class="col-sm-8">
+                            <strong>@Model.EmployeeName</strong>
+                            <br />
+                            <small class="text-muted">@Model.EmployeeCode</small>
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-briefcase text-secondary"></i> المسمى الوظيفي
+                        </dt>
+                        <dd class="col-sm-8">@Model.JobTitle</dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-building text-secondary"></i> القسم
+                        </dt>
+                        <dd class="col-sm-8">@Model.Department</dd>
+                    </dl>
+                </div>
+
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            <i class="fas fa-calendar text-primary"></i> التاريخ
+                        </dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-secondary">@Model.AttendanceDate.ToString("yyyy/MM/dd")</span>
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-sign-in-alt text-success"></i> وقت الدخول
+                        </dt>
+                        <dd class="col-sm-8">
+                            @if (Model.CheckInTime.HasValue)
+                            {
+                                <span class="badge bg-success">@Model.CheckInTime.Value.ToString("HH:mm")</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">غير مسجل</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-sign-out-alt text-danger"></i> وقت الخروج
+                        </dt>
+                        <dd class="col-sm-8">
+                            @if (Model.CheckOutTime.HasValue)
+                            {
+                                <span class="badge bg-danger">@Model.CheckOutTime.Value.ToString("HH:mm")</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">غير مسجل</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-clipboard-check text-primary"></i> الحالة
+                        </dt>
+                        <dd class="col-sm-8">
+                            @{
+                                var statusClass = Model.Status == AttendanceStatus.Present ? "success" :
+                                                 Model.Status == AttendanceStatus.Absent ? "danger" :
+                                                 Model.Status == AttendanceStatus.Late ? "warning" : "info";
+                            }
+                            <span class="badge bg-@statusClass">@Model.StatusName</span>
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-clock text-warning"></i> دقائق التأخير
+                        </dt>
+                        <dd class="col-sm-8">
+                            @if (Model.DelayMinutes.HasValue)
+                            {
+                                <span class="badge bg-warning text-dark">@Model.DelayMinutes دقيقة</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">لا يوجد تأخير</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-toggle-on text-success"></i> الحالة
+                        </dt>
+                        <dd class="col-sm-8">
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check"></i> مفعل
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-times"></i> غير مفعل
+                                </span>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Notes))
+                {
+                    <div class="col-md-12 mt-3">
+                        <hr />
+                        <strong><i class="fas fa-sticky-note text-muted"></i> ملاحظات:</strong>
+                        <p class="mt-2 p-3 bg-light rounded">@Model.Notes</p>
+                    </div>
+                }
+
+                <div class="col-md-12 mt-3">
+                    <hr />
+                    <div class="text-muted small">
+                        <i class="fas fa-calendar-plus"></i> تاريخ الإنشاء: @Model.CreatedAt.ToString("yyyy/MM/dd HH:mm")
+                        @if (Model.UpdatedAt.HasValue)
+                        {
+                            <span class="ms-3">
+                                <i class="fas fa-calendar-edit"></i> آخر تحديث: @Model.UpdatedAt.Value.ToString("yyyy/MM/dd HH:mm")
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

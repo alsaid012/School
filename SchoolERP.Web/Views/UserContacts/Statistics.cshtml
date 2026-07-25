@@ -1,0 +1,196 @@
+@model SchoolERP.Application.DTOs.UserContacts.UserContactStatisticsDto
+
+@{
+    ViewData["Title"] = "إحصائيات جهات الاتصال";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-chart-pie text-primary"></i>
+            إحصائيات جهات الاتصال
+        </h1>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> العودة للقائمة
+        </a>
+    </div>
+
+    <!-- الإحصائيات الأساسية -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-primary">
+                <div class="card-body">
+                    <h6 class="text-muted">إجمالي جهات الاتصال</h6>
+                    <h2 class="text-primary">@Model.TotalContacts</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-success">
+                <div class="card-body">
+                    <h6 class="text-muted">جهات اتصال أساسية</h6>
+                    <h2 class="text-success">@Model.PrimaryContacts</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-info">
+                <div class="card-body">
+                    <h6 class="text-muted">جهات اتصال موثقة</h6>
+                    <h2 class="text-info">@Model.VerifiedContacts</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-secondary">
+                <div class="card-body">
+                    <h6 class="text-muted">متوسط لكل مستخدم</h6>
+                    <h2 class="text-secondary">@Model.AverageContactsPerUser.ToString("0.0")</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- توزيع حسب النوع -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <i class="fas fa-chart-bar"></i>
+                    توزيع جهات الاتصال حسب النوع
+                </div>
+                <div class="card-body">
+                    @if (Model.ContactsByType != null && Model.ContactsByType.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>النوع</th>
+                                        <th>العدد</th>
+                                        <th>النسبة</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.ContactsByType)
+                                    {
+                                        var percentage = Model.TotalContacts > 0 ? (decimal)item.Value / Model.TotalContacts * 100 : 0;
+                                        <tr>
+                                            <td>@item.Key</td>
+                                            <td>
+                                                <span class="badge bg-primary">@item.Value</span>
+                                            </td>
+                                            <td>
+                                                <div class="progress" style="height: 20px;">
+                                                    <div class="progress-bar progress-bar-striped" 
+                                                         style="width: @percentage.ToString("0.0")%; background-color: #4CAF50;">
+                                                        @percentage.ToString("0.0")%
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center text-muted py-3">
+                            <i class="fas fa-chart-bar fa-2x d-block mb-2"></i>
+                            لا توجد بيانات لعرضها
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- إحصائيات إضافية -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <i class="fas fa-info-circle"></i>
+                    إحصائيات إضافية
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between border-bottom pb-2">
+                        <span>عدد الهواتف</span>
+                        <span class="badge bg-primary">@Model.PhoneContacts</span>
+                    </div>
+                    <div class="d-flex justify-content-between border-bottom py-2">
+                        <span>عدد البريد الإلكتروني</span>
+                        <span class="badge bg-info">@Model.EmailContacts</span>
+                    </div>
+                    <div class="d-flex justify-content-between border-bottom py-2">
+                        <span>عدد واتساب</span>
+                        <span class="badge bg-success">@Model.WhatsAppContacts</span>
+                    </div>
+                    <div class="d-flex justify-content-between border-bottom py-2">
+                        <span>عدد فيسبوك</span>
+                        <span class="badge bg-warning text-dark">@Model.FacebookContacts</span>
+                    </div>
+                    <div class="d-flex justify-content-between pt-2">
+                        <span>المستخدمين النشطين</span>
+                        <span class="badge bg-dark">@Model.ActiveUsersWithContacts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- أكثر المستخدمين جهات اتصال -->
+    @if (Model.TopUsersWithContacts != null && Model.TopUsersWithContacts.Any())
+    {
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <i class="fas fa-trophy"></i>
+                أكثر المستخدمين جهات اتصال
+                <span class="badge bg-light text-dark float-end">أفضل 5 مستخدمين</span>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>اسم المستخدم</th>
+                                <th>إجمالي جهات الاتصال</th>
+                                <th>جهات اتصال أساسية</th>
+                                <th>جهات اتصال موثقة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int rank = 1;
+                                foreach (var user in Model.TopUsersWithContacts)
+                                {
+                                    var medal = rank == 1 ? "🥇" :
+                                               rank == 2 ? "🥈" :
+                                               rank == 3 ? "🥉" : "";
+                                    <tr>
+                                        <td>
+                                            <span class="badge bg-warning text-dark">#@rank</span>
+                                            @medal
+                                        </td>
+                                        <td>@user.UserName</td>
+                                        <td>
+                                            <span class="badge bg-primary">@user.ContactsCount</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success">@user.PrimaryContactsCount</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info">@user.VerifiedContactsCount</span>
+                                        </td>
+                                    </tr>
+                                    rank++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,116 @@
+@model SchoolERP.Application.DTOs.Teachers.UpdateTeacherDto
+
+@{
+    ViewData["Title"] = "تعديل المعلم";
+    ViewData["PageTitle"] = "تعديل المعلم";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-warning">
+        <h5 class="mb-0"><i class="fas fa-edit me-2"></i>تعديل المعلم</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-action="Edit" asp-route-id="@ViewBag.Id">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- ============================================================ -->
+            <!-- المؤهل + التخصص -->
+            <!-- ============================================================ -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Qualification" class="form-label">
+                            <i class="fas fa-graduation-cap me-1"></i>المؤهل الدراسي
+                        </label>
+                        <input asp-for="Qualification" class="form-control" />
+                        <span asp-validation-for="Qualification" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Specialization" class="form-label">
+                            <i class="fas fa-tag me-1"></i>التخصص
+                        </label>
+                        <input asp-for="Specialization" class="form-control" />
+                        <span asp-validation-for="Specialization" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- الراتب + معلم فصل -->
+            <!-- ============================================================ -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Salary" class="form-label">
+                            <i class="fas fa-money-bill me-1"></i>الراتب
+                        </label>
+                        <input asp-for="Salary" type="number" class="form-control" />
+                        <span asp-validation-for="Salary" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <div class="form-check mt-2">
+                            <input asp-for="IsHomeroomTeacher" class="form-check-input" />
+                            <label asp-for="IsHomeroomTeacher" class="form-check-label">
+                                <i class="fas fa-door-open me-1"></i>معلم فصل
+                            </label>
+                        </div>
+                        <span asp-validation-for="IsHomeroomTeacher" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- المواد التي يدرسها -->
+            <!-- ============================================================ -->
+            <div class="mb-3">
+                <label class="form-label">
+                    <i class="fas fa-book me-1"></i>المواد التي يدرسها
+                </label>
+                <select asp-for="SubjectIds" class="form-select" multiple>
+                    @if (ViewBag.Subjects != null)
+                    {
+                        foreach (var subject in ViewBag.Subjects)
+                        {
+                            if (ViewBag.SelectedSubjectIds != null && ((List<int>)ViewBag.SelectedSubjectIds).Contains(subject.Id))
+                            {
+                                <option value="@subject.Id" selected>@subject.SubjectName</option>
+                            }
+                            else
+                            {
+                                <option value="@subject.Id">@subject.SubjectName</option>
+                            }
+                        }
+                    }
+                </select>
+                <small class="text-muted">اضغط Ctrl + اختيار لتحديد عدة مواد</small>
+                <span asp-validation-for="SubjectIds" class="text-danger"></span>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- الحالة -->
+            <!-- ============================================================ -->
+            <div class="mb-3">
+                <label asp-for="IsActive" class="form-label">
+                    <i class="fas fa-power-off me-1"></i>الحالة
+                </label>
+                <select asp-for="IsActive" class="form-select">
+                    <option value="true">مفعل</option>
+                    <option value="false">غير مفعل</option>
+                </select>
+                <span asp-validation-for="IsActive" class="text-danger"></span>
+            </div>
+
+            <hr />
+            <button type="submit" class="btn btn-warning">
+                <i class="fas fa-save me-2"></i>تحديث
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-times me-2"></i>إلغاء
+            </a>
+        </form>
+    </div>
+</div>

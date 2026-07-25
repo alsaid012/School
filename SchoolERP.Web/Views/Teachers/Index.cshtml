@@ -1,0 +1,113 @@
+﻿@model IEnumerable<SchoolERP.Application.DTOs.Teachers.TeacherDto>
+
+@{
+    ViewData["Title"] = "المعلمين";
+    ViewData["PageTitle"] = "إدارة المعلمين";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <h4 class="mb-0"><i class="fas fa-chalkboard-teacher me-2"></i>@ViewData["PageTitle"]</h4>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>إضافة معلم جديد
+    </a>
+</div>
+
+<!-- ============================================================ -->
+<!-- رسائل التنبيه -->
+<!-- ============================================================ -->
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<!-- ============================================================ -->
+<!-- جدول المعلمين -->
+<!-- ============================================================ -->
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-bordered align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th style="width: 50px;">#</th>
+                <th style="min-width: 100px;">كود المعلم</th>
+                <th style="min-width: 140px;">اسم المعلم</th>
+                <th style="min-width: 120px;">التخصص</th>
+                <th style="min-width: 120px;">المدرسة</th>
+                <th style="min-width: 100px;">معلم فصل</th>
+                <th style="min-width: 100px;">الحالة</th>
+                <th style="min-width: 220px;">الإجراءات</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                int index = 1;
+                foreach (var teacher in Model)
+                {
+                    <tr>
+                        <td class="text-center">@index</td>
+                        <td><strong>@teacher.TeacherCode</strong></td>
+                        <td>@teacher.FullName</td>
+                        <td>@teacher.Specialization</td>
+                        <td>@teacher.SchoolName</td>
+                        <td>
+                            @if (teacher.IsHomeroomTeacher)
+                            {
+                                <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>نعم</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">لا</span>
+                            }
+                        </td>
+                        <td>
+                            @if (teacher.IsActive)
+                            {
+                                <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>نشط</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger"><i class="fas fa-times-circle me-1"></i>غير نشط</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm flex-wrap gap-1" role="group">
+                                <a asp-action="Details" asp-route-id="@teacher.Id" class="btn btn-info btn-sm" title="تفاصيل">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@teacher.Id" class="btn btn-warning btn-sm" title="تعديل">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form asp-action="Delete" asp-route-id="@teacher.Id" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm" title="حذف" onclick="return confirm('هل أنت متأكد من حذف هذا المعلم؟')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    index++;
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-4">
+                        <i class="fas fa-chalkboard-teacher fa-2x d-block mb-2"></i>
+                        لا يوجد معلمين
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

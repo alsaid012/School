@@ -1,0 +1,141 @@
+@using SchoolERP.Domain.Enums
+@using SchoolERP.Web.ViewModels.StudentAttendances
+@model SchoolERP.Web.ViewModels.StudentAttendances.StudentAttendanceCreateRangeViewModel
+
+@{
+    ViewData["Title"] = "تسجيل حضور جماعي";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var studentList = ViewBag.StudentList as List<StudentInfo> ?? new List<StudentInfo>();
+    var classRoomName = ViewBag.ClassRoomName as string ?? "";
+    var studentCount = ViewBag.StudentCount as int? ?? 0;
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-users text-success"></i>
+            تسجيل حضور جماعي
+        </h1>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> العودة للقائمة
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            <i class="fas fa-plus"></i>
+            تسجيل حضور لجميع طلاب الفصل
+        </div>
+        <div class="card-body">
+            <form asp-action="CreateRange" method="post">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="row">
+                    <!-- الفصل -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="ClassRoomId" class="form-label fw-bold">
+                            <i class="fas fa-chalkboard text-primary"></i>
+                            الفصل
+                        </label>
+                        <select asp-for="ClassRoomId" class="form-select form-select-lg" asp-items="Model.ClassRooms" onchange="location.href='?classRoomId='+this.value+'&date=@Model.Date.ToString("yyyy-MM-dd")'">
+                            <option value="">-- اختر الفصل --</option>
+                        </select>
+                        <span asp-validation-for="ClassRoomId" class="text-danger"></span>
+                    </div>
+
+                    <!-- التاريخ -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Date" class="form-label fw-bold">
+                            <i class="fas fa-calendar text-info"></i>
+                            التاريخ
+                        </label>
+                        <input asp-for="Date" type="date" class="form-control form-control-lg" onchange="location.href='?classRoomId=@Model.ClassRoomId&date='+this.value" />
+                        <span asp-validation-for="Date" class="text-danger"></span>
+                    </div>
+                </div>
+
+                @if (Model.ClassRoomId > 0 && Model.Attendances.Any())
+                {
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        عدد الطلاب غير المسجلين في هذا اليوم: <strong>@studentCount</strong> طالب
+                        <br />
+                        <small class="text-muted">سيتم تسجيل الحضور للطلاب الذين لم يتم تسجيلهم مسبقاً في هذا اليوم</small>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>اسم الطالب</th>
+                                    <th>الحالة</th>
+                                    <th>وقت الدخول</th>
+                                    <th>وقت الخروج</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int index = 0;
+                                    foreach (var student in studentList)
+                                    {
+                                        var attendance = Model.Attendances.ElementAtOrDefault(index);
+                                        if (attendance != null)
+                                        {
+                                            <tr>
+                                                <td>@(index + 1)</td>
+                                                <td>
+                                                    <input type="hidden" name="Attendances[@index].StudentId" value="@student.Id" />
+                                                    <input type="hidden" name="Attendances[@index].AttendanceDate" value="@attendance.AttendanceDate.ToString("yyyy-MM-dd")" />
+                                                    <strong>@student.Name</strong>
+                                                    <br />
+                                                    <small class="text-muted">@student.Code</small>
+                                                </td>
+                                                <td>
+                                                    <select name="Attendances[@index].Status" class="form-select">
+                                                        @foreach (var status in Model.StatusList)
+                                                        {
+                                                            <option value="@status.Value" selected="@status.Selected">@status.Text</option>
+                                                        }
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="datetime-local" name="Attendances[@index].CheckInTime" class="form-control" value="@attendance.CheckInTime?.ToString("yyyy-MM-ddTHH:mm")" />
+                                                </td>
+                                                <td>
+                                                    <input type="datetime-local" name="Attendances[@index].CheckOutTime" class="form-control" value="@attendance.CheckOutTime?.ToString("yyyy-MM-ddTHH:mm")" />
+                                                </td>
+                                            </tr>
+                                            index++;
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-3 d-flex gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-save"></i> تسجيل الحضور للجميع
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-times"></i> إلغاء
+                        </a>
+                    </div>
+                }
+                else if (Model.ClassRoomId > 0)
+                {
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle"></i>
+                        جميع طلاب هذا الفصل مسجلين بالفعل في هذا اليوم
+                    </div>
+                }
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

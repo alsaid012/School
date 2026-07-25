@@ -1,0 +1,191 @@
+﻿@model SchoolERP.Web.ViewModels.ExamResults.ExamResultIndexViewModel
+
+@{
+    ViewData["Title"] = "نتائج الامتحانات";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-chart-bar text-primary"></i>
+            نتائج الامتحانات
+        </h1>
+        <div>
+            <a asp-action="Create" class="btn btn-success btn-lg">
+                <i class="fas fa-plus-circle"></i>
+                إضافة نتيجة
+            </a>
+            <a asp-action="CreateRange" class="btn btn-primary btn-lg ms-2">
+                <i class="fas fa-plus-circle"></i>
+                إضافة نتائج متعددة
+            </a>
+        </div>
+    </div>
+
+    <!-- فلترة -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form asp-action="Index" method="get" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-file-alt"></i> الامتحان
+                    </label>
+                    <select name="examId" class="form-select">
+                        <option value="">-- جميع الامتحانات --</option>
+                        @foreach (var exam in Model.Exams)
+                        {
+                            <option value="@exam.Value" selected="@exam.Selected">@exam.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter"></i> تصفية
+                    </button>
+                </div>
+                <div class="col-md-2">
+                    <a asp-action="Index" class="btn btn-secondary w-100">
+                        <i class="fas fa-undo"></i> إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- جدول النتائج -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-list"></i>
+            قائمة النتائج
+            <span class="badge bg-light text-primary float-end">
+                @Model.Results.Count نتيجة
+            </span>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped" id="resultsTable">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>الطالب</th>
+                            <th>الامتحان</th>
+                            <th>المادة</th>
+                            <th>الفصل</th>
+                            <th>الدرجة</th>
+                            <th>النسبة</th>
+                            <th>التقدير</th>
+                            <th>الحالة</th>
+                            <th class="text-center">الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Results != null && Model.Results.Any())
+                        {
+                            int index = 1;
+                            foreach (var item in Model.Results)
+                            {
+                                var gradeClass = item.Percentage >= 80 ? "success" :
+                                item.Percentage >= 70 ? "warning" :
+                                item.Percentage >= 60 ? "info" : "danger";
+                                <tr>
+                                    <td>@index</td>
+                                    <td>
+                                        <strong>@item.StudentName</strong>
+                                        <br />
+                                        <small class="text-muted">@item.StudentCode</small>
+                                    </td>
+                                    <td>@item.ExamName</td>
+                                    <td>@item.SubjectName</td>
+                                    <td>@item.ClassRoomName</td>
+                                    <td>
+                                        <span class="badge bg-primary">@item.Score / @item.MaxScore</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info">@(item.Percentage?.ToString("0.0") ?? "0")%</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-@gradeClass">@item.Grade</span>
+                                    </td>
+                                    <td>
+                                        @if (item.IsPassed)
+                                        {
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check"></i> ناجح
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">
+                                                <i class="fas fa-times"></i> راسب
+                                            </span>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Details" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-info" title="تفاصيل">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-warning" title="تعديل">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <!-- ✅ زر الإحصائيات -->
+                                            <a asp-action="Statistics" asp-route-examId="@item.ExamId"
+                                               class="btn btn-sm btn-primary" title="إحصائيات الامتحان">
+                                                <i class="fas fa-chart-pie"></i>
+                                            </a>
+                                            <button type="button"
+                                                    class="btn btn-sm btn-danger"
+                                                    onclick="deleteItem(@item.Id)"
+                                                    title="حذف">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="10" class="text-center text-muted py-4">
+                                    <i class="fas fa-chart-bar fa-2x d-block mb-2"></i>
+                                    لا توجد نتائج لعرضها
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="deleteForm" asp-action="Delete" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="deleteId" name="id" value="" />
+</form>
+
+@section Scripts {
+    <script>
+        function deleteItem(id) {
+            if (confirm('هل أنت متأكد من حذف هذه النتيجة؟')) {
+                document.getElementById('deleteId').value = id;
+                document.getElementById('deleteForm').submit();
+            }
+        }
+
+        $(document).ready(function () {
+            $('#resultsTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
+                },
+                order: [[0, 'asc']],
+                pageLength: 25
+            });
+        });
+    </script>
+}

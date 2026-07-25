@@ -1,0 +1,166 @@
+@model SchoolERP.Application.DTOs.ClassRooms.UpdateClassRoomDto
+
+@{
+    ViewData["Title"] = "تعديل الفصل";
+    ViewData["PageTitle"] = "تعديل الفصل";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-warning">
+        <h5 class="mb-0"><i class="fas fa-edit me-2"></i>تعديل الفصل</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-action="Edit" asp-route-id="@ViewBag.Id">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="ClassName" class="form-label">
+                            <i class="fas fa-tag me-1"></i>اسم الفصل
+                        </label>
+                        <input asp-for="ClassName" class="form-control" />
+                        <span asp-validation-for="ClassName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="ClassCode" class="form-label">
+                            <i class="fas fa-barcode me-1"></i>كود الفصل
+                        </label>
+                        <input asp-for="ClassCode" class="form-control" />
+                        <span asp-validation-for="ClassCode" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="GradeLevelId" class="form-label">
+                            <i class="fas fa-graduation-cap me-1"></i>الصف الدراسي
+                        </label>
+                        <select asp-for="GradeLevelId" class="form-select">
+                            <option value="">اختر الصف...</option>
+                            @if (ViewBag.GradeLevels != null)
+                            {
+                                foreach (var grade in ViewBag.GradeLevels)
+                                {
+                                    if (Model.GradeLevelId == grade.Id)
+                                    {
+                                        <option value="@grade.Id" selected>@grade.GradeName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@grade.Id">@grade.GradeName</option>
+                                    }
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="GradeLevelId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="TeacherId" class="form-label">
+                            <i class="fas fa-chalkboard-teacher me-1"></i>معلم الفصل
+                        </label>
+                        <select asp-for="TeacherId" class="form-select">
+                            <option value="">اختر المعلم...</option>
+                            @if (ViewBag.Teachers != null)
+                            {
+                                foreach (var teacher in ViewBag.Teachers)
+                                {
+                                    var fullName = teacher.User?.FullName ?? teacher.TeacherCode;
+
+                                    if (Model.TeacherId == teacher.Id)
+                                    {
+                                        <option value="@teacher.Id" selected>@fullName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@teacher.Id">@fullName</option>
+                                    }
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="TeacherId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="RoomNumber" class="form-label">
+                            <i class="fas fa-hashtag me-1"></i>رقم الغرفة
+                        </label>
+                        <input asp-for="RoomNumber" class="form-control" />
+                        <span asp-validation-for="RoomNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Capacity" class="form-label">
+                            <i class="fas fa-users me-1"></i>السعة
+                        </label>
+                        <input asp-for="Capacity" type="number" class="form-control" />
+                        <span asp-validation-for="Capacity" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" asp-for="HasSmartBoard" />
+                            <label class="form-check-label" asp-for="HasSmartBoard">
+                                <i class="fas fa-desktop me-1"></i>سبورة ذكية
+                            </label>
+                        </div>
+                        <span asp-validation-for="HasSmartBoard" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" asp-for="HasProjector" />
+                            <label class="form-check-label" asp-for="HasProjector">
+                                <i class="fas fa-projector me-1"></i>بروجيكتور
+                            </label>
+                        </div>
+                        <span asp-validation-for="HasProjector" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Notes" class="form-label">
+                    <i class="fas fa-align-left me-1"></i>ملاحظات
+                </label>
+                <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="IsActive" class="form-label">
+                    <i class="fas fa-power-off me-1"></i>الحالة
+                </label>
+                <select asp-for="IsActive" class="form-select">
+                    <option value="true">مفعل</option>
+                    <option value="false">غير مفعل</option>
+                </select>
+                <span asp-validation-for="IsActive" class="text-danger"></span>
+            </div>
+
+            <hr />
+            <button type="submit" class="btn btn-warning">
+                <i class="fas fa-save me-2"></i>تحديث
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-times me-2"></i>إلغاء
+            </a>
+        </form>
+    </div>
+</div>

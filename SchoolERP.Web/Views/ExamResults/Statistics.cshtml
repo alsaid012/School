@@ -1,0 +1,224 @@
+@model SchoolERP.Application.DTOs.ExamResults.ExamResultStatisticsDto
+
+@{
+    ViewData["Title"] = "إحصائيات الامتحان";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var examName = ViewBag.ExamName ?? "الامتحان";
+    var examDate = ViewBag.ExamDate ?? DateTime.Now;
+    var maxScore = ViewBag.MaxScore ?? 100;
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-chart-pie text-primary"></i>
+            إحصائيات الامتحان
+        </h1>
+        <div>
+            <a asp-action="Index" asp-route-examId="@ViewBag.ExamId" class="btn btn-secondary">
+                <i class="fas fa-arrow-right"></i> العودة للنتائج
+            </a>
+        </div>
+    </div>
+
+    <!-- معلومات الامتحان -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-info-circle"></i>
+            معلومات الامتحان
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <strong>اسم الامتحان:</strong>
+                    <span class="badge bg-primary fs-6">@examName</span>
+                </div>
+                <div class="col-md-4">
+                    <strong>التاريخ:</strong>
+                    <span class="badge bg-secondary fs-6">@examDate.ToString("yyyy/MM/dd")</span>
+                </div>
+                <div class="col-md-4">
+                    <strong>الدرجة النهائية:</strong>
+                    <span class="badge bg-warning text-dark fs-6">@maxScore</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الإحصائيات الأساسية -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-primary">
+                <div class="card-body">
+                    <h6 class="text-muted">عدد الطلاب</h6>
+                    <h2 class="text-primary">@Model.TotalStudents</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-success">
+                <div class="card-body">
+                    <h6 class="text-muted">الناجحين</h6>
+                    <h2 class="text-success">@Model.PassedStudents</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-danger">
+                <div class="card-body">
+                    <h6 class="text-muted">الراسبين</h6>
+                    <h2 class="text-danger">@Model.FailedStudents</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-info">
+                <div class="card-body">
+                    <h6 class="text-muted">نسبة النجاح</h6>
+                    <h2 class="text-info">@Model.SuccessRate.ToString("0.0")%</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الإحصائيات التفصيلية -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <i class="fas fa-star"></i> توزيع التقديرات
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <span>ممتاز (A)</span>
+                        <span class="badge bg-success">@Model.ExcellentStudents</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <span>جيد جداً (B)</span>
+                        <span class="badge bg-info">@Model.GoodStudents</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <span>جيد (C)</span>
+                        <span class="badge bg-warning text-dark">@(Model.TotalStudents - Model.ExcellentStudents - Model.GoodStudents - Model.PassedOnlyStudents - Model.FailedOnlyStudents)</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <span>مقبول (D)</span>
+                        <span class="badge bg-secondary">@Model.PassedOnlyStudents</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <span>راسب (F)</span>
+                        <span class="badge bg-danger">@Model.FailedOnlyStudents</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <i class="fas fa-chart-line"></i> إحصائيات الدرجات
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <span>متوسط الدرجات</span>
+                        <span class="badge bg-primary fs-6">@Model.AverageScore.ToString("0.00")</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <span>أعلى درجة</span>
+                        <span class="badge bg-success fs-6">@Model.MaxScore</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <span>أدنى درجة</span>
+                        <span class="badge bg-danger fs-6">@Model.MinScore</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <i class="fas fa-users"></i> ملخص الطلاب
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <span>إجمالي الطلاب</span>
+                        <span class="badge bg-primary fs-6">@Model.TotalStudents</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <span>الناجحين</span>
+                        <span class="badge bg-success fs-6">@Model.PassedStudents</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <span>الراسبين</span>
+                        <span class="badge bg-danger fs-6">@Model.FailedStudents</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <span>نسبة النجاح</span>
+                        <span class="badge bg-info fs-6">@Model.SuccessRate.ToString("0.0")%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ترتيب الطلاب -->
+    @if (Model.StudentRanks != null && Model.StudentRanks.Any())
+    {
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <i class="fas fa-trophy"></i>
+                ترتيب الطلاب
+                <span class="badge bg-light text-dark float-end">@Model.StudentRanks.Count طالب</span>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>الترتيب</th>
+                                <th>اسم الطالب</th>
+                                <th>الدرجة</th>
+                                <th>النسبة</th>
+                                <th>التقدير</th>
+                                <th>الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var student in Model.StudentRanks)
+                            {
+                                var medal = student.Rank == 1 ? "🥇" :
+                                           student.Rank == 2 ? "🥈" :
+                                           student.Rank == 3 ? "🥉" : "";
+                                <tr>
+                                    <td>
+                                        <span class="badge bg-warning text-dark">#@student.Rank</span>
+                                        @medal
+                                    </td>
+                                    <td>@student.StudentName</td>
+                                    <td>
+                                        <span class="badge bg-primary">@student.Score</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info">@student.Percentage.ToString("0.0")%</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">@student.Grade</span>
+                                    </td>
+                                    <td>
+                                        @if (student.IsPassed)
+                                        {
+                                            <span class="badge bg-success">ناجح</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">راسب</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>

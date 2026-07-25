@@ -1,0 +1,119 @@
+@model SchoolERP.Web.ViewModels.Students.StudentGradesViewModel
+
+@{
+    ViewData["Title"] = "درجاتي";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="page-title">
+                <i class="fas fa-star"></i> درجاتي الدراسية
+            </h2>
+        </div>
+    </div>
+
+    <!-- إحصائيات الدرجات -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">المتوسط</h6>
+                    <h3 class="text-primary">@Model.AverageScore.ToString("0.0")%</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">عدد الامتحانات</h6>
+                    <h3 class="text-info">@Model.TotalExams</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">ناجح</h6>
+                    <h3 class="text-success">@Model.PassedExams</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">راسب</h6>
+                    <h3 class="text-danger">@Model.FailedExams</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- جدول الدرجات -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-list"></i> قائمة الدرجات
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>المادة</th>
+                            <th>الامتحان</th>
+                            <th>التاريخ</th>
+                            <th>الدرجة</th>
+                            <th>النسبة</th>
+                            <th>التقدير</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Grades != null && Model.Grades.Any())
+                        {
+                            int index = 1;
+                            foreach (var grade in Model.Grades)
+                            {
+                                <tr>
+                                    <td>@index</td>
+                                    <td>@grade.SubjectName</td>
+                                    <td>@grade.ExamName</td>
+                                    <td>@grade.ExamDate.ToString("yyyy/MM/dd")</td>
+                                    <td>@grade.Score / @grade.MaxScore</td>
+                                    <td>@grade.Percentage.ToString("0.0")%</td>
+                                    <td>
+                                        <span class="badge @(grade.Percentage >= 80 ? "bg-success" : grade.Percentage >= 60 ? "bg-warning" : "bg-danger")">
+                                            @grade.Grade
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @if (grade.IsPassed)
+                                        {
+                                            <span class="badge bg-success">ناجح</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">راسب</span>
+                                        }
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8" class="text-center text-muted py-4">
+                                    <i class="fas fa-star fa-2x d-block mb-2"></i>
+                                    لا توجد درجات لعرضها
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

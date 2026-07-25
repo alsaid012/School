@@ -1,0 +1,91 @@
+@model SchoolERP.Web.ViewModels.ExamResults.ExamResultCreateViewModel
+
+@{
+    ViewData["Title"] = "إضافة نتيجة جديدة";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-plus-circle text-success"></i>
+            إضافة نتيجة جديدة
+        </h1>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> العودة للقائمة
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            <i class="fas fa-plus"></i>
+            بيانات النتيجة الجديدة
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="row">
+                    <!-- الامتحان -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="ExamResult.ExamId" class="form-label fw-bold">
+                            <i class="fas fa-file-alt text-primary"></i>
+                            الامتحان
+                        </label>
+                        <select asp-for="ExamResult.ExamId" class="form-select form-select-lg" asp-items="Model.Exams">
+                            <option value="">-- اختر الامتحان --</option>
+                        </select>
+                        <span asp-validation-for="ExamResult.ExamId" class="text-danger"></span>
+                    </div>
+
+                    <!-- الطالب -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="ExamResult.StudentId" class="form-label fw-bold">
+                            <i class="fas fa-user-graduate text-info"></i>
+                            الطالب
+                        </label>
+                        <select asp-for="ExamResult.StudentId" class="form-select form-select-lg" asp-items="Model.Students">
+                            <option value="">-- اختر الطالب --</option>
+                        </select>
+                        <span asp-validation-for="ExamResult.StudentId" class="text-danger"></span>
+                    </div>
+
+                    <!-- الدرجة -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="ExamResult.Score" class="form-label fw-bold">
+                            <i class="fas fa-star text-warning"></i>
+                            الدرجة
+                        </label>
+                        <input asp-for="ExamResult.Score" type="number" min="0" max="@ViewBag.MaxScore" class="form-control form-control-lg" placeholder="مثال: 85" />
+                        <span asp-validation-for="ExamResult.Score" class="text-danger"></span>
+                        <small class="text-muted">الدرجة النهائية: @ViewBag.MaxScore</small>
+                    </div>
+
+                    <!-- ملاحظات -->
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="ExamResult.Remarks" class="form-label fw-bold">
+                            <i class="fas fa-sticky-note text-muted"></i>
+                            ملاحظات (اختياري)
+                        </label>
+                        <textarea asp-for="ExamResult.Remarks" class="form-control" rows="3" placeholder="أدخل أي ملاحظات إضافية..."></textarea>
+                        <span asp-validation-for="ExamResult.Remarks" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2 border-top pt-3">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-save"></i> حفظ النتيجة
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-times"></i> إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

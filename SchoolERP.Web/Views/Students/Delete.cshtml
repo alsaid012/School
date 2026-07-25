@@ -1,0 +1,65 @@
+@model SchoolERP.Application.DTOs.Students.StudentDto
+
+@{
+    ViewData["Title"] = "حذف الطالب";
+    ViewData["PageTitle"] = "حذف الطالب";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0"><i class="fas fa-trash me-2"></i>حذف الطالب</h5>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>تنبيه!</strong> هل أنت متأكد من حذف هذا الطالب؟ هذا الإجراء لا يمكن التراجع عنه.
+        </div>
+
+        <dl class="row">
+            <dt class="col-sm-3">كود الطالب</dt>
+            <dd class="col-sm-9"><strong>@Model.StudentCode</strong></dd>
+
+            <dt class="col-sm-3">اسم الطالب</dt>
+            <dd class="col-sm-9">@Model.FullName</dd>
+
+            <dt class="col-sm-3">الصف الدراسي</dt>
+            <dd class="col-sm-9">@Model.GradeLevelName</dd>
+
+            <dt class="col-sm-3">الفصل</dt>
+            <dd class="col-sm-9">@Model.ClassRoomName</dd>
+
+            <dt class="col-sm-3">حالة التخرج</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsGraduated)
+                {
+                    <span class="badge bg-secondary">متخرج</span>
+                }
+                else
+                {
+                    <span class="badge bg-success">غير متخرج</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">الحالة</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsActive)
+                {
+                    <span class="badge bg-success">نشط</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">غير نشط</span>
+                }
+            </dd>
+        </dl>
+
+        <form method="post" asp-action="Delete" asp-route-id="@Model.Id">
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash me-2"></i>تأكيد الحذف
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-right me-2"></i>العودة
+            </a>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,175 @@
+@model SchoolERP.Web.ViewModels.EmployeeAttendances.EmployeeAttendanceEditViewModel
+
+@{
+    ViewData["Title"] = "تعديل سجل الحضور";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-edit text-warning"></i>
+            تعديل سجل الحضور
+        </h1>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> العودة للقائمة
+        </a>
+    </div>
+
+    <!-- معلومات الموظف (للقراءة فقط) -->
+    <div class="card shadow-sm mb-4 border-info">
+        <div class="card-header bg-info text-white">
+            <i class="fas fa-info-circle"></i>
+            معلومات الموظف (للقراءة فقط)
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <strong><i class="fas fa-user-tie"></i> الموظف:</strong>
+                    <span class="badge bg-primary fs-6">@Model.DisplayInfo.EmployeeName</span>
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-id-card"></i> الكود:</strong>
+                    <span class="badge bg-secondary fs-6">@Model.DisplayInfo.EmployeeCode</span>
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-briefcase"></i> المسمى:</strong>
+                    <span class="badge bg-warning text-dark fs-6">@Model.DisplayInfo.JobTitle</span>
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-building"></i> القسم:</strong>
+                    <span class="badge bg-info fs-6">@Model.DisplayInfo.Department</span>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-3">
+                    <strong><i class="fas fa-calendar"></i> التاريخ:</strong>
+                    <span class="badge bg-secondary fs-6">@Model.DisplayInfo.AttendanceDate.ToString("yyyy/MM/dd")</span>
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-clipboard-check"></i> الحالة الحالية:</strong>
+                    <span class="badge bg-success fs-6">@Model.DisplayInfo.CurrentStatus</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نموذج التعديل -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-warning text-white">
+            <i class="fas fa-edit"></i>
+            تعديل بيانات الحضور
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="row">
+                    <!-- وقت الدخول -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Attendance.CheckInTime" class="form-label fw-bold">
+                            <i class="fas fa-sign-in-alt text-success"></i>
+                            وقت الدخول
+                        </label>
+                        <input asp-for="Attendance.CheckInTime" type="datetime-local" class="form-control form-control-lg" />
+                        <span asp-validation-for="Attendance.CheckInTime" class="text-danger"></span>
+                    </div>
+
+                    <!-- وقت الخروج -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Attendance.CheckOutTime" class="form-label fw-bold">
+                            <i class="fas fa-sign-out-alt text-danger"></i>
+                            وقت الخروج
+                        </label>
+                        <input asp-for="Attendance.CheckOutTime" type="datetime-local" class="form-control form-control-lg" />
+                        <span asp-validation-for="Attendance.CheckOutTime" class="text-danger"></span>
+                    </div>
+
+                    <!-- حالة الحضور -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Attendance.Status" class="form-label fw-bold">
+                            <i class="fas fa-clipboard-check text-primary"></i>
+                            حالة الحضور
+                        </label>
+                        <select asp-for="Attendance.Status" class="form-select form-select-lg" asp-items="ViewBag.StatusList">
+                            <option value="">-- اختر الحالة --</option>
+                        </select>
+                        <span asp-validation-for="Attendance.Status" class="text-danger"></span>
+                    </div>
+
+                    <!-- دقائق التأخير -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Attendance.DelayMinutes" class="form-label fw-bold">
+                            <i class="fas fa-clock text-warning"></i>
+                            دقائق التأخير
+                        </label>
+                        <input asp-for="Attendance.DelayMinutes" type="number" min="0" max="1000" class="form-control form-control-lg" placeholder="مثال: 10" />
+                        <span asp-validation-for="Attendance.DelayMinutes" class="text-danger"></span>
+                        <small class="text-muted">ادخل 0 إذا لم يكن هناك تأخير</small>
+                    </div>
+
+                    <!-- الحالة (تفعيل/تعطيل) -->
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Attendance.IsActive" class="form-label fw-bold">
+                            <i class="fas fa-toggle-on text-success"></i>
+                            @Html.DisplayNameFor(m => m.Attendance.IsActive)
+                        </label>
+                        <div class="form-check form-switch mt-2">
+                            <input asp-for="Attendance.IsActive" class="form-check-input" id="isActiveSwitch" checked="@(Model.Attendance.IsActive)" />
+                            <label class="form-check-label fw-bold" for="isActiveSwitch">
+                                @if (Model.Attendance.IsActive)
+                                {
+                                    <span class="text-success"><i class="fas fa-check-circle"></i> مفعل</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger"><i class="fas fa-times-circle"></i> غير مفعل</span>
+                                }
+                            </label>
+                        </div>
+                        <small class="text-muted">تعطيل السجل يمنع ظهوره في التقارير</small>
+                    </div>
+
+                    <!-- ملاحظات -->
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Attendance.Notes" class="form-label fw-bold">
+                            <i class="fas fa-sticky-note text-muted"></i>
+                            ملاحظات (اختياري)
+                        </label>
+                        <textarea asp-for="Attendance.Notes" class="form-control" rows="3" placeholder="أدخل أي ملاحظات إضافية..."></textarea>
+                        <span asp-validation-for="Attendance.Notes" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2 border-top pt-3">
+                    <button type="submit" class="btn btn-warning btn-lg">
+                        <i class="fas fa-save"></i> تحديث سجل الحضور
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-times"></i> إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            $('#isActiveSwitch').on('change', function () {
+                var label = $(this).closest('.form-check').find('.form-check-label');
+                if ($(this).is(':checked')) {
+                    label.html('<span class="text-success"><i class="fas fa-check-circle"></i> مفعل</span>');
+                } else {
+                    label.html('<span class="text-danger"><i class="fas fa-times-circle"></i> غير مفعل</span>');
+                }
+            });
+        });
+    </script>
+}

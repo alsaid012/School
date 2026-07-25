@@ -1,0 +1,74 @@
+@model SchoolERP.Application.DTOs.Users.UserDto
+
+@{
+    ViewData["Title"] = "حذف المستخدم";
+    ViewData["PageTitle"] = "حذف المستخدم";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0"><i class="fas fa-trash me-2"></i>حذف المستخدم</h5>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>تنبيه!</strong> هل أنت متأكد من حذف هذا المستخدم؟ هذا الإجراء لا يمكن التراجع عنه.
+        </div>
+
+        <div class="text-center mb-3">
+            @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+            {
+                <img src="@Model.ProfilePicture" alt="@Model.FullName" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover; border: 3px solid #dc3545;" />
+            }
+            else
+            {
+                <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center text-white" style="width: 100px; height: 100px; font-size: 48px;">
+                    @Model.FullName?.FirstOrDefault()
+                </div>
+            }
+        </div>
+
+        <dl class="row">
+            <dt class="col-sm-3">اسم المستخدم</dt>
+            <dd class="col-sm-9">@Model.Username</dd>
+
+            <dt class="col-sm-3">الاسم الكامل</dt>
+            <dd class="col-sm-9">@Model.FullName</dd>
+
+            <dt class="col-sm-3">البريد الإلكتروني</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">نوع المستخدم</dt>
+            <dd class="col-sm-9">@Model.UserType</dd>
+
+            <dt class="col-sm-3">الحالة</dt>
+            <dd class="col-sm-9">
+                @if (Model.Status == SchoolERP.Domain.Enums.UserStatus.Active)
+                {
+                    <span class="badge bg-success">نشط</span>
+                }
+                else if (Model.Status == SchoolERP.Domain.Enums.UserStatus.Pending)
+                {
+                    <span class="badge bg-warning">معلق</span>
+                }
+                else if (Model.Status == SchoolERP.Domain.Enums.UserStatus.Suspended)
+                {
+                    <span class="badge bg-danger">موقوف</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">غير نشط</span>
+                }
+            </dd>
+        </dl>
+
+        <form method="post" asp-action="Delete" asp-route-id="@Model.Id">
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash me-2"></i>تأكيد الحذف
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-right me-2"></i>العودة
+            </a>
+        </form>
+    </div>
+</div>

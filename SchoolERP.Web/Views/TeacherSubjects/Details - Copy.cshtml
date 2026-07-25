@@ -1,0 +1,70 @@
+@model SchoolERP.Application.DTOs.TeacherSubjects.TeacherSubjectDto
+
+@{
+    ViewData["Title"] = "تفاصيل الرابط";
+    ViewData["PageTitle"] = "تفاصيل الرابط";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-link me-2"></i>تفاصيل الرابط</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">المعلم</dt>
+            <dd class="col-sm-9">
+                <strong>@Model.TeacherName</strong>
+                <br />
+                <small class="text-muted">الكود: @Model.TeacherCode</small>
+            </dd>
+
+            <dt class="col-sm-3">المادة</dt>
+            <dd class="col-sm-9">
+                <strong>@Model.SubjectName</strong>
+                <br />
+                <small class="text-muted">الكود: @Model.SubjectCode</small>
+            </dd>
+
+            <dt class="col-sm-3">الصف الدراسي</dt>
+            <dd class="col-sm-9">@Model.GradeLevelName</dd>
+
+            <dt class="col-sm-3">مادة أساسية</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsPrimary)
+                {
+                    <span class="badge bg-success"><i class="fas fa-star me-1"></i>نعم</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">لا</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">الحالة</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsActive)
+                {
+                    <span class="badge bg-success">مفعل</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">غير مفعل</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">تاريخ الإنشاء</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</dd>
+
+            <dt class="col-sm-3">آخر تحديث</dt>
+            <dd class="col-sm-9">@(Model.UpdatedAt?.ToString("yyyy-MM-dd HH:mm") ?? "-")</dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right me-2"></i>العودة
+        </a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+            <i class="fas fa-edit me-2"></i>تعديل
+        </a>
+    </div>
+</div>

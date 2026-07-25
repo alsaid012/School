@@ -1,0 +1,231 @@
+@model SchoolERP.Web.ViewModels.UserContacts.UserContactEditViewModel
+
+@{
+    ViewData["Title"] = "تعديل جهة اتصال";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-edit text-warning"></i>
+            تعديل جهة اتصال
+        </h1>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> العودة للقائمة
+        </a>
+    </div>
+
+    <!-- معلومات جهة الاتصال (للقراءة فقط) -->
+    <div class="card shadow-sm mb-4 border-info">
+        <div class="card-header bg-info text-white">
+            <i class="fas fa-info-circle"></i>
+            معلومات جهة الاتصال (للقراءة فقط)
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <strong><i class="fas fa-user"></i> المستخدم:</strong>
+                    <span class="badge bg-primary fs-6">@Model.DisplayInfo.UserName</span>
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-tag"></i> النوع:</strong>
+                    <span class="badge bg-info fs-6">@Model.DisplayInfo.ContactTypeName</span>
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-link"></i> القيمة:</strong>
+                    <span class="badge bg-success fs-6">@Model.DisplayInfo.ContactValue</span>
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-star"></i> أساسي:</strong>
+                    @if (Model.DisplayInfo.IsPrimary)
+                    {
+                        <span class="badge bg-success fs-6">نعم</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary fs-6">لا</span>
+                    }
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-3">
+                    <strong><i class="fas fa-check-circle"></i> موثق:</strong>
+                    @if (Model.DisplayInfo.IsVerified)
+                    {
+                        <span class="badge bg-success fs-6">نعم</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary fs-6">لا</span>
+                    }
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-calendar-plus"></i> تاريخ الإنشاء:</strong>
+                    <span class="badge bg-secondary fs-6">@Model.DisplayInfo.CreatedAt.ToString("yyyy/MM/dd")</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نموذج التعديل -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-warning text-white">
+            <i class="fas fa-edit"></i>
+            تعديل بيانات جهة الاتصال
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="row">
+                    <!-- نوع جهة الاتصال -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Contact.ContactType" class="form-label fw-bold">
+                            <i class="fas fa-tag text-info"></i>
+                            نوع جهة الاتصال
+                        </label>
+                        <select asp-for="Contact.ContactType" class="form-select form-select-lg" asp-items="ViewBag.ContactTypes">
+                            <option value="">-- اختر النوع --</option>
+                        </select>
+                        <span asp-validation-for="Contact.ContactType" class="text-danger"></span>
+                    </div>
+
+                    <!-- قيمة جهة الاتصال -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Contact.ContactValue" class="form-label fw-bold">
+                            <i class="fas fa-link text-warning"></i>
+                            قيمة جهة الاتصال
+                        </label>
+                        <input asp-for="Contact.ContactValue" class="form-control form-control-lg" />
+                        <span asp-validation-for="Contact.ContactValue" class="text-danger"></span>
+                    </div>
+
+                    <!-- جهة اتصال أساسية -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Contact.IsPrimary" class="form-label fw-bold">
+                            <i class="fas fa-star text-warning"></i>
+                            @Html.DisplayNameFor(m => m.Contact.IsPrimary)
+                        </label>
+                        <div class="form-check form-switch mt-2">
+                            <input asp-for="Contact.IsPrimary" class="form-check-input" id="isPrimarySwitch" checked="@(Model.Contact.IsPrimary)" />
+                            <label class="form-check-label fw-bold" for="isPrimarySwitch">
+                                @if (Model.Contact.IsPrimary)
+                                {
+                                    <span class="text-success"><i class="fas fa-star"></i> أساسي</span>
+                                }
+                                else
+                                {
+                                    <span class="text-secondary"><i class="fas fa-circle"></i> ثانوي</span>
+                                }
+                            </label>
+                        </div>
+                        <small class="text-muted">جهة الاتصال الأساسية هي التي سيتم استخدامها افتراضياً</small>
+                    </div>
+
+                    <!-- تم التحقق -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Contact.IsVerified" class="form-label fw-bold">
+                            <i class="fas fa-check-circle text-success"></i>
+                            @Html.DisplayNameFor(m => m.Contact.IsVerified)
+                        </label>
+                        <div class="form-check form-switch mt-2">
+                            <input asp-for="Contact.IsVerified" class="form-check-input" id="isVerifiedSwitch" checked="@(Model.Contact.IsVerified)" />
+                            <label class="form-check-label fw-bold" for="isVerifiedSwitch">
+                                @if (Model.Contact.IsVerified)
+                                {
+                                    <span class="text-success"><i class="fas fa-check-circle"></i> موثق</span>
+                                }
+                                else
+                                {
+                                    <span class="text-secondary"><i class="fas fa-circle"></i> غير موثق</span>
+                                }
+                            </label>
+                        </div>
+                        <small class="text-muted">تحديد أن جهة الاتصال موثقة (تم التحقق منها)</small>
+                    </div>
+
+                    <!-- الحالة -->
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Contact.IsActive" class="form-label fw-bold">
+                            <i class="fas fa-toggle-on text-success"></i>
+                            @Html.DisplayNameFor(m => m.Contact.IsActive)
+                        </label>
+                        <div class="form-check form-switch mt-2">
+                            <input asp-for="Contact.IsActive" class="form-check-input" id="isActiveSwitch" checked="@(Model.Contact.IsActive)" />
+                            <label class="form-check-label fw-bold" for="isActiveSwitch">
+                                @if (Model.Contact.IsActive)
+                                {
+                                    <span class="text-success"><i class="fas fa-check-circle"></i> مفعل</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger"><i class="fas fa-times-circle"></i> غير مفعل</span>
+                                }
+                            </label>
+                        </div>
+                        <small class="text-muted">تعطيل جهة الاتصال يمنع ظهورها في القوائم</small>
+                    </div>
+
+                    <!-- ملاحظات -->
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Contact.Notes" class="form-label fw-bold">
+                            <i class="fas fa-sticky-note text-muted"></i>
+                            ملاحظات (اختياري)
+                        </label>
+                        <textarea asp-for="Contact.Notes" class="form-control" rows="3" placeholder="أدخل أي ملاحظات إضافية..."></textarea>
+                        <span asp-validation-for="Contact.Notes" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2 border-top pt-3">
+                    <button type="submit" class="btn btn-warning btn-lg">
+                        <i class="fas fa-save"></i> تحديث جهة الاتصال
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-times"></i> إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            // ✅ تحديث نصوص Switches عند التغيير
+            $('#isPrimarySwitch').on('change', function () {
+                var label = $(this).closest('.form-check').find('.form-check-label');
+                if ($(this).is(':checked')) {
+                    label.html('<span class="text-success"><i class="fas fa-star"></i> أساسي</span>');
+                } else {
+                    label.html('<span class="text-secondary"><i class="fas fa-circle"></i> ثانوي</span>');
+                }
+            });
+
+            $('#isVerifiedSwitch').on('change', function () {
+                var label = $(this).closest('.form-check').find('.form-check-label');
+                if ($(this).is(':checked')) {
+                    label.html('<span class="text-success"><i class="fas fa-check-circle"></i> موثق</span>');
+                } else {
+                    label.html('<span class="text-secondary"><i class="fas fa-circle"></i> غير موثق</span>');
+                }
+            });
+
+            $('#isActiveSwitch').on('change', function () {
+                var label = $(this).closest('.form-check').find('.form-check-label');
+                if ($(this).is(':checked')) {
+                    label.html('<span class="text-success"><i class="fas fa-check-circle"></i> مفعل</span>');
+                } else {
+                    label.html('<span class="text-danger"><i class="fas fa-times-circle"></i> غير مفعل</span>');
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,6 @@
+{
+  "SchoolERP.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\ASP.NET MVC Project\\SchoolERP\\SchoolERP.API",
+  "SchoolERP.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\ASP.NET MVC Project\\SchoolERP\\SchoolERP.Application",
+  "SchoolERP.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\ASP.NET MVC Project\\SchoolERP\\SchoolERP.Domain\\SchoolERP.Domain",
+  "SchoolERP.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\ASP.NET MVC Project\\SchoolERP\\SchoolERP.Infrastructure"
+}

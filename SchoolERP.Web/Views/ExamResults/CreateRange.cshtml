@@ -1,0 +1,177 @@
+@model SchoolERP.Web.ViewModels.ExamResults.ExamResultCreateRangeViewModel
+
+@{
+    ViewData["Title"] = "إضافة نتائج متعددة";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-plus-circle text-success"></i>
+            إضافة نتائج متعددة
+        </h1>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> العودة للقائمة
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            <i class="fas fa-plus"></i>
+            إضافة نتائج لامتحان واحد
+        </div>
+        <div class="card-body">
+            <form asp-action="CreateRange" method="post" id="createRangeForm">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="row">
+                    <!-- الامتحان -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="ExamId" class="form-label fw-bold">
+                            <i class="fas fa-file-alt text-primary"></i>
+                            الامتحان
+                        </label>
+                        <select asp-for="ExamId" class="form-select form-select-lg" asp-items="Model.Exams" onchange="location.href='?examId='+this.value">
+                            <option value="">-- اختر الامتحان --</option>
+                        </select>
+                        <span asp-validation-for="ExamId" class="text-danger"></span>
+                        @if (ViewBag.ExamName != null)
+                        {
+                            <small class="text-muted">الامتحان: <strong>@ViewBag.ExamName</strong> | الدرجة النهائية: <strong>@ViewBag.MaxScore</strong></small>
+                        }
+                    </div>
+
+                    <!-- الطلاب -->
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-users text-info"></i>
+                            الطلاب (اختر الطلاب لإضافة نتائجهم)
+                        </label>
+                        @if (Model.AvailableStudents != null && Model.AvailableStudents.Any())
+                        {
+                            <div class="border rounded p-3" style="max-height: 300px; overflow-y: auto;">
+                                @foreach (var student in Model.AvailableStudents)
+                                {
+                                    <div class="form-check">
+                                        <input type="checkbox" name="SelectedStudentIds" value="@student.Value" class="form-check-input" id="student_@student.Value" />
+                                        <label class="form-check-label" for="student_@student.Value">
+                                            @student.Text
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                            <small class="text-muted">اختر الطلاب الذين تريد إضافة نتائجهم</small>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning">
+                                @if (Model.ExamId > 0)
+                                {
+                                    <span><i class="fas fa-info-circle"></i> جميع الطلاب مسجلين بالفعل في هذا الامتحان</span>
+                                }
+                                else
+                                {
+                                    <span><i class="fas fa-info-circle"></i> يرجى اختيار الامتحان أولاً</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2 border-top pt-3">
+                    <button type="submit" class="btn btn-success btn-lg" id="submitBtn">
+                        <i class="fas fa-save"></i> إضافة النتائج
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-times"></i> إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model.SelectedStudentIds != null && Model.SelectedStudentIds.Any())
+    {
+        <div class="card shadow-sm mt-4">
+            <div class="card-header bg-info text-white">
+                <i class="fas fa-edit"></i>
+                إدخال درجات الطلاب المختارين
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    @for (int i = 0; i < Model.SelectedStudentIds.Count; i++)
+                    {
+                        var studentId = Model.SelectedStudentIds[i];
+                        var studentName = Model.AvailableStudents?.FirstOrDefault(s => s.Value == studentId.ToString())?.Text ?? "طالب";
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-primary">
+                                <div class="card-body">
+                                    <h6 class="card-title">@studentName</h6>
+                                    <input type="hidden" name="ExamResults[@i].StudentId" value="@studentId" />
+                                    <input type="hidden" name="ExamResults[@i].ExamId" value="@Model.ExamId" />
+                                    <div class="form-group">
+                                        <label class="form-label">الدرجة</label>
+                                        <input type="number" name="ExamResults[@i].Score" class="form-control" min="0" max="@ViewBag.MaxScore" placeholder="مثال: 85" required />
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label class="form-label">ملاحظات</label>
+                                        <input type="text" name="ExamResults[@i].Remarks" class="form-control" placeholder="ملاحظات (اختياري)" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="mt-3">
+                    <button type="submit" form="createRangeForm" class="btn btn-success btn-lg">
+                        <i class="fas fa-save"></i> حفظ جميع النتائج
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            // ✅ عند تغيير الامتحان، إعادة تحميل الصفحة مع معرف الامتحان
+            $('#ExamId').on('change', function () {
+                var examId = $(this).val();
+                if (examId) {
+                    location.href = '?examId=' + examId;
+                } else {
+                    location.href = '@Url.Action("CreateRange")';
+                }
+            });
+
+            // ✅ عند اختيار طلاب، عرض نموذج إدخال الدرجات
+            $('input[name="SelectedStudentIds"]').on('change', function () {
+                var selectedStudents = [];
+                $('input[name="SelectedStudentIds"]:checked').each(function () {
+                    selectedStudents.push($(this).val());
+                });
+
+                if (selectedStudents.length > 0) {
+                    var form = $(this).closest('form');
+                    var examId = $('#ExamId').val();
+                    
+                    // ✅ بناء الـ URL مع الطلاب المختارين
+                    var url = '@Url.Action("CreateRange")?examId=' + examId;
+                    selectedStudents.forEach(function (id) {
+                        url += '&selectedStudents=' + id;
+                    });
+                    location.href = url;
+                } else {
+                    // ✅ إذا لم يتم اختيار طلاب، إعادة تحميل الصفحة بدون selectedStudents
+                    var examId = $('#ExamId').val();
+                    location.href = '?examId=' + examId;
+                }
+            });
+        });
+    </script>
+}

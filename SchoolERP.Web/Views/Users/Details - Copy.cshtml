@@ -1,0 +1,141 @@
+@model SchoolERP.Application.DTOs.Users.UserDetailsDto
+
+@{
+    ViewData["Title"] = "تفاصيل المستخدم";
+    ViewData["PageTitle"] = "تفاصيل المستخدم";
+}
+
+<div class="card">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-user me-2"></i>@Model.FullName</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">اسم المستخدم</dt>
+                    <dd class="col-sm-8">@Model.Username</dd>
+
+                    <dt class="col-sm-4">الاسم الكامل</dt>
+                    <dd class="col-sm-8">@Model.FullName</dd>
+
+                    <dt class="col-sm-4">الرقم القومي</dt>
+                    <dd class="col-sm-8">@Model.NationalId</dd>
+
+                    <dt class="col-sm-4">البريد الإلكتروني</dt>
+                    <dd class="col-sm-8">@Model.Email</dd>
+
+                    <dt class="col-sm-4">رقم الهاتف</dt>
+                    <dd class="col-sm-8">@Model.PhoneNumber</dd>
+
+                    <dt class="col-sm-4">تاريخ الميلاد</dt>
+                    <dd class="col-sm-8">@Model.DateOfBirth.ToString("yyyy-MM-dd")</dd>
+
+                    <dt class="col-sm-4">العنوان</dt>
+                    <dd class="col-sm-8">@Model.Address</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">نوع المستخدم</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-info">@Model.UserType</span>
+                    </dd>
+
+                    <dt class="col-sm-4">الحالة</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.Status == SchoolERP.Domain.Enums.UserStatus.Active)
+                        {
+                            <span class="badge bg-success">نشط</span>
+                        }
+                        else if (Model.Status == SchoolERP.Domain.Enums.UserStatus.Pending)
+                        {
+                            <span class="badge bg-warning">معلق</span>
+                        }
+                        else if (Model.Status == SchoolERP.Domain.Enums.UserStatus.Suspended)
+                        {
+                            <span class="badge bg-danger">موقوف</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">غير نشط</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">المدرسة</dt>
+                    <dd class="col-sm-8">@Model.SchoolName</dd>
+
+                    <dt class="col-sm-4">تاريخ آخر تسجيل دخول</dt>
+                    <dd class="col-sm-8">@(Model.LastLogin?.ToString("yyyy-MM-dd HH:mm") ?? "لم يسجل بعد")</dd>
+
+                    <dt class="col-sm-4">تاريخ الإنشاء</dt>
+                    <dd class="col-sm-8">@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</dd>
+
+                    <dt class="col-sm-4">آخر تحديث</dt>
+                    <dd class="col-sm-8">@(Model.UpdatedAt?.ToString("yyyy-MM-dd HH:mm") ?? "-")</dd>
+                </dl>
+            </div>
+        </div>
+
+        @if (Model.UserRoles != null && Model.UserRoles.Any())
+        {
+            <hr />
+            <h6><i class="fas fa-tags me-2"></i>الأدوار</h6>
+            <div>
+                @foreach (var role in Model.UserRoles)
+                {
+                    <span class="badge bg-primary me-1">@role.RoleType @(role.IsPrimary ? "(أساسي)" : "")</span>
+                }
+            </div>
+        }
+
+        @if (Model.Contacts != null && Model.Contacts.Any())
+        {
+            <hr />
+            <h6><i class="fas fa-address-book me-2"></i>جهات الاتصال</h6>
+            <table class="table table-sm table-bordered">
+                <thead>
+                    <tr>
+                        <th>النوع</th>
+                        <th>القيمة</th>
+                        <th>أساسي</th>
+                        <th>موثق</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var contact in Model.Contacts)
+                    {
+                        <tr>
+                            <td>@contact.ContactType</td>
+                            <td>@contact.ContactValue</td>
+                            <td>@(contact.IsPrimary ? "نعم" : "لا")</td>
+                            <td>@(contact.IsVerified ? "نعم" : "لا")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        <!-- ====== الصورة الشخصية ====== -->
+        <div class="text-center mb-3">
+            @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+            {
+                <img src="@Model.ProfilePicture" alt="@Model.FullName" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #0d6efd;" />
+            }
+            else
+            {
+                <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center text-white" style="width: 150px; height: 150px; font-size: 64px;">
+                    @Model.FullName?.FirstOrDefault()
+                </div>
+            }
+            <h5 class="mt-2">@Model.FullName</h5>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right me-2"></i>العودة
+        </a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+            <i class="fas fa-edit me-2"></i>تعديل
+        </a>
+    </div>
+</div>

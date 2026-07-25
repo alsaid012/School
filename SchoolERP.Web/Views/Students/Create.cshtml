@@ -1,0 +1,132 @@
+@model SchoolERP.Application.DTOs.Students.CreateStudentDto
+
+@{
+    ViewData["Title"] = "إنشاء طالب جديد";
+    ViewData["PageTitle"] = "إنشاء طالب جديد";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="fas fa-user-plus me-2"></i>إنشاء طالب جديد</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- ============================================================ -->
+            <!-- كود الطالب + المستخدم -->
+            <!-- ============================================================ -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="StudentCode" class="form-label">
+                            <i class="fas fa-barcode me-1"></i>كود الطالب <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="StudentCode" class="form-control" placeholder="مثال: STU-2024-001" />
+                        <span asp-validation-for="StudentCode" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="UserId" class="form-label">
+                            <i class="fas fa-user me-1"></i>المستخدم <span class="text-danger">*</span>
+                        </label>
+                        <select asp-for="UserId" class="form-select">
+                            <option value="">اختر المستخدم...</option>
+                            @if (ViewBag.Users != null)
+                            {
+                                foreach (var user in ViewBag.Users)
+                                {
+                                    <option value="@user.Id">@user.FullName (@user.Username)</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="UserId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- العام الدراسي + الفصل -->
+            <!-- ============================================================ -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="AcademicYearId" class="form-label">
+                            <i class="fas fa-calendar me-1"></i>العام الدراسي <span class="text-danger">*</span>
+                        </label>
+                        <select asp-for="AcademicYearId" class="form-select">
+                            <option value="">اختر العام الدراسي...</option>
+                            @if (ViewBag.AcademicYears != null)
+                            {
+                                foreach (var year in ViewBag.AcademicYears)
+                                {
+                                    <option value="@year.Id">@year.YearName</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="AcademicYearId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="ClassRoomId" class="form-label">
+                            <i class="fas fa-door-open me-1"></i>الفصل
+                        </label>
+                        <select asp-for="ClassRoomId" class="form-select">
+                            <option value="">اختر الفصل...</option>
+                            @if (ViewBag.ClassRooms != null)
+                            {
+                                foreach (var room in ViewBag.ClassRooms)
+                                {
+                                    <option value="@room.Id">@room.ClassName</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="ClassRoomId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- ولي الأمر -->
+            <!-- ============================================================ -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="ParentName" class="form-label">
+                            <i class="fas fa-user-friends me-1"></i>اسم ولي الأمر
+                        </label>
+                        <input asp-for="ParentName" class="form-control" placeholder="أدخل اسم ولي الأمر" />
+                        <span asp-validation-for="ParentName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="ParentPhone" class="form-label">
+                            <i class="fas fa-phone me-1"></i>تليفون ولي الأمر
+                        </label>
+                        <input asp-for="ParentPhone" class="form-control" placeholder="01xxxxxxxxx" />
+                        <span asp-validation-for="ParentPhone" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ParentEmail" class="form-label">
+                    <i class="fas fa-envelope me-1"></i>بريد ولي الأمر
+                </label>
+                <input asp-for="ParentEmail" type="email" class="form-control" placeholder="example@email.com" />
+                <span asp-validation-for="ParentEmail" class="text-danger"></span>
+            </div>
+
+            <hr />
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-save me-2"></i>حفظ
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-times me-2"></i>إلغاء
+            </a>
+        </form>
+    </div>
+</div>

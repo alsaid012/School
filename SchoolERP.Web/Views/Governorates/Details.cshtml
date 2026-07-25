@@ -1,0 +1,50 @@
+@model SchoolERP.Application.DTOs.Governorates.GovernorateDto
+
+@{
+    ViewData["Title"] = "تفاصيل المحافظة";
+    ViewData["PageTitle"] = "تفاصيل المحافظة";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>@Model.Name</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">اسم المحافظة</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+
+            <dt class="col-sm-3">الكود</dt>
+            <dd class="col-sm-9"><span class="badge bg-secondary">@Model.Code</span></dd>
+
+            <dt class="col-sm-3">عدد الإدارات</dt>
+            <dd class="col-sm-9">@Model.DepartmentsCount</dd>
+
+            <dt class="col-sm-3">الحالة</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsActive)
+                {
+                    <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>مفعل</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger"><i class="fas fa-times-circle me-1"></i>غير مفعل</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">تاريخ الإنشاء</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</dd>
+
+            <dt class="col-sm-3">آخر تحديث</dt>
+            <dd class="col-sm-9">@(Model.UpdatedAt?.ToString("yyyy-MM-dd HH:mm") ?? "-")</dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right me-2"></i>العودة
+        </a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+            <i class="fas fa-edit me-2"></i>تعديل
+        </a>
+    </div>
+</div>

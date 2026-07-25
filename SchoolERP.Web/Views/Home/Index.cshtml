@@ -1,0 +1,330 @@
+﻿@using SchoolERP.Web.ViewModels.Home
+@model HomeDashboardViewModel
+
+@{
+    ViewData["Title"] = "لوحة التحكم";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+}
+
+<div class="container-fluid">
+
+    <!-- ✅ قسم الترحيب -->
+    <div class="welcome-section mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="display-5 fw-bold welcome-text-shadow">
+                    <i class="fas fa-school me-3"></i>مرحباً بك في نظام إدارة المدارس
+                </h1>
+                <p class="fs-5 mb-0 opacity-75">
+                    <i class="fas fa-calendar-alt me-2"></i>
+                    @if (!string.IsNullOrEmpty(Model.CurrentAcademicYear))
+                    {
+                        <span>السنة الدراسية: <strong>@Model.CurrentAcademicYear</strong></span>
+                    }
+                    else
+                    {
+                        <span>لا توجد سنة دراسية حالية</span>
+                    }
+                    <span class="mx-3">|</span>
+                    <i class="fas fa-users me-2"></i>
+                    <span>إجمالي المستخدمين: <strong>@Model.TotalUsers</strong></span>
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <span class="school-badge">
+                    <i class="fas fa-building me-2"></i> @Model.TotalSchools مدرسة
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ بطاقات الإحصائيات -->
+    <div class="row g-4 mb-4">
+        <!-- الطلاب -->
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="card stat-card bg-gradient-blue text-white position-relative">
+                <div class="card-body">
+                    <div class="stat-label">الطلاب</div>
+                    <div class="stat-number">@Model.TotalStudents</div>
+                    <small><i class="fas fa-user-plus me-1"></i>جديد: @Model.NewStudents</small>
+                    <div class="stat-icon"><i class="fas fa-user-graduate"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- المعلمين -->
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="card stat-card bg-gradient-green text-white position-relative">
+                <div class="card-body">
+                    <div class="stat-label">المعلمين</div>
+                    <div class="stat-number">@Model.TotalTeachers</div>
+                    <small><i class="fas fa-user-plus me-1"></i>جديد: @Model.NewTeachers</small>
+                    <div class="stat-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- الموظفين -->
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="card stat-card bg-gradient-orange text-dark position-relative">
+                <div class="card-body">
+                    <div class="stat-label">الموظفين</div>
+                    <div class="stat-number">@Model.TotalEmployees</div>
+                    <small><i class="fas fa-users me-1"></i>إجمالي الموظفين</small>
+                    <div class="stat-icon"><i class="fas fa-user-tie"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- المستخدمين النشطين -->
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="card stat-card bg-gradient-purple text-white position-relative">
+                <div class="card-body">
+                    <div class="stat-label">المستخدمين النشطين</div>
+                    <div class="stat-number">@Model.ActiveUsers</div>
+                    <small><i class="fas fa-check-circle me-1"></i>من @Model.TotalUsers مستخدم</small>
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ الصف الثاني من الإحصائيات -->
+    <div class="row g-4 mb-4">
+        <!-- المدارس -->
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="card stat-card bg-gradient-teal text-white position-relative">
+                <div class="card-body">
+                    <div class="stat-label">المدارس</div>
+                    <div class="stat-number">@Model.TotalSchools</div>
+                    <small><i class="fas fa-building me-1"></i>مدارس مسجلة</small>
+                    <div class="stat-icon"><i class="fas fa-school"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- السنوات الدراسية -->
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="card stat-card bg-gradient-red text-white position-relative">
+                <div class="card-body">
+                    <div class="stat-label">السنوات الدراسية</div>
+                    <div class="stat-number">@Model.TotalAcademicYears</div>
+                    <small><i class="fas fa-calendar-check me-1"></i>سنوات مسجلة</small>
+                    <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- طلاب السنة الحالية -->
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="card stat-card bg-gradient-blue text-white position-relative">
+                <div class="card-body">
+                    <div class="stat-label">طلاب السنة الحالية</div>
+                    <div class="stat-number">@Model.CurrentYearStudents</div>
+                    <small><i class="fas fa-user-graduate me-1"></i>طالب مسجل</small>
+                    <div class="stat-icon"><i class="fas fa-user-plus"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- نسبة النجاح (مثال) -->
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="card stat-card bg-gradient-orange text-dark position-relative">
+                <div class="card-body">
+                    <div class="stat-label">نسبة النجاح الإجمالية</div>
+                    <div class="stat-number">85%</div>
+                    <small><i class="fas fa-chart-line me-1"></i>متوسط النجاح</small>
+                    <div class="stat-icon"><i class="fas fa-percentage"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ الأزرار السريعة -->
+    <div class="row g-3 mb-4">
+        <div class="col-12">
+            <div class="card card-shadow-hover border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="fas fa-bolt text-warning me-2"></i>
+                        إجراءات سريعة
+                    </h5>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a asp-controller="Students" asp-action="Create" class="quick-action-btn btn btn-outline-primary">
+                            <i class="fas fa-user-graduate fs-4"></i>
+                            <div>
+                                <div class="fw-bold">إضافة طالب</div>
+                                <small class="text-muted">تسجيل طالب جديد</small>
+                            </div>
+                        </a>
+                        <a asp-controller="Teachers" asp-action="Create" class="quick-action-btn btn btn-outline-success">
+                            <i class="fas fa-chalkboard-teacher fs-4"></i>
+                            <div>
+                                <div class="fw-bold">إضافة معلم</div>
+                                <small class="text-muted">تسجيل معلم جديد</small>
+                            </div>
+                        </a>
+                        <a asp-controller="AcademicYears" asp-action="Create" class="quick-action-btn btn btn-outline-warning">
+                            <i class="fas fa-calendar-alt fs-4"></i>
+                            <div>
+                                <div class="fw-bold">سنة دراسية</div>
+                                <small class="text-muted">إضافة سنة دراسية جديدة</small>
+                            </div>
+                        </a>
+                        <a asp-controller="Exams" asp-action="Create" class="quick-action-btn btn btn-outline-danger">
+                            <i class="fas fa-file-alt fs-4"></i>
+                            <div>
+                                <div class="fw-bold">إضافة امتحان</div>
+                                <small class="text-muted">تسجيل امتحان جديد</small>
+                            </div>
+                        </a>
+                        <a asp-controller="ClassSchedules" asp-action="Create" class="quick-action-btn btn btn-outline-info">
+                            <i class="fas fa-clock fs-4"></i>
+                            <div>
+                                <div class="fw-bold">جدول حصص</div>
+                                <small class="text-muted">إضافة حصة جديدة</small>
+                            </div>
+                        </a>
+                        <a asp-controller="StudentAttendances" asp-action="Create" class="quick-action-btn btn btn-outline-secondary">
+                            <i class="fas fa-clipboard-check fs-4"></i>
+                            <div>
+                                <div class="fw-bold">حضور طلاب</div>
+                                <small class="text-muted">تسجيل حضور الطلاب</small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ قسم النشاطات الأخيرة -->
+    <div class="row g-4">
+        <!-- آخر المستخدمين -->
+        <div class="col-lg-6">
+            <div class="card card-shadow-hover border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 pt-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-user-clock text-primary me-2"></i>
+                            آخر المستخدمين المسجلين
+                        </h5>
+                        <a asp-controller="Users" asp-action="Index" class="btn btn-sm btn-outline-primary">
+                            عرض الكل <i class="fas fa-arrow-left ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="activity-list">
+                        @if (Model.RecentUsers != null && Model.RecentUsers.Any())
+                        {
+                            foreach (var user in Model.RecentUsers)
+                            {
+                                <div class="activity-item d-flex align-items-center gap-3">
+                                    <div class="activity-icon bg-primary">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="fw-bold">@user.FullName</div>
+                                        <div class="small text-muted">
+                                            <span class="badge bg-info me-2">@user.UserType</span>
+                                            @user.Email
+                                        </div>
+                                    </div>
+                                    <div class="small text-muted text-nowrap">
+                                        <i class="fas fa-clock me-1"></i>
+                                        @user.CreatedAt.ToString("dd/MM/yyyy")
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="text-center text-muted py-4">
+                                <i class="fas fa-users fa-2x d-block mb-2"></i>
+                                لا يوجد مستخدمين مسجلين حديثاً
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- آخر الطلاب -->
+        <div class="col-lg-6">
+            <div class="card card-shadow-hover border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 pt-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-user-graduate text-success me-2"></i>
+                            آخر الطلاب المسجلين
+                        </h5>
+                        <a asp-controller="Students" asp-action="Index" class="btn btn-sm btn-outline-success">
+                            عرض الكل <i class="fas fa-arrow-left ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="activity-list">
+                        @if (Model.RecentStudents != null && Model.RecentStudents.Any())
+                        {
+                            foreach (var student in Model.RecentStudents)
+                            {
+                                <div class="activity-item d-flex align-items-center gap-3">
+                                    <div class="activity-icon bg-success">
+                                        <i class="fas fa-user-graduate"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="fw-bold">@student.FullName</div>
+                                        <div class="small text-muted">
+                                            <span class="badge bg-secondary me-2">@student.StudentCode</span>
+                                            @student.AcademicYear
+                                        </div>
+                                    </div>
+                                    <div class="small text-muted text-nowrap">
+                                        <i class="fas fa-arrow-right me-1"></i>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="text-center text-muted py-4">
+                                <i class="fas fa-user-graduate fa-2x d-block mb-2"></i>
+                                لا يوجد طلاب مسجلين حديثاً
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ Footer معلومات -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card border-0 bg-light">
+                <div class="card-body text-center text-muted">
+                    <small>
+                        <i class="fas fa-database me-2"></i>
+                        إجمالي البيانات المسجلة:
+                        <span class="badge bg-primary me-1">@Model.TotalUsers مستخدم</span>
+                        <span class="badge bg-success me-1">@Model.TotalStudents طالب</span>
+                        <span class="badge bg-info me-1">@Model.TotalTeachers معلم</span>
+                        <span class="badge bg-warning text-dark me-1">@Model.TotalEmployees موظف</span>
+                        <span class="badge bg-secondary">@Model.TotalSchools مدرسة</span>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/home.js" asp-append-version="true"></script>
+}

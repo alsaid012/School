@@ -1,0 +1,226 @@
+@model SchoolERP.Application.DTOs.Exams.ExamDetailsDto
+
+@{
+    ViewData["Title"] = "تفاصيل الامتحان";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-file-alt text-info"></i>
+            تفاصيل الامتحان
+        </h1>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                <i class="fas fa-edit"></i> تعديل
+            </a>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-right"></i> العودة
+            </a>
+        </div>
+    </div>
+
+    <!-- معلومات الامتحان -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-info text-white">
+            <i class="fas fa-info-circle"></i>
+            معلومات الامتحان
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">اسم الامتحان</dt>
+                        <dd class="col-sm-8">@Model.ExamName</dd>
+
+                        <dt class="col-sm-4">نوع الامتحان</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-info">@Model.ExamTypeName</span>
+                        </dd>
+
+                        <dt class="col-sm-4">المادة</dt>
+                        <dd class="col-sm-8">@Model.SubjectName</dd>
+
+                        <dt class="col-sm-4">السنة الدراسية</dt>
+                        <dd class="col-sm-8">@Model.AcademicYearName</dd>
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">الفصل</dt>
+                        <dd class="col-sm-8">@(Model.ClassRoomName ?? "غير محدد")</dd>
+
+                        <dt class="col-sm-4">المعلم المشرف</dt>
+                        <dd class="col-sm-8">@(Model.TeacherName ?? "غير محدد")</dd>
+
+                        <dt class="col-sm-4">التاريخ</dt>
+                        <dd class="col-sm-8">@Model.ExamDate.ToString("yyyy/MM/dd")</dd>
+
+                        <dt class="col-sm-4">الوقت</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-success">@Model.StartTime.ToString("hh\\:mm") - @Model.EndTime.ToString("hh\\:mm")</span>
+                        </dd>
+
+                        <dt class="col-sm-4">الدرجة النهائية</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-warning text-dark">@Model.MaxScore</span>
+                        </dd>
+
+                        <dt class="col-sm-4">الحالة</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success">مفعل</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">غير مفعل</span>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- إحصائيات الامتحان -->
+    @if (Model.Statistics != null)
+    {
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <i class="fas fa-chart-bar"></i>
+                        إحصائيات الامتحان
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <div class="border rounded p-3">
+                                    <h6 class="text-muted">عدد الطلاب</h6>
+                                    <h3 class="text-primary">@Model.Statistics.TotalStudents</h3>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="border rounded p-3">
+                                    <h6 class="text-muted">الناجحين</h6>
+                                    <h3 class="text-success">@Model.Statistics.PassedStudents</h3>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="border rounded p-3">
+                                    <h6 class="text-muted">الراسبين</h6>
+                                    <h3 class="text-danger">@Model.Statistics.FailedStudents</h3>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="border rounded p-3">
+                                    <h6 class="text-muted">نسبة النجاح</h6>
+                                    <h3 class="text-warning">@Model.Statistics.SuccessRate.ToString("0.0")%</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3 text-center">
+                            <div class="col-md-4">
+                                <div class="border rounded p-3">
+                                    <h6 class="text-muted">متوسط الدرجات</h6>
+                                    <h3 class="text-info">@Model.Statistics.AverageScore.ToString("0.00")</h3>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="border rounded p-3">
+                                    <h6 class="text-muted">أعلى درجة</h6>
+                                    <h3 class="text-success">@Model.Statistics.MaxScore</h3>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="border rounded p-3">
+                                    <h6 class="text-muted">أدنى درجة</h6>
+                                    <h3 class="text-danger">@Model.Statistics.MinScore</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- نتائج الامتحان -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-secondary text-white">
+            <i class="fas fa-list"></i>
+            نتائج الامتحان
+            <span class="badge bg-light text-secondary float-end">@Model.Results.Count نتيجة</span>
+        </div>
+        <div class="card-body">
+            @if (Model.Results != null && Model.Results.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped" id="resultsTable">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>اسم الطالب</th>
+                                <th>الدرجة</th>
+                                <th>النسبة المئوية</th>
+                                <th>التقدير</th>
+                                <th>ملاحظات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int index = 1;
+                                foreach (var result in Model.Results.OrderByDescending(r => r.Score))
+                                {
+                                    var grade = result.Percentage >= 90 ? "ممتاز" :
+                                                result.Percentage >= 80 ? "جيد جداً" :
+                                                result.Percentage >= 70 ? "جيد" :
+                                                result.Percentage >= 60 ? "مقبول" : "راسب";
+                                    var gradeClass = result.Percentage >= 80 ? "success" :
+                                                    result.Percentage >= 70 ? "warning" :
+                                                    result.Percentage >= 60 ? "info" : "danger";
+                                    <tr>
+                                        <td>@index</td>
+                                        <td>@result.StudentName</td>
+                                        <td>
+                                            <span class="badge bg-primary">@result.Score</span>
+                                        </td>
+                                        <td>@(result.Percentage?.ToString("0.0") ?? "0")%</td>
+                                        <td>
+                                            <span class="badge bg-@gradeClass">@grade</span>
+                                        </td>
+                                        <td>@(result.Remarks ?? "-")</td>
+                                    </tr>
+                                    index++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center text-muted py-4">
+                    <i class="fas fa-users fa-2x d-block mb-2"></i>
+                    لا توجد نتائج لهذا الامتحان
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#resultsTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
+                },
+                order: [[2, 'desc']],
+                pageLength: 25
+            });
+        });
+    </script>
+}

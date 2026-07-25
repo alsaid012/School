@@ -1,0 +1,136 @@
+@model SchoolERP.Web.ViewModels.UserRoles.UserRoleCreateViewModel
+
+@{
+    ViewData["Title"] = "إضافة دور جديد";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-plus-circle text-success"></i>
+            إضافة دور جديد
+        </h1>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> العودة للقائمة
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            <i class="fas fa-plus"></i>
+            بيانات الدور الجديد
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="row">
+                    <!-- المستخدم -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Role.UserId" class="form-label fw-bold">
+                            <i class="fas fa-user text-primary"></i>
+                            المستخدم
+                        </label>
+                        <select asp-for="Role.UserId" class="form-select form-select-lg" asp-items="Model.Users">
+                            <option value="">-- اختر المستخدم --</option>
+                        </select>
+                        <span asp-validation-for="Role.UserId" class="text-danger"></span>
+                    </div>
+
+                    <!-- نوع الدور -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Role.RoleType" class="form-label fw-bold">
+                            <i class="fas fa-tag text-info"></i>
+                            نوع الدور
+                        </label>
+                        <select asp-for="Role.RoleType" class="form-select form-select-lg" asp-items="Model.RoleTypes">
+                            <option value="">-- اختر نوع الدور --</option>
+                        </select>
+                        <span asp-validation-for="Role.RoleType" class="text-danger"></span>
+                    </div>
+
+                    <!-- دور أساسي -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Role.IsPrimary" class="form-label fw-bold">
+                            <i class="fas fa-star text-warning"></i>
+                            @Html.DisplayNameFor(m => m.Role.IsPrimary)
+                        </label>
+                        <div class="form-check form-switch mt-2">
+                            <input asp-for="Role.IsPrimary" class="form-check-input" id="isPrimarySwitch" />
+                            <label class="form-check-label fw-bold" for="isPrimarySwitch">
+                                @if (Model.Role.IsPrimary)
+                                {
+                                    <span class="text-success"><i class="fas fa-star"></i> أساسي</span>
+                                }
+                                else
+                                {
+                                    <span class="text-secondary"><i class="fas fa-circle"></i> ثانوي</span>
+                                }
+                            </label>
+                        </div>
+                        <small class="text-muted">الدور الأساسي هو الدور الرئيسي للمستخدم</small>
+                    </div>
+
+                    <!-- تاريخ البداية -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Role.StartDate" class="form-label fw-bold">
+                            <i class="fas fa-calendar-plus text-success"></i>
+                            تاريخ البداية (اختياري)
+                        </label>
+                        <input asp-for="Role.StartDate" type="date" class="form-control form-control-lg" />
+                        <span asp-validation-for="Role.StartDate" class="text-danger"></span>
+                    </div>
+
+                    <!-- تاريخ النهاية -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Role.EndDate" class="form-label fw-bold">
+                            <i class="fas fa-calendar-times text-danger"></i>
+                            تاريخ النهاية (اختياري)
+                        </label>
+                        <input asp-for="Role.EndDate" type="date" class="form-control form-control-lg" />
+                        <span asp-validation-for="Role.EndDate" class="text-danger"></span>
+                    </div>
+
+                    <!-- ملاحظات -->
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Role.Notes" class="form-label fw-bold">
+                            <i class="fas fa-sticky-note text-muted"></i>
+                            ملاحظات (اختياري)
+                        </label>
+                        <textarea asp-for="Role.Notes" class="form-control" rows="3" placeholder="أدخل أي ملاحظات إضافية..."></textarea>
+                        <span asp-validation-for="Role.Notes" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2 border-top pt-3">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-save"></i> حفظ الدور
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-times"></i> إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            // ✅ تحديث نص Switch عند التغيير
+            $('#isPrimarySwitch').on('change', function () {
+                var label = $(this).closest('.form-check').find('.form-check-label');
+                if ($(this).is(':checked')) {
+                    label.html('<span class="text-success"><i class="fas fa-star"></i> أساسي</span>');
+                } else {
+                    label.html('<span class="text-secondary"><i class="fas fa-circle"></i> ثانوي</span>');
+                }
+            });
+        });
+    </script>
+}

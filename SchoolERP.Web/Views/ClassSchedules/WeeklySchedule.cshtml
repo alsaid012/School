@@ -1,0 +1,143 @@
+@using SchoolERP.Web.ViewModels.ClassSchedule
+@model ClassScheduleWeeklyViewModel
+
+@{
+    ViewData["Title"] = "الجدول الأسبوعي";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- عنوان الصفحة -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-calendar-week text-primary"></i>
+            الجدول الأسبوعي
+            <small class="text-muted fs-6">@Model.ClassRoomName</small>
+        </h1>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> العودة للقائمة
+        </a>
+    </div>
+
+    <!-- معلومات الفصل -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <strong><i class="fas fa-chalkboard"></i> الفصل:</strong>
+                    <span class="badge bg-primary fs-6">@Model.ClassRoomName</span>
+                </div>
+                <div class="col-md-4">
+                    <strong><i class="fas fa-graduation-cap"></i> الصف:</strong>
+                    <span class="badge bg-secondary fs-6">@Model.GradeLevelName</span>
+                </div>
+                <div class="col-md-4">
+                    <strong><i class="fas fa-calendar"></i> السنة:</strong>
+                    <select name="academicYearId" class="form-select form-select-sm d-inline-block w-auto" onchange="location.href='?classRoomId=@(ViewBag.ClassRoomId)&academicYearId='+this.value">
+                        <option value="">-- جميع السنوات --</option>
+                        @foreach (var year in Model.AcademicYears)
+                        {
+                            <option value="@year.Value" selected="@year.Selected">@year.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الجدول الأسبوعي -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-table"></i>
+            الجدول الأسبوعي
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover text-center">
+                    <thead class="table-dark">
+                        <tr>
+                            <th style="width: 15%;">اليوم</th>
+                            <th>الحصص</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.WeeklySchedule != null && Model.WeeklySchedule.Any())
+                        {
+                            var days = new[] { "الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت" };
+                            foreach (var day in days)
+                            {
+                                <tr>
+                                    <td class="fw-bold align-middle">
+                                        <span class="badge bg-primary">@day</span>
+                                    </td>
+                                    <td>
+                                        @if (Model.WeeklySchedule.TryGetValue(day, out var schedules) && schedules.Any())
+                                        {
+                                            <div class="d-flex flex-wrap gap-2 justify-content-center">
+                                                @foreach (var schedule in schedules.OrderBy(s => s.StartTime))
+                                                {
+                                                    <div class="card schedule-card @(schedule.IsActive ? "border-success" : "border-danger opacity-50")">
+                                                        <div class="card-body p-2">
+                                                            <div class="fw-bold">@schedule.SubjectName</div>
+                                                            <div class="small text-muted">@schedule.TeacherName</div>
+                                                            <div class="small">
+                                                                <span class="badge bg-info">@schedule.StartTime.ToString("hh\\:mm") - @schedule.EndTime.ToString("hh\\:mm")</span>
+                                                                @if (schedule.PeriodNumber.HasValue)
+                                                                {
+                                                                    <span class="badge bg-warning text-dark">#@schedule.PeriodNumber</span>
+                                                                }
+                                                                @if (!schedule.IsActive)
+                                                                {
+                                                                    <span class="badge bg-danger">غير مفعل</span>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">لا توجد حصص</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="2" class="text-center text-muted py-4">
+                                    <i class="fas fa-calendar-times fa-2x d-block mb-2"></i>
+                                    لا توجد حصص في هذا الجدول
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .schedule-card {
+            min-width: 120px;
+            max-width: 180px;
+            background-color: #f8f9fa;
+            border-width: 2px;
+            transition: transform 0.2s;
+        }
+        .schedule-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .schedule-card .card-body {
+            padding: 8px 12px;
+        }
+        .table td {
+            vertical-align: middle;
+        }
+    </style>
+}

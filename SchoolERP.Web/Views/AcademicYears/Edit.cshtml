@@ -1,0 +1,179 @@
+@model SchoolERP.Application.DTOs.AcademicYears.UpdateAcademicYearDto
+
+@{
+    ViewData["Title"] = "تعديل عام دراسي";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var id = ViewBag.Id as int?;
+    var schoolName = ViewBag.SchoolName as string;
+    var studentsCount = ViewBag.StudentsCount as int?;
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-edit text-warning"></i>
+            تعديل عام دراسي
+        </h1>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> العودة للقائمة
+        </a>
+    </div>
+
+    <!-- معلومات العام الدراسي -->
+    <div class="card shadow-sm mb-4 border-info">
+        <div class="card-header bg-info text-white">
+            <i class="fas fa-info-circle"></i>
+            معلومات العام الدراسي (للقراءة فقط)
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <strong><i class="fas fa-school"></i> المدرسة:</strong>
+                    <span class="badge bg-primary fs-6">@schoolName</span>
+                </div>
+                <div class="col-md-4">
+                    <strong><i class="fas fa-users"></i> عدد الطلاب:</strong>
+                    <span class="badge bg-secondary fs-6">@studentsCount</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-warning text-white">
+            <i class="fas fa-edit"></i>
+            تعديل بيانات العام الدراسي
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@id" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="row">
+                    <!-- اسم العام الدراسي -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="YearName" class="form-label fw-bold">
+                            <i class="fas fa-tag text-primary"></i>
+                            اسم العام الدراسي
+                        </label>
+                        <input asp-for="YearName" class="form-control form-control-lg" />
+                        <span asp-validation-for="YearName" class="text-danger"></span>
+                    </div>
+
+                    <!-- تاريخ البداية -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="StartDate" class="form-label fw-bold">
+                            <i class="fas fa-calendar-plus text-success"></i>
+                            تاريخ البداية
+                        </label>
+                        <input asp-for="StartDate" type="date" class="form-control form-control-lg" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+
+                    <!-- تاريخ النهاية -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="EndDate" class="form-label fw-bold">
+                            <i class="fas fa-calendar-times text-danger"></i>
+                            تاريخ النهاية
+                        </label>
+                        <input asp-for="EndDate" type="date" class="form-control form-control-lg" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+
+                    <!-- عام دراسي حالي -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="IsCurrent" class="form-label fw-bold">
+                            <i class="fas fa-check-circle text-success"></i>
+                            @Html.DisplayNameFor(m => m.IsCurrent)
+                        </label>
+                        <div class="form-check form-switch mt-2">
+                            <input asp-for="IsCurrent" class="form-check-input" id="isCurrentSwitch" checked="@(Model.IsCurrent)" />
+                            <label class="form-check-label fw-bold" for="isCurrentSwitch">
+                                @if (Model.IsCurrent)
+                                {
+                                    <span class="text-success"><i class="fas fa-check-circle"></i> عام دراسي حالي</span>
+                                }
+                                else
+                                {
+                                    <span class="text-secondary"><i class="fas fa-circle"></i> عام دراسي سابق</span>
+                                }
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- الحالة -->
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="IsActive" class="form-label fw-bold">
+                            <i class="fas fa-toggle-on text-success"></i>
+                            @Html.DisplayNameFor(m => m.IsActive)
+                        </label>
+                        <div class="form-check form-switch mt-2">
+                            <input asp-for="IsActive" class="form-check-input" id="isActiveSwitch" checked="@(Model.IsActive)" />
+                            <label class="form-check-label fw-bold" for="isActiveSwitch">
+                                @if (Model.IsActive)
+                                {
+                                    <span class="text-success"><i class="fas fa-check-circle"></i> مفعل</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger"><i class="fas fa-times-circle"></i> غير مفعل</span>
+                                }
+                            </label>
+                        </div>
+                        <small class="text-muted">تعطيل العام الدراسي يمنع ظهوره في القوائم</small>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2 border-top pt-3">
+                    <button type="submit" class="btn btn-warning btn-lg">
+                        <i class="fas fa-save"></i> تحديث العام الدراسي
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-times"></i> إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            // ✅ تحديث نص Switches عند التغيير
+            $('#isCurrentSwitch').on('change', function () {
+                var label = $(this).closest('.form-check').find('.form-check-label');
+                if ($(this).is(':checked')) {
+                    label.html('<span class="text-success"><i class="fas fa-check-circle"></i> عام دراسي حالي</span>');
+                } else {
+                    label.html('<span class="text-secondary"><i class="fas fa-circle"></i> عام دراسي سابق</span>');
+                }
+            });
+
+            $('#isActiveSwitch').on('change', function () {
+                var label = $(this).closest('.form-check').find('.form-check-label');
+                if ($(this).is(':checked')) {
+                    label.html('<span class="text-success"><i class="fas fa-check-circle"></i> مفعل</span>');
+                } else {
+                    label.html('<span class="text-danger"><i class="fas fa-times-circle"></i> غير مفعل</span>');
+                }
+            });
+
+            // ✅ التحقق من التواريخ
+            $('form').on('submit', function (e) {
+                var startDate = $('#StartDate').val();
+                var endDate = $('#EndDate').val();
+
+                if (startDate && endDate && startDate >= endDate) {
+                    alert('⚠️ تاريخ البداية يجب أن يكون قبل تاريخ النهاية');
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,212 @@
+@model SchoolERP.Application.DTOs.UserRoles.UserRoleStatisticsDto
+
+@{
+    ViewData["Title"] = "إحصائيات أدوار المستخدمين";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-chart-pie text-primary"></i>
+            إحصائيات أدوار المستخدمين
+        </h1>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> العودة للقائمة
+        </a>
+    </div>
+
+    <!-- الإحصائيات الأساسية -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-primary">
+                <div class="card-body">
+                    <h6 class="text-muted">إجمالي الأدوار</h6>
+                    <h2 class="text-primary">@Model.TotalRoles</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-success">
+                <div class="card-body">
+                    <h6 class="text-muted">مستخدمين نشطين</h6>
+                    <h2 class="text-success">@Model.ActiveUsersWithRoles</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-warning">
+                <div class="card-body">
+                    <h6 class="text-muted">أدوار أساسية</h6>
+                    <h2 class="text-warning">@Model.PrimaryRoles</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center border-info">
+                <div class="card-body">
+                    <h6 class="text-muted">أدوار مؤقتة</h6>
+                    <h2 class="text-info">@Model.TemporaryRoles</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- توزيع الأدوار حسب النوع -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <i class="fas fa-chart-bar"></i>
+                    توزيع الأدوار حسب النوع
+                </div>
+                <div class="card-body">
+                    @if (Model.RolesByType != null && Model.RolesByType.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>نوع الدور</th>
+                                        <th>العدد</th>
+                                        <th>النسبة</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.RolesByType)
+                                    {
+                                        var percentage = Model.TotalRoles > 0 ? (decimal)item.Value / Model.TotalRoles * 100 : 0;
+                                        <tr>
+                                            <td>@item.Key</td>
+                                            <td>
+                                                <span class="badge bg-primary">@item.Value</span>
+                                            </td>
+                                            <td>
+                                                <div class="progress" style="height: 20px;">
+                                                    <div class="progress-bar progress-bar-striped" 
+                                                         style="width: @percentage.ToString("0.0")%; background-color: #4CAF50;">
+                                                        @percentage.ToString("0.0")%
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center text-muted py-3">
+                            <i class="fas fa-chart-bar fa-2x d-block mb-2"></i>
+                            لا توجد بيانات لعرضها
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- إحصائيات إضافية -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <i class="fas fa-info-circle"></i>
+                    إحصائيات إضافية
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between border-bottom pb-2">
+                        <span>أدوار الطلاب</span>
+                        <span class="badge bg-primary">@Model.StudentRoles</span>
+                    </div>
+                    <div class="d-flex justify-content-between border-bottom py-2">
+                        <span>أدوار المعلمين</span>
+                        <span class="badge bg-success">@Model.TeacherRoles</span>
+                    </div>
+                    <div class="d-flex justify-content-between border-bottom py-2">
+                        <span>أدوار الموظفين</span>
+                        <span class="badge bg-info">@Model.EmployeeRoles</span>
+                    </div>
+                    <div class="d-flex justify-content-between border-bottom py-2">
+                        <span>أدوار المديرين</span>
+                        <span class="badge bg-warning text-dark">@Model.PrincipalRoles</span>
+                    </div>
+                    <div class="d-flex justify-content-between border-bottom py-2">
+                        <span>أدوار الأدمن</span>
+                        <span class="badge bg-danger">@Model.AdminRoles</span>
+                    </div>
+                    <div class="d-flex justify-content-between pt-2">
+                        <span>مستخدمين متعددي الأدوار</span>
+                        <span class="badge bg-dark">@Model.MultiRoleUsers</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- أكثر المستخدمين أدواراً -->
+    @if (Model.TopUsersWithRoles != null && Model.TopUsersWithRoles.Any())
+    {
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <i class="fas fa-trophy"></i>
+                أكثر المستخدمين أدواراً
+                <span class="badge bg-light text-dark float-end">أفضل 5 مستخدمين</span>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>اسم المستخدم</th>
+                                <th>عدد الأدوار</th>
+                                <th>الأدوار</th>
+                                <th>دور أساسي</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int rank = 1;
+                                foreach (var user in Model.TopUsersWithRoles)
+                                {
+                                    var medal = rank == 1 ? "🥇" :
+                                               rank == 2 ? "🥈" :
+                                               rank == 3 ? "🥉" : "";
+                                    <tr>
+                                        <td>
+                                            <span class="badge bg-warning text-dark">#@rank</span>
+                                            @medal
+                                        </td>
+                                        <td>@user.UserName</td>
+                                        <td>
+                                            <span class="badge bg-primary">@user.RolesCount</span>
+                                        </td>
+                                        <td>
+                                            @foreach (var role in user.RoleNames)
+                                            {
+                                                <span class="badge bg-info me-1">@role</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (user.HasPrimaryRole)
+                                            {
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-check"></i> نعم
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">لا</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    rank++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>

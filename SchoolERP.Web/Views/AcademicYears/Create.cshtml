@@ -1,0 +1,137 @@
+@model SchoolERP.Web.ViewModels.AcademicYears.AcademicYearCreateViewModel
+
+@{
+    ViewData["Title"] = "إضافة عام دراسي جديد";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-plus-circle text-success"></i>
+            إضافة عام دراسي جديد
+        </h1>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> العودة للقائمة
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            <i class="fas fa-plus"></i>
+            بيانات العام الدراسي الجديد
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="row">
+                    <!-- اسم العام الدراسي -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="AcademicYear.YearName" class="form-label fw-bold">
+                            <i class="fas fa-tag text-primary"></i>
+                            اسم العام الدراسي
+                        </label>
+                        <input asp-for="AcademicYear.YearName" class="form-control form-control-lg" placeholder="مثال: 2024-2025" />
+                        <span asp-validation-for="AcademicYear.YearName" class="text-danger"></span>
+                        <small class="text-muted">مثال: 2024-2025</small>
+                    </div>
+
+                    <!-- المدرسة -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="AcademicYear.SchoolId" class="form-label fw-bold">
+                            <i class="fas fa-school text-info"></i>
+                            المدرسة
+                        </label>
+                        <select asp-for="AcademicYear.SchoolId" class="form-select form-select-lg" asp-items="Model.Schools">
+                            <option value="">-- اختر المدرسة --</option>
+                        </select>
+                        <span asp-validation-for="AcademicYear.SchoolId" class="text-danger"></span>
+                    </div>
+
+                    <!-- تاريخ البداية -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="AcademicYear.StartDate" class="form-label fw-bold">
+                            <i class="fas fa-calendar-plus text-success"></i>
+                            تاريخ البداية
+                        </label>
+                        <input asp-for="AcademicYear.StartDate" type="date" class="form-control form-control-lg" />
+                        <span asp-validation-for="AcademicYear.StartDate" class="text-danger"></span>
+                    </div>
+
+                    <!-- تاريخ النهاية -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="AcademicYear.EndDate" class="form-label fw-bold">
+                            <i class="fas fa-calendar-times text-danger"></i>
+                            تاريخ النهاية
+                        </label>
+                        <input asp-for="AcademicYear.EndDate" type="date" class="form-control form-control-lg" />
+                        <span asp-validation-for="AcademicYear.EndDate" class="text-danger"></span>
+                    </div>
+
+                    <!-- عام دراسي حالي -->
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="AcademicYear.IsCurrent" class="form-label fw-bold">
+                            <i class="fas fa-check-circle text-success"></i>
+                            @Html.DisplayNameFor(m => m.AcademicYear.IsCurrent)
+                        </label>
+                        <div class="form-check form-switch mt-2">
+                            <input asp-for="AcademicYear.IsCurrent" class="form-check-input" id="isCurrentSwitch" />
+                            <label class="form-check-label fw-bold" for="isCurrentSwitch">
+                                @if (Model.AcademicYear.IsCurrent)
+                                {
+                                    <span class="text-success"><i class="fas fa-check-circle"></i> عام دراسي حالي</span>
+                                }
+                                else
+                                {
+                                    <span class="text-secondary"><i class="fas fa-circle"></i> عام دراسي سابق</span>
+                                }
+                            </label>
+                        </div>
+                        <small class="text-muted">تعيين هذا العام كعام دراسي حالي</small>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2 border-top pt-3">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-save"></i> حفظ العام الدراسي
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-times"></i> إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            // ✅ تحديث نص Switch عند التغيير
+            $('#isCurrentSwitch').on('change', function () {
+                var label = $(this).closest('.form-check').find('.form-check-label');
+                if ($(this).is(':checked')) {
+                    label.html('<span class="text-success"><i class="fas fa-check-circle"></i> عام دراسي حالي</span>');
+                } else {
+                    label.html('<span class="text-secondary"><i class="fas fa-circle"></i> عام دراسي سابق</span>');
+                }
+            });
+
+            // ✅ التحقق من التواريخ
+            $('form').on('submit', function (e) {
+                var startDate = $('#AcademicYear_StartDate').val();
+                var endDate = $('#AcademicYear_EndDate').val();
+
+                if (startDate && endDate && startDate >= endDate) {
+                    alert('⚠️ تاريخ البداية يجب أن يكون قبل تاريخ النهاية');
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+}

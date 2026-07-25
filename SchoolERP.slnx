@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="COPYRIGHT.txt" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="SchoolERP.Application/SchoolERP.Application.csproj" />
+  <Project Path="SchoolERP.Domain/SchoolERP.Domain.csproj" />
+  <Project Path="SchoolERP.Infrastructure/SchoolERP.Infrastructure.csproj" />
+  <Project Path="SchoolERP.Web/SchoolERP.Web.csproj" />
+</Solution>

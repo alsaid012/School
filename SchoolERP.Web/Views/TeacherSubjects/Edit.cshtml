@@ -1,0 +1,231 @@
+@model SchoolERP.Application.DTOs.TeacherSubjects.UpdateTeacherSubjectDto
+
+@{
+    ViewData["Title"] = "تعديل الرابط";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var id = ViewBag.Id as int?;
+}
+
+<div class="container-fluid">
+    <!-- عنوان الصفحة -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <i class="fas fa-edit text-warning"></i>
+            تعديل ربط المعلم بالمادة
+        </h1>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> العودة للقائمة
+        </a>
+    </div>
+
+    <!-- بطاقة المعلومات الثابتة (عرض فقط) -->
+    <div class="card shadow-sm mb-4 border-info">
+        <div class="card-header bg-info text-white">
+            <i class="fas fa-info-circle"></i>
+            معلومات الرابط الحالية (للقراءة فقط)
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <strong><i class="fas fa-user-tie"></i> المعلم:</strong>
+                    <span class="badge bg-primary fs-6">@ViewBag.TeacherName</span>
+                </div>
+                <div class="col-md-4">
+                    <strong><i class="fas fa-book"></i> المادة:</strong>
+                    <span class="badge bg-success fs-6">@ViewBag.SubjectName</span>
+                </div>
+                <div class="col-md-4">
+                    <strong><i class="fas fa-graduation-cap"></i> الصف:</strong>
+                    <span class="badge bg-secondary fs-6">@ViewBag.GradeLevelName</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نموذج التعديل -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-warning text-white">
+            <i class="fas fa-edit"></i>
+            تعديل بيانات الرابط
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                <input type="hidden" name="id" value="@id" />
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="row">
+                    <!-- ✅ معرف المعلم والمادة (مخفي) -->
+                    <input type="hidden" asp-for="TeacherId" />
+                    <input type="hidden" asp-for="SubjectId" />
+
+                    <!-- ✅ عرض معلومات ثابتة (للقراءة فقط) -->
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold text-muted">
+                            <i class="fas fa-user-tie text-primary"></i>
+                            المعلم
+                        </label>
+                        <div class="form-control form-control-lg bg-light text-dark fw-bold">
+                            @ViewBag.TeacherName
+                        </div>
+                        <small class="text-muted">لا يمكن تغيير المعلم</small>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold text-muted">
+                            <i class="fas fa-book text-success"></i>
+                            المادة
+                        </label>
+                        <div class="form-control form-control-lg bg-light text-dark fw-bold">
+                            @ViewBag.SubjectName
+                        </div>
+                        <small class="text-muted">لا يمكن تغيير المادة</small>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold text-muted">
+                            <i class="fas fa-graduation-cap text-secondary"></i>
+                            الصف الدراسي
+                        </label>
+                        <div class="form-control form-control-lg bg-light text-dark fw-bold">
+                            @ViewBag.GradeLevelName
+                        </div>
+                        <small class="text-muted">لا يمكن تغيير الصف</small>
+                    </div>
+
+                    <!-- ============================================ -->
+                    <!-- ✅ الحقول القابلة للتعديل                     -->
+                    <!-- ============================================ -->
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="IsPrimary" class="form-label fw-bold">
+                            <i class="fas fa-star text-warning"></i>
+                            @Html.DisplayNameFor(m => m.IsPrimary)
+                        </label>
+                        <div class="form-check form-switch">
+                            <input asp-for="IsPrimary" class="form-check-input" id="isPrimarySwitch" />
+                            <label class="form-check-label fw-bold" for="isPrimarySwitch">
+                                @if (Model.IsPrimary)
+                                {
+                                    <span class="text-success"><i class="fas fa-check-circle"></i> مادة أساسية</span>
+                                }
+                                else
+                                {
+                                    <span class="text-secondary"><i class="fas fa-circle"></i> مادة ثانوية</span>
+                                }
+                            </label>
+                        </div>
+                        <span asp-validation-for="IsPrimary" class="text-danger"></span>
+                        <br />
+                        <small class="text-muted">📌 المادة الأساسية هي المادة الرئيسية التي يدرسها المعلم</small>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="WeeklyHours" class="form-label fw-bold">
+                            <i class="fas fa-clock text-info"></i>
+                            @Html.DisplayNameFor(m => m.WeeklyHours)
+                        </label>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                            <input asp-for="WeeklyHours"
+                                   type="number"
+                                   min="1"
+                                   max="10"
+                                   class="form-control"
+                                   placeholder="مثال: 4" />
+                            <span class="input-group-text">حصة/أسبوع</span>
+                        </div>
+                        <span asp-validation-for="WeeklyHours" class="text-danger"></span>
+                        <small class="text-muted">📌 عدد الحصص الأسبوعية لهذه المادة (1-10)</small>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="IsActive" class="form-label fw-bold">
+                            <i class="fas fa-toggle-on text-success"></i>
+                            @Html.DisplayNameFor(m => m.IsActive)
+                        </label>
+                        <div class="form-check form-switch">
+                            <input asp-for="IsActive" class="form-check-input" id="isActiveSwitch" />
+                            <label class="form-check-label fw-bold" for="isActiveSwitch">
+                                @if (Model.IsActive)
+                                {
+                                    <span class="text-success"><i class="fas fa-check-circle"></i> مفعل</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger"><i class="fas fa-times-circle"></i> غير مفعل</span>
+                                }
+                            </label>
+                        </div>
+                        <small class="text-muted">📌 تعطيل الرابط يمنع ظهوره في الجداول والتقارير</small>
+                    </div>
+                </div>
+
+                <!-- أزرار التحكم -->
+                <div class="mt-4 d-flex gap-2 border-top pt-3">
+                    <button type="submit" class="btn btn-warning btn-lg">
+                        <i class="fas fa-save"></i> حفظ التعديلات
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-times"></i> إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // ✅ تحديث نصوص الـ Switches عند التغيير
+        $(document).ready(function () {
+
+            // ✅ تحديث نص IsPrimary
+            $('#isPrimarySwitch').on('change', function () {
+                var label = $(this).closest('.form-check').find('.form-check-label');
+                if ($(this).is(':checked')) {
+                    label.html('<span class="text-success"><i class="fas fa-check-circle"></i> مادة أساسية</span>');
+                } else {
+                    label.html('<span class="text-secondary"><i class="fas fa-circle"></i> مادة ثانوية</span>');
+                }
+            });
+
+            // ✅ تحديث نص IsActive
+            $('#isActiveSwitch').on('change', function () {
+                var label = $(this).closest('.form-check').find('.form-check-label');
+                if ($(this).is(':checked')) {
+                    label.html('<span class="text-success"><i class="fas fa-check-circle"></i> مفعل</span>');
+                } else {
+                    label.html('<span class="text-danger"><i class="fas fa-times-circle"></i> غير مفعل</span>');
+                }
+            });
+        });
+    </script>
+}
+
+@* <!-- ✅ CSS تحسينات -->
+@section Styles {
+    <style>
+        .form-control.bg-light {
+            background-color: #f8f9fa !important;
+            cursor: not-allowed;
+        }
+
+        .form-check-label {
+            font-size: 1.1rem;
+        }
+
+        .input-group-text {
+            background-color: #e9ecef;
+        }
+
+        .btn-lg {
+            padding: 10px 30px;
+        }
+
+        .card-header i {
+            margin-left: 8px;
+        }
+    </style>
+} *@

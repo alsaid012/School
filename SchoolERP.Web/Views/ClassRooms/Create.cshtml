@@ -1,0 +1,138 @@
+@model SchoolERP.Application.DTOs.ClassRooms.CreateClassRoomDto
+
+@{
+    ViewData["Title"] = "إنشاء فصل جديد";
+    ViewData["PageTitle"] = "إنشاء فصل جديد";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="fas fa-plus me-2"></i>إنشاء فصل جديد</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="ClassName" class="form-label">
+                            <i class="fas fa-tag me-1"></i>اسم الفصل <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="ClassName" class="form-control" placeholder="مثال: 1/أ" />
+                        <span asp-validation-for="ClassName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="ClassCode" class="form-label">
+                            <i class="fas fa-barcode me-1"></i>كود الفصل
+                        </label>
+                        <input asp-for="ClassCode" class="form-control" placeholder="مثال: CLS-001" />
+                        <span asp-validation-for="ClassCode" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="GradeLevelId" class="form-label">
+                            <i class="fas fa-graduation-cap me-1"></i>الصف الدراسي <span class="text-danger">*</span>
+                        </label>
+                        <select asp-for="GradeLevelId" class="form-select">
+                            <option value="">اختر الصف...</option>
+                            @if (ViewBag.GradeLevels != null)
+                            {
+                                foreach (var grade in ViewBag.GradeLevels)
+                                {
+                                    <option value="@grade.Id">@grade.GradeName</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="GradeLevelId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="TeacherId" class="form-label">
+                            <i class="fas fa-chalkboard-teacher me-1"></i>معلم الفصل
+                        </label>
+                        <select asp-for="TeacherId" class="form-select">
+                            <option value="">اختر المعلم...</option>
+                            @if (ViewBag.Teachers != null)
+                            {
+                                foreach (var teacher in ViewBag.Teachers)
+                                {
+                                    var fullName = teacher.User?.FullName ?? teacher.TeacherCode;
+                                    <option value="@teacher.Id">@fullName</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="TeacherId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="RoomNumber" class="form-label">
+                            <i class="fas fa-hashtag me-1"></i>رقم الغرفة
+                        </label>
+                        <input asp-for="RoomNumber" class="form-control" placeholder="مثال: 101" />
+                        <span asp-validation-for="RoomNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Capacity" class="form-label">
+                            <i class="fas fa-users me-1"></i>السعة <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="Capacity" type="number" class="form-control" placeholder="مثال: 30" />
+                        <span asp-validation-for="Capacity" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <div class="form-check mt-2">
+                            <input asp-for="HasSmartBoard" class="form-check-input" />
+                            <label asp-for="HasSmartBoard" class="form-check-label">
+                                <i class="fas fa-desktop me-1"></i>سبورة ذكية
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <div class="form-check mt-2">
+                            <input asp-for="HasProjector" class="form-check-input" />
+                            <label asp-for="HasProjector" class="form-check-label">
+                                <i class="fas fa-projector me-1"></i>بروجيكتور
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Notes" class="form-label">
+                    <i class="fas fa-align-left me-1"></i>ملاحظات
+                </label>
+                <textarea asp-for="Notes" class="form-control" rows="3" placeholder="أدخل ملاحظات إضافية"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+
+            <hr />
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-save me-2"></i>حفظ
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-times me-2"></i>إلغاء
+            </a>
+        </form>
+    </div>
+</div>
