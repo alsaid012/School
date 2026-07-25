@@ -1,143 +1,83 @@
-🏫 SchoolERP - نظام إدارة المدارس
+# 🏫 SchoolERP - نظام إدارة المدارس
 
-نظام متكامل لإدارة المدارس مبني باستخدام ASP.NET Core MVC و Clean Architecture
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-10.0-purple.svg)](https://dotnet.microsoft.com/)
+[![C#](https://img.shields.io/badge/C%23-12.0-blue.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/)
+[![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-red.svg)](https://www.microsoft.com/en-us/sql-server/)
+[![GitHub last commit](https://img.shields.io/github/last-commit/alsaid012/School)](https://github.com/alsaid012/School)
+[![GitHub repo size](https://img.shields.io/github/repo-size/alsaid012/School)](https://github.com/alsaid012/School)
+[![GitHub stars](https://img.shields.io/github/stars/alsaid012/School)](https://github.com/alsaid012/School)
 
-📋 عن المشروع
+> نظام متكامل لإدارة المدارس مبني باستخدام **ASP.NET Core MVC** و **Clean Architecture**
 
-SchoolERP هو نظام إدارة مدارس متكامل يوفر حلولاً شاملة لإدارة المؤسسات التعليمية.
+---
 
-المميزات الرئيسية:
+## 📋 عن المشروع
 
-👤 إدارة المستخدمين: المستخدمين، الأدوار، الصلاحيات، المصادقة
-🎓 إدارة الطلاب: تسجيل الطلاب، الملفات الشخصية، الدرجات، الحضور
-👨‍🏫 إدارة المعلمين: تسجيل المعلمين، توزيع المواد، الجداول
-👨‍💼 إدارة الموظفين: تسجيل الموظفين، الحضور، المهام
-🏫 إدارة المدارس: المدارس، المحافظات، الإدارات التعليمية
-📚 المواد الدراسية: المواد، الصفوف، الفصول، ربط المعلمين
-📅 جدول الحصص: إنشاء الجدول، إدارة الحصص، التعارضات
-📝 الامتحانات: إنشاء الامتحانات، النتائج، الإحصائيات
-✅ الحضور: حضور الطلاب، حضور الموظفين، التقارير
+**SchoolERP** هو نظام إدارة مدارس متكامل يوفر حلولاً شاملة لإدارة المؤسسات التعليمية.
 
-🛠️ التقنيات المستخدمة:
+### ✨ المميزات الرئيسية
 
-ASP.NET Core MVC 10.0
-Entity Framework Core 10.0
-SQL Server 2022+
-Clean Architecture
-Repository Pattern
-Unit of Work
-AutoMapper 12.0
-Bootstrap 5.3
-Font Awesome 6.0
-DataTables 1.13
-BCrypt
+| القسم | المميزات |
+|-------|----------|
+| 👤 **إدارة المستخدمين** | المستخدمين، الأدوار، الصلاحيات، المصادقة |
+| 🎓 **إدارة الطلاب** | تسجيل الطلاب، الملفات الشخصية، الدرجات، الحضور |
+| 👨‍🏫 **إدارة المعلمين** | تسجيل المعلمين، توزيع المواد، الجداول |
+| 👨‍💼 **إدارة الموظفين** | تسجيل الموظفين، الحضور، المهام |
+| 🏫 **إدارة المدارس** | المدارس، المحافظات، الإدارات التعليمية |
+| 📚 **المواد الدراسية** | المواد، الصفوف، الفصول، ربط المعلمين |
+| 📅 **جدول الحصص** | إنشاء الجدول، إدارة الحصص، التعارضات |
+| 📝 **الامتحانات** | إنشاء الامتحانات، النتائج، الإحصائيات |
+| ✅ **الحضور** | حضور الطلاب، حضور الموظفين، التقارير |
 
-🏗️ البنية المعمارية (Clean Architecture):
+---
 
-SchoolERP.Domain - طبقة الكيانات (Entities)
-SchoolERP.Application - طبقة التطبيق (DTOs, Services)
-SchoolERP.Infrastructure - طبقة البنية التحتية (DbContext, Repositories)
-SchoolERP.Web - طبقة العرض (Controllers, Views)
+## 🛠️ التقنيات المستخدمة
 
-🚀 كيفية التشغيل:
+| التقنية | الإصدار | الوصف |
+|---------|---------|-------|
+| **ASP.NET Core MVC** | 10.0 | إطار العمل الرئيسي |
+| **Entity Framework Core** | 10.0 | ORM للتعامل مع قاعدة البيانات |
+| **SQL Server** | 2022+ | قاعدة البيانات |
+| **Clean Architecture** | - | بنية المشروع |
+| **Repository Pattern** | - | نمط المستودعات |
+| **Unit of Work** | - | نمط وحدة العمل |
+| **AutoMapper** | 12.0 | تحويل الكيانات إلى DTOs |
+| **Bootstrap 5** | 5.3 | إطار العمل للواجهات |
+| **Font Awesome** | 6.0 | أيقونات |
+| **DataTables** | 1.13 | جداول تفاعلية |
+| **BCrypt** | - | تشفير كلمات المرور |
 
-1. استنساخ المشروع:
-   git clone https://github.com/alsaid012/School.git
-   cd School
+---
 
-2. تحديث Connection String:
-   افتح ملف SchoolERP.Web/appsettings.json وعدل الاتصال بقاعدة البيانات.
+## 🏗️ البنية المعمارية (Clean Architecture)
 
-3. تشغيل الـ Migrations:
-   في Visual Studio (Package Manager Console):
-   Select-Project SchoolERP.Infrastructure
-   Update-Database
 
-   في Command Line:
-   dotnet ef database update --project SchoolERP.Infrastructure --startup-project SchoolERP.Web
-
-4. تشغيل المشروع:
-   في Visual Studio: اضغط F5 أو Ctrl + F5
-   في Command Line: dotnet run --project SchoolERP.Web
-
-5. فتح المتصفح:
-   
-
-🔑 بيانات الدخول:
-
-مدير النظام - admin - Admin@123
-مدير المدرسة - principal - Principal@123
-معلم - teacher - Teacher@123
-موظف - employee - Employee@123
-طالب - student - Student@123
-
-📁 هيكل قاعدة البيانات:
-
-الجداول الرئيسية:
-Users - المستخدمين
-UserRoles - أدوار المستخدمين
-Schools - المدارس
-Students - الطلاب
-Teachers - المعلمين
-Employees - الموظفين
-GradeLevels - الصفوف الدراسية
-ClassRooms - الفصول الدراسية
-Subjects - المواد الدراسية
-TeacherSubjects - ربط المعلمين بالمواد
-ClassSchedules - جدول الحصص
-AcademicYears - السنوات الدراسية
-Exams - الامتحانات
-ExamResults - نتائج الامتحانات
-StudentAttendances - حضور الطلاب
-EmployeeAttendances - حضور الموظفين
-UserContacts - جهات الاتصال
-
-علاقات الجداول:
-Governorate (1) -> Department (M) -> School (M)
-School (1) -> User (M) -> UserRole (M)
-User (1) -> Student (1) / Teacher (1) / Employee (1)
-School (1) -> GradeLevel (M) -> ClassRoom (M)
-ClassRoom (1) -> Student (M)
-GradeLevel (1) -> Subject (M)
-Teacher (M) -> TeacherSubject (M) -> Subject (M)
-ClassRoom (1) -> ClassSchedule (M) -> Subject (1) -> Teacher (1)
-Exam (1) -> ExamResult (M) -> Student (1)
-Student (1) -> StudentAttendance (M)
-Employee (1) -> EmployeeAttendance (M)
-User (1) -> UserContact (M)
-
-📋 المميزات التقنية:
-
-✅ Clean Architecture - فصل واضح بين الطبقات
-✅ Repository Pattern - فصل منطق الوصول إلى البيانات
-✅ Unit of Work - إدارة المعاملات بشكل موحد
-✅ AutoMapper - تحويل تلقائي بين الكيانات و DTOs
-✅ Soft Delete - حذف منطقي مع إمكانية الاستعادة
-✅ Audit Trail - تتبع من أنشأ وعدل البيانات
-✅ Authentication - مصادقة باستخدام Cookies
-✅ Authorization - صلاحيات على مستوى الأدوار
-✅ Validation - التحقق من البيانات على العميل والخادم
-✅ RTL Support - دعم كامل للغة العربية
-✅ Responsive Design - تصميم متجاوب مع جميع الأجهزة
-✅ DataTables - جداول تفاعلية مع بحث وترتيب
-
-🤝 المساهمة:
-
-نرحب بمساهماتكم! للمساهمة:
-1. عمل Fork للمشروع
-2. إنشاء فرع جديد
-3. عمل Commit للتغييرات
-4. Push إلى الفرع
-5. فتح Pull Request
-
-📜 الترخيص:
-هذا المشروع مرخص تحت MIT License.
-
-👤 المطور:
-    - السيد عبدالرحمن  - المطور الرئيسي
-GitHub: @alsaid012
-البريد الإلكتروني: alsaid012@gmail.com
-
-⭐ إذا أعجبك المشروع، لا تنسى وضع نجمة (Star) على GitHub!
-
-Made with ❤️ by Ahmed Al-Said
+SchoolERP/
+├── SchoolERP.Domain/ # طبقة الكيانات (Entities)
+│ ├── Entities/ # الكيانات الأساسية
+│ ├── Enums/ # التعدادات (Enums)
+│ └── Interfaces/ # الواجهات الأساسية
+│
+├── SchoolERP.Application/ # طبقة التطبيق (Application)
+│ ├── DTOs/ # نماذج نقل البيانات
+│ ├── Interfaces/ # واجهات الخدمات والمستودعات
+│ ├── Services/ # خدمات التطبيق
+│ ├── Validators/ # التحقق من البيانات
+│ └── Mappings/ # AutoMapper Profiles
+│
+├── SchoolERP.Infrastructure/ # طبقة البنية التحتية
+│ ├── Data/ # DbContext والتهيئة
+│ ├── Repositories/ # تنفيذ المستودعات
+│ ├── Migrations/ # هجرات قاعدة البيانات
+│ └── Extensions/ # إضافات
+│
+└── SchoolERP.Web/ # طبقة العرض (Presentation)
+├── Controllers/ # وحدات التحكم
+├── Views/ # صفحات Razor
+├── ViewModels/ # نماذج العرض
+├── wwwroot/ # الملفات الثابتة
+│ ├── css/ # ملفات التنسيق
+│ └── js/ # ملفات السكريبت
+└── Program.cs # نقطة بدء التطبيق
+---
