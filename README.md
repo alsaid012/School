@@ -48,7 +48,9 @@ SchoolERP/
 ---
 
 ## 🚀 كيفية التشغيل
-
+Login
+username: admin
+password: Admin@123
 
 
 git clone https://github.com/alsaid012/School.git
