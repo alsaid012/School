@@ -52,7 +52,8 @@
 
 ## 🏗️ البنية المعمارية (Clean Architecture)
 
---
+---
+
 SchoolERP/
 ├── SchoolERP.Domain/ # طبقة الكيانات (Entities)
 │ ├── Entities/ # الكيانات الأساسية
@@ -80,4 +81,27 @@ SchoolERP/
 │ ├── css/ # ملفات التنسيق
 │ └── js/ # ملفات السكريبت
 └── Program.cs # نقطة بدء التطبيق
+---
+
+
+---
+
+## 🚀 كيفية التشغيل
+
+### 1️⃣ استنساخ المشروع
+---
+```bash
+git clone https://github.com/alsaid012/School.git
+cd School
+---
+
+
+---
+🔑 بيانات الدخول
+الدور	اسم المستخدم	كلمة المرور
+👑 مدير النظام	admin	Admin@123
+🏫 مدير المدرسة	principal	Principal@123
+👨‍🏫 معلم	teacher	Teacher@123
+👨‍💼 موظف	employee	Employee@123
+🎓 طالب	student	Student@123
 ---
