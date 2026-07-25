@@ -112,6 +112,4 @@ cd School
 
 
 
-<img width="1899" height="1096" alt="image" src="https://github.com/user-attachments/assets/5997ffc0-1910-41d4-bb9d-1980142eb8f8" />
-<img width="1910" height="1028" alt="image" src="https://github.com/user-attachments/assets/74928647-4ec0-4a62-8d05-aab28aca254b" />
 
