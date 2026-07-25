@@ -47,24 +47,15 @@ SchoolERP/
 
 ---
 
-##
 
-🚀 كيفية التشغيل
+
+## 🚀  كيفية التشغيل ##
 ---
 
 ## 🛠️ التقنيات المستخدمة
 
-| التقنية | الإصدار |
-|---------|---------|
-| ASP.NET Core MVC | 10.0 |
-| Entity Framework Core | 10.0 |
-| SQL Server | 2022+ |
-| Bootstrap | 5.3 |
-| Font Awesome | 6.0 |
-| DataTables | 1.13 |
-| AutoMapper | 12.0 |
 
----
+
 
 
 
