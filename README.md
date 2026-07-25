@@ -1,9 +1,9 @@
 ﻿# 🏫 SchoolERP - نظام إدارة المدارس
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-8.0-purple.svg)](https://dotnet.microsoft.com/)
+[![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-10.0-purple.svg)](https://dotnet.microsoft.com/)
 [![C#](https://img.shields.io/badge/C%23-12.0-blue.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/)
-[![SQL Server](https://img.shields.io/badge/SQL%20Server-2019-red.svg)](https://www.microsoft.com/en-us/sql-server/)
+[![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-red.svg)](https://www.microsoft.com/en-us/sql-server/)
 
 > نظام متكامل لإدارة المدارس مبني باستخدام **ASP.NET Core MVC** و **Clean Architecture**
 
@@ -49,8 +49,7 @@ SchoolERP/
 
 ## 🚀 كيفية التشغيل
 
-### 1️⃣ استنساخ المشروع
 
-```bash
-git clone https://github.com/YourUsername/SchoolERP.git
-cd SchoolERP
+
+git clone https://github.com/alsaid012/School.git
+
