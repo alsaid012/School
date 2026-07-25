@@ -52,5 +52,5 @@ SchoolERP/
 ### 1️⃣ استنساخ المشروع
 
 ```bash
-git clone https://github.com/YourUsername/SchoolERP.git
+git clone https://github.com/alsaid012/School.git
 cd SchoolERP
