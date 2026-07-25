@@ -82,7 +82,7 @@ using (var scope = app.Services.CreateScope())
     await dbContext.Database.MigrateAsync();  // ✅ MigrateAsync بدلاً من Migrate
 
     // ✅ Seed data
-    await SeedData3.SeedAsync(dbContext);
+    await SeedData.SeedAsync(dbContext);
 }
 
 app.Run();
