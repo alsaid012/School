@@ -252,96 +252,97 @@ namespace SchoolERP.Infrastructure.Data
             //    await context.SaveChangesAsync();
             //}
 
-        //    // ════════════════════════════════════════════════════════════════
-        //    // 7. العام الدراسي (AcademicYear)
-        //    // ════════════════════════════════════════════════════════════════
-        //    if (!context.AcademicYears.Any())
-        //    {
-        //        var school = context.Schools.First();
+            //    // ════════════════════════════════════════════════════════════════
+            //    // 7. العام الدراسي (AcademicYear)
+            //    // ════════════════════════════════════════════════════════════════
+            //    if (!context.AcademicYears.Any())
+            //    {
+            //        var school = context.Schools.First();
 
-        //        var currentYear = new AcademicYear
-        //        {
-        //            SchoolId = school.Id,
-        //            YearName = "2024-2025",
-        //            StartDate = new DateTime(2024, 9, 1),
-        //            EndDate = new DateTime(2025, 6, 30),
-        //            IsCurrent = true
-        //        };
+            //        var currentYear = new AcademicYear
+            //        {
+            //            SchoolId = school.Id,
+            //            YearName = "2024-2025",
+            //            StartDate = new DateTime(2024, 9, 1),
+            //            EndDate = new DateTime(2025, 6, 30),
+            //            IsCurrent = true
+            //        };
 
-        //        await context.AcademicYears.AddAsync(currentYear);
-        //        await context.SaveChangesAsync();
-        //    }
-        //}
+            //        await context.AcademicYears.AddAsync(currentYear);
+            //        await context.SaveChangesAsync();
+            //    }
+            //}
 
-        //#region ════════════════════════════════════ دوال مساعدة ════════════════════════════════════
-        //private static string GetSchoolStage(int index)
-        //{
-        //    var stages = new[] { "الابتدائية", "الإعدادية", "الثانوية", "الابتدائية", "الإعدادية", "الثانوية" };
-        //    return stages[index % stages.Length];
-        //}
+            //#region ════════════════════════════════════ دوال مساعدة ════════════════════════════════════
+            //private static string GetSchoolStage(int index)
+            //{
+            //    var stages = new[] { "الابتدائية", "الإعدادية", "الثانوية", "الابتدائية", "الإعدادية", "الثانوية" };
+            //    return stages[index % stages.Length];
+            //}
 
-        //private static string GetRandomPrincipalName(int index)
-        //{
-        //    var names = new[] { "أحمد حسن", "محمد علي", "خالد سعيد", "ياسر محمود", "طارق عبدالله", "سامي إبراهيم", "حسام محمد", "عمرو خالد" };
-        //    return names[index % names.Length];
-        //}
+            //private static string GetRandomPrincipalName(int index)
+            //{
+            //    var names = new[] { "أحمد حسن", "محمد علي", "خالد سعيد", "ياسر محمود", "طارق عبدالله", "سامي إبراهيم", "حسام محمد", "عمرو خالد" };
+            //    return names[index % names.Length];
+            //}
 
-        //private static string GetRandomFirstName(int index)
-        //{
-        //    var names = new[] { "أحمد", "محمد", "خالد", "ياسر", "طارق", "سامي", "حسام", "عمرو", "محمود", "علي", "حسن", "سعيد", "عادل", "نادر" };
-        //    return names[index % names.Length];
-        //}
+            //private static string GetRandomFirstName(int index)
+            //{
+            //    var names = new[] { "أحمد", "محمد", "خالد", "ياسر", "طارق", "سامي", "حسام", "عمرو", "محمود", "علي", "حسن", "سعيد", "عادل", "نادر" };
+            //    return names[index % names.Length];
+            //}
 
-        //private static string GetRandomLastName(int index)
-        //{
-        //    var names = new[] { "حسن", "محمد", "علي", "سعيد", "محمود", "إبراهيم", "عبدالله", "خالد", "عامر", "ناصر", "راشد", "سالم" };
-        //    return names[index % names.Length];
-        //}
+            //private static string GetRandomLastName(int index)
+            //{
+            //    var names = new[] { "حسن", "محمد", "علي", "سعيد", "محمود", "إبراهيم", "عبدالله", "خالد", "عامر", "ناصر", "راشد", "سالم" };
+            //    return names[index % names.Length];
+            //}
 
-        //private static string GetRandomNationalId(int index)
-        //{
-        //    return $"2{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}";
-        //}
+            //private static string GetRandomNationalId(int index)
+            //{
+            //    return $"2{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}{new Random().Next(0, 9)}";
+            //}
 
-        //private static DateTime GetRandomDateOfBirth(int index)
-        //{
-        //    var year = 1990 + (index % 15);
-        //    var month = 1 + (index % 12);
-        //    var day = 1 + (index % 28);
-        //    return new DateTime(year, month, day);
-        //}
+            //private static DateTime GetRandomDateOfBirth(int index)
+            //{
+            //    var year = 1990 + (index % 15);
+            //    var month = 1 + (index % 12);
+            //    var day = 1 + (index % 28);
+            //    return new DateTime(year, month, day);
+            //}
 
-        //private static string GetRandomQualification(int index)
-        //{
-        //    var qualifications = new[]
-        //    {
-        //        "ليسانس آداب", "ليسانس تربية", "بكالوريوس علوم", "بكالوريوس تجارة", "بكالوريوس هندسة",
-        //        "ليسانس حقوق", "بكالوريوس طب", "بكالوريوس صيدلة", "بكالوريوس زراعة", "بكالوريوس فنون"
-        //    };
-        //    return qualifications[index % qualifications.Length];
-        //}
+            //private static string GetRandomQualification(int index)
+            //{
+            //    var qualifications = new[]
+            //    {
+            //        "ليسانس آداب", "ليسانس تربية", "بكالوريوس علوم", "بكالوريوس تجارة", "بكالوريوس هندسة",
+            //        "ليسانس حقوق", "بكالوريوس طب", "بكالوريوس صيدلة", "بكالوريوس زراعة", "بكالوريوس فنون"
+            //    };
+            //    return qualifications[index % qualifications.Length];
+            //}
 
-        //private static string GetRandomParentName(int index)
-        //{
-        //    var names = new[] { "أحمد", "محمد", "خالد", "ياسر", "طارق", "سامي", "حسام", "عمرو", "محمود", "علي" };
-        //    return $"{names[index % names.Length]} {names[(index + 1) % names.Length]}";
-        //}
+            //private static string GetRandomParentName(int index)
+            //{
+            //    var names = new[] { "أحمد", "محمد", "خالد", "ياسر", "طارق", "سامي", "حسام", "عمرو", "محمود", "علي" };
+            //    return $"{names[index % names.Length]} {names[(index + 1) % names.Length]}";
+            //}
 
-        //private static string GetGrade(int score)
-        //{
-        //    return score switch
-        //    {
-        //        >= 90 => "A",
-        //        >= 80 => "B",
-        //        >= 70 => "C",
-        //        >= 60 => "D",
-        //        >= 50 => "E",
-        //        _ => "F"
-        //    };
-        //}
+            //private static string GetGrade(int score)
+            //{
+            //    return score switch
+            //    {
+            //        >= 90 => "A",
+            //        >= 80 => "B",
+            //        >= 70 => "C",
+            //        >= 60 => "D",
+            //        >= 50 => "E",
+            //        _ => "F"
+            //    };
+            //}
 
-        //#endregion
-    
-    
+            //#endregion
+
+
+        }
     }
 }
