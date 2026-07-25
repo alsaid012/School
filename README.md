@@ -67,6 +67,7 @@ SchoolERP/
 موظف             	 employee     	Employee@123
 طالب               student       	Student@123
 
+---
 
 git clone https://github.com/alsaid012/School.git
 
