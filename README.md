@@ -84,20 +84,20 @@ SchoolERP/
 ---
 
 
----
+
 
 ## 🚀 كيفية التشغيل
 
-### 1️⃣ استنساخ المشروع
----
+ 1️⃣ استنساخ المشروع
+
 ```bash
 git clone https://github.com/alsaid012/School.git
 cd School
----
 
 
+
 ---
-## 🔑 بيانات الدخول###
+## 🔑 بيانات الدخول
 الدور	اسم المستخدم	كلمة المرور
 👑 مدير النظام	admin	Admin@123
 🏫 مدير المدرسة	principal	Principal@123
