@@ -51,3 +51,60 @@
 ---
 
 ## 🏗️ البنية المعمارية (Clean Architecture)
+
+SchoolERP/
+├── SchoolERP.Domain/ # طبقة الكيانات (Entities)
+│ ├── Entities/ # الكيانات الأساسية
+│ ├── Enums/ # التعدادات (Enums)
+│ └── Interfaces/ # الواجهات الأساسية
+│
+├── SchoolERP.Application/ # طبقة التطبيق (Application)
+│ ├── DTOs/ # نماذج نقل البيانات
+│ ├── Interfaces/ # واجهات الخدمات والمستودعات
+│ ├── Services/ # خدمات التطبيق
+│ ├── Validators/ # التحقق من البيانات
+│ └── Mappings/ # AutoMapper Profiles
+│
+├── SchoolERP.Infrastructure/ # طبقة البنية التحتية
+│ ├── Data/ # DbContext والتهيئة
+│ ├── Repositories/ # تنفيذ المستودعات
+│ ├── Migrations/ # هجرات قاعدة البيانات
+│ └── Extensions/ # إضافات
+│
+└── SchoolERP.Web/ # طبقة العرض (Presentation)
+├── Controllers/ # وحدات التحكم
+├── Views/ # صفحات Razor
+├── ViewModels/ # نماذج العرض
+├── wwwroot/ # الملفات الثابتة
+│ ├── css/ # ملفات التنسيق
+│ └── js/ # ملفات السكريبت
+└── Program.cs # نقطة بدء التطبيق
+
+
+---
+
+## 🚀 كيفية التشغيل
+
+### 1️⃣ **استنساخ المشروع**
+
+```bash
+git clone https://github.com/alsaid012/School.git
+cd School
+
+
+# تحديد المشروع الصحيح
+Select-Project SchoolERP.Infrastructure
+
+# إنشاء قاعدة البيانات
+Update-Database
+
+dotnet ef database update --project SchoolERP.Infrastructure --startup-project SchoolERP.Web
+
+🔑 بيانات الدخول
+الدور	اسم المستخدم	كلمة المرور
+👑 مدير النظام	admin	Admin@123
+🏫 مدير المدرسة	principal	Principal@123
+👨‍🏫 معلم	teacher	Teacher@123
+👨‍💼 موظف	employee	Employee@123
+🎓 طالب	student	Student@123
+
