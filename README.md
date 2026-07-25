@@ -52,7 +52,7 @@
 
 ## 🏗️ البنية المعمارية (Clean Architecture)
 
-
+-
 SchoolERP/
 ├── SchoolERP.Domain/ # طبقة الكيانات (Entities)
 │ ├── Entities/ # الكيانات الأساسية
