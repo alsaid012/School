@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SchoolERP.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+47525a6c1ab76982dbe18edfd864957275c58b94")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+33e2979ef56354cb60a523a003c7871d0569865e")]
 [assembly: System.Reflection.AssemblyProductAttribute("SchoolERP.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SchoolERP.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -37,7 +37,8 @@ namespace SchoolERP.Infrastructure.Data.Configurations
             builder.HasOne(s => s.Department)
                 .WithMany(d => d.Schools)
                 .HasForeignKey(s => s.DepartmentId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict)
+                 .IsRequired(false);
         }
     }
 }
