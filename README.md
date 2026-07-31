@@ -99,12 +99,12 @@ cd School
 ---
 ## ----------------------------------------------
 ## 🔑 بيانات الدخول
-الدور	اسم المستخدم	كلمة المرور
-👑 مدير النظام	admin	Admin@123
-🏫 مدير المدرسة	principal	Principal@123
-👨‍🏫 معلم	teacher	Teacher@123
-👨‍💼 موظف	employee	Employee@123
-🎓 طالب	student	Student@123
+الدور	             اسم المستخدم        	كلمة المرور
+👑 مدير النظام	      admin             	Admin@123
+🏫 مدير المدرسة 	  principal          	Principal@123
+👨‍🏫 معلم	             teacher           	Teacher@123
+👨‍💼 موظف	            employee           	Employee@123
+🎓 طالب	           student             	Student@123
 ---
 
 
