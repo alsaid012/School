@@ -59,6 +59,9 @@ SchoolERP/
 │ ├── Entities/ # الكيانات الأساسية
 │ ├── Enums/ # التعدادات (Enums)
 │ └── Interfaces/ # الواجهات الأساسية
+
+
+
 │
 ├── SchoolERP.Application/ # طبقة التطبيق (Application)
 │ ├── DTOs/ # نماذج نقل البيانات
@@ -66,12 +69,18 @@ SchoolERP/
 │ ├── Services/ # خدمات التطبيق
 │ ├── Validators/ # التحقق من البيانات
 │ └── Mappings/ # AutoMapper Profiles
+
+
+
 │
 ├── SchoolERP.Infrastructure/ # طبقة البنية التحتية
 │ ├── Data/ # DbContext والتهيئة
 │ ├── Repositories/ # تنفيذ المستودعات
 │ ├── Migrations/ # هجرات قاعدة البيانات
 │ └── Extensions/ # إضافات
+
+
+
 │
 └── SchoolERP.Web/ # طبقة العرض (Presentation)
 ├── Controllers/ # وحدات التحكم
